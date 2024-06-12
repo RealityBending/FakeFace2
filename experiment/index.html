@@ -6,6 +6,8 @@
 
         <!-- Load plugins used in Demographics -->
         <script src="https://unpkg.com/jspsych"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response"></script>
+        <script src="demographics.js"></script>
         <link
             href="https://unpkg.com/jspsych/css/jspsych.css"
             rel="stylesheet"
@@ -23,13 +25,15 @@
     <script>
         // Initialize experiment =================================================
         var jsPsych = initJsPsych({
-            // on_finish: function () {
-            //     jsPsych.data.displayData("json") // Display data in browser
-            // },
+            on_finish: function () {
+                jsPsych.data.displayData("json") // Display data in browser
+            },
         })
 
         // Initialize timeline
         var timeline = []
+
+        timeline.push(demographics_consent)
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
