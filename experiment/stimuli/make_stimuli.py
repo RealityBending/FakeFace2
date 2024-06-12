@@ -9,7 +9,7 @@ folder = os.listdir(path + '/AMFD/')
 image_dir = []
 for file in folder:
     if file.startswith('NF') or file.startswith('NM'):
-        image_dir.append({"stimulus": 'stimuli/AMFD/' + file})
+        image_dir.append({"stimulus": file})
 
 
 # Save the array to a json file called images.js

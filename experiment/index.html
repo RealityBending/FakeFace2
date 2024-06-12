@@ -6,8 +6,18 @@
 
         <!-- Load plugins used in Demographics -->
         <script src="https://unpkg.com/jspsych"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-browser-check"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-button-response"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response"></script>
+
+        <!-- Custom scripts -->
+        <script src="stimuli/stimuli.js"></script>
         <script src="demographics.js"></script>
+        <script src="fiction.js"></script>
+
+        <!-- CSS -->
         <link
             href="https://unpkg.com/jspsych/css/jspsych.css"
             rel="stylesheet"
@@ -33,7 +43,13 @@
         // Initialize timeline
         var timeline = []
 
-        timeline.push(demographics_consent)
+        timeline.push(demographics_browser_info)
+        // timeline.push(demographics_consent)
+
+        // Fiction task ===========================================================
+        timeline.push(fiction_preloadstims)
+
+        timeline.push(fiction_phase1)
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)

@@ -1,3 +1,27 @@
+var demographics_browser_info = {
+    type: jsPsychBrowserCheck,
+    data: {
+        screen: "browser_info",
+        date: new Date().toLocaleDateString("fr-FR"),
+        time: new Date().toLocaleTimeString("fr-FR"),
+    },
+    on_finish: function (data) {
+        dat = jsPsych.data.get().filter({ screen: "browser_info" }).values()[0]
+
+        // Rename
+        data["screen_height"] = dat["height"]
+        data["screen_width"] = dat["width"]
+
+        // Add URL variables - ?sona_id=x&exp=1
+        let urlvars = jsPsych.data.urlVariables()
+        data["researcher"] = urlvars["exp"]
+        data["sona_id"] = urlvars["sona_id"]
+        data["prolific_id"] = urlvars["PROLIFIC_PID"] // Prolific
+        data["study_id"] = urlvars["STUDY_ID"] // Prolific
+        data["session_id"] = urlvars["SESSION_ID"] // Prolific
+    },
+}
+
 var demographics_consent = {
     type: jsPsychHtmlButtonResponse,
     css_classes: ["narrow-text"],
