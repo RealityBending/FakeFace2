@@ -53,3 +53,63 @@ var demographics_consent = {
     choices: ["I read, understood, and I consent"],
     data: { screen: "consent" },
 }
+
+/ Demographic info ========================================================================
+var demographics_multichoice = {
+    type: jsPsychSurveyMultiChoice,
+    preamble: "<b>Please answer the following questions:</b>",
+    questions: [
+        {
+            prompt: "What is your gender?",
+            options: ["Male", "Female", "Other"],
+            name: "gender",
+        },
+        // {
+        //     prompt: "Are you currently a student?",
+        //     options: ["Yes", "No"],
+        //     name: "student",
+        // },
+        {
+            prompt: "What is your highest completed education level?",
+            options: [
+                "University (doctorate)",
+                "University (master) <sub><sup>or equivalent</sup></sub>",
+                "University (bachelor) <sub><sup>or equivalent</sup></sub>",
+                "High school",
+                "Other",
+            ],
+            name: "education",
+            },
+        // {
+        //     prompt: "English level",
+        //     options: ["native", "fluent", "intermediate", "beginner"],
+        //     name: "english",
+        // },
+    ],
+    data: {
+        screen: "demographics_1",
+    },
+}
+
+var demographics_freetext = {
+    type: jsPsychSurveyText,
+    questions: [
+        {
+            prompt: "Please enter your age (in years)",
+            placeholder: "e.g., '31'",
+            name: "age",
+        },
+        {
+            prompt: "Please enter your ethnicity",
+            placeholder: "e.g., Caucasian",
+            name: "ethnicity",
+        },
+    ],
+    data: {
+        screen: "demographics_2",
+    },
+}
+
+var demographics_info = {
+    timeline: [demographics_multichoice, demographics_freetext],
+}
