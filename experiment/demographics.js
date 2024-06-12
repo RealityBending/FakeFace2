@@ -54,7 +54,7 @@ var demographics_consent = {
     data: { screen: "consent" },
 }
 
-/ Demographic info ========================================================================
+// Demographic info ========================================================================
 var demographics_multichoice = {
     type: jsPsychSurveyMultiChoice,
     preamble: "<b>Please answer the following questions:</b>",
