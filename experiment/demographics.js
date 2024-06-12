@@ -1,3 +1,4 @@
+// Retrieve and save browser info ========================================================
 var demographics_browser_info = {
     type: jsPsychBrowserCheck,
     data: {
@@ -22,6 +23,7 @@ var demographics_browser_info = {
     },
 }
 
+// Consent form ========================================================
 var demographics_consent = {
     type: jsPsychHtmlButtonResponse,
     css_classes: ["narrow-text"],
