@@ -33,10 +33,10 @@ var demographics_consent = {
         "<h1>Informed Consent</h1>" +
         // Overview
         "<p align='left'><b>Invitation to Take Part</b><br>" +
-        "You are being invited to take part in a research study to further our understanding of Human psychology. Thank you for carefully reading this information sheet. This study is being conducted by Dr Dominique Makowski from the School of Psychology, University of Sussex, who is happy to be contacted (D.Makowski@sussex.ac.uk) if you have any questions.</p>" +
+        "You are being invited to take part in a research study to further our understanding of human perception. Thank you for carefully reading this information sheet. This study is being conducted by Sofia Turcany Diaz and Dr Dominique Makowski from the School of Psychology, University of Sussex, who are happy to be contacted (st633@sussex.ac.uk and D.Makowski@sussex.ac.uk) if you have any questions.</p>" +
         // Description
         "<p align='left'><b>Why have I been invited and what will I do?</b><br>" +
-        "The goal is to study how Humans are impacted by visual illusions. In this study, you will be asked to complete a few questionnaires and perform some tasks where we will measure how fast and accurately you can perceive small visual differences. The whole experiment will take you <b>about 35 min</b> to complete. Please make you sure that you are in a quiet environment, <b>on a computer</b> (the experiment is not mobile-friendly), and that you have time to complete it in one go.</p>" +
+        "The goal is to study how new technology can impact <b>human perception<b>. In this study, you will be shown facial images and asked to complete a few questionnaires and perform some tasks where we will measure how fast and accurately you can perceive small visual differences. The whole experiment will take you <b>about 35 min</b> to complete. Please make you sure that you are <b>attentive and in a quiet environment<b>, and that you have time to complete it in one go.</p>" +
         // Results and personal information
         "<p align='left'><b>What will happen to the results and my personal information?</b><br>" +
         "The results of this research may be written into a scientific publication. Your anonymity will be ensured in the way described in the consent information below. Please read this information carefully and then, if you wish to take part, please acknowledge that you have fully understood this sheet, and that you consent to take part in the study as it is described here.</p>" +
@@ -51,7 +51,7 @@ var demographics_consent = {
         "<li align='left'>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, ...).</li>" +
         "<li align='left'>By participating, you agree to follow the instructions and provide honest answers. If you do not wish to participate, simply close your browser.</li>" +
         "</p>" +
-        "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Dr Dominique Makowski (D.Makowski@sussex.ac.uk). This research has been approved (ER/HER27/1) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>",
+        "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Sofia Turcany Diaz (st633@sussex.ac.uk) or Dr Dominique Makowski (D.Makowski@sussex.ac.uk). This research has been approved (ER/HER27/1) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>",
     choices: ["I read, understood, and I consent"],
     data: { screen: "consent" },
 }
