@@ -18,6 +18,7 @@
         <script src="stimuli/stimuli.js"></script>
         <script src="demographics.js"></script>
         <script src="fiction.js"></script>
+        <script src="questionnaires.js"></script>
 
         <!-- CSS -->
         <link
@@ -48,7 +49,12 @@
         timeline.push(demographics_browser_info)
         timeline.push(demographics_consent)
         timeline.push(demographics_info)
+        
+        // Initialize timeline
+        timeline.push(IPIP)
+        timeline.push(GAAIS)
 
+        
         // Fiction task ===========================================================
         timeline.push(fiction_preloadstims)
         timeline.push(fiction_phase1)
