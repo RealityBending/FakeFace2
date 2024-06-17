@@ -1,7 +1,11 @@
 // FaceFake2 questionnaires
 
 // Questionnaires =================================================        
-var questionnaire_IPIP = [
+// mini-ipip.js
+
+var questionnaire_IPIP = (function() {
+    // Define the mini IPIP questionnaire with HTML-formatted prompts
+    var questionnaire = [
         { prompt: "<b>I am the life of the party</b><br>", name: 'q1', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
         { prompt: "<b>I sympathize with others' feelings</b><br>", name: 'q2', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
         { prompt: "<b>I get chores done right away</b><br>", name: 'q3', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
@@ -27,3 +31,24 @@ var questionnaire_IPIP = [
         { prompt: "<b>I talk to a lot of different people at parties</b><br>", name: 'q23', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
         { prompt: "<b>I would get a lot of pleasure from owning expensive luxury goods</b><br>", name: 'q24', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true }
     ];
+
+    // Create the jsPsych timeline for the questionnaire
+    var timeline = [];
+
+    // Add each question to the timeline
+    for (var i = 0; i < questionnaire.length; i++) {
+        timeline.push({
+            type: 'survey-likert',
+            questions: [
+                {
+                    prompt: questionnaire[i].prompt,
+                    name: questionnaire[i].name,
+                    labels: questionnaire[i].options,
+                    required: questionnaire[i].required
+                }
+            ],
+            data: { question_number: i + 1 }
+        });
+    }
+    return timeline;
+})();
