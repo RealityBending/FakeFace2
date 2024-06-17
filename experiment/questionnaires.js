@@ -102,11 +102,7 @@ function format_questions_analog(items, dimensions, ticks = ["Inaccurate", "Accu
  var IPIP_slider = {
     type: jsPsychMultipleSlider,
     preamble: "<b>Please answer the following questions:</b>",
-    questions: format_questions_analog(
-        items_IPIP,
-        IPIP_dim,
-        (ticks = IPIP_ticks)
-    ),
+    questions: items_IPIP,
     randomize_question_order: true,
     require_movement: false,
     slider_width: 600,
