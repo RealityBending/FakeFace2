@@ -1,54 +1,150 @@
 // FaceFake2 questionnaires
 
 // Questionnaires =================================================        
-// mini-ipip.js
+// mini-ipip
+var items_IPIP = [
+    "<b>I am the life of the party</b><br>",
+    "<b>I sympathize with others' feelings</b><br>",
+    "<b>I get chores done right away</b><br>",
+    "<b>I have frequent mood swings</b><br>",
+    "<b>I have a vivid imagination</b><br>",
+    "<b>I feel entitled to more of everything</b><br>",
+    "<b>I do not talk a lot</b><br>",
+    "<b>I am not interested in other people's problems</b><br>",
+    "<b>I have difficulty understanding abstract ideas</b><br>",
+    "<b>I like order</b><br>",
+    "<b>I make a mess of things</b><br>",
+    "<b>I deserve more things in life</b><br>",
+    "<b>I do not have a good imagination</b><br>",
+    "<b>I feel other's emotions</b><br>",
+    "<b>I am relaxed most of the time</b><br>",
+    "<b>I get upset easily</b><br>",
+    "<b>I seldom feel blue</b><br>",
+    "<b>I would like to be seen driving around in a very expensive car</b><br>",
+    "<b>I keep in the background</b><br>",
+    "<b>I am not really interested in others</b><br>",
+    "<b>I am not interested in abstract ideas</b><br>",
+    "<b>I often forget to put things back in their proper place</b><br>",
+    "<b>I talk to a lot of different people at parties</b><br>",
+    "<b>I would get a lot of pleasure from owning expensive luxury goods</b><br>",
+]
 
-var questionnaire_IPIP = (function() {
-    // Define the mini IPIP questionnaire with HTML-formatted prompts
-    var questionnaire = [
-        { prompt: "<b>I am the life of the party</b><br>", name: 'q1', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I sympathize with others' feelings</b><br>", name: 'q2', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I get chores done right away</b><br>", name: 'q3', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I have frequent mood swings</b><br>", name: 'q4', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I have a vivid imagination</b><br>", name: 'q5', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I feel entitled to more of everything</b><br>", name: 'q6', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I do not talk a lot</b><br>", name: 'q7', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I am not interested in other people's problems</b><br>", name: 'q8', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I have difficulty understanding abstract ideas</b><br>", name: 'q9', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I like order</b><br>", name: 'q10', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I make a mess of things</b><br>", name: 'q11', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I deserve more things in life</b><br>", name: 'q12', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I do not have a good imagination</b><br>", name: 'q13', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I feel other's emotions</b><br>", name: 'q14', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I am relaxed most of the time</b><br>", name: 'q15', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I get upset easily</b><br>", name: 'q16', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I seldom feel blue</b><br>", name: 'q17', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I would like to be seen driving around in a very expensive car</b><br>", name: 'q18', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I keep in the background</b><br>", name: 'q19', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I am not really interested in others</b><br>", name: 'q20', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I am not interested in abstract ideas</b><br>", name: 'q21', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I often forget to put things back in their proper place</b><br>", name: 'q22', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I talk to a lot of different people at parties</b><br>", name: 'q23', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true },
-        { prompt: "<b>I would get a lot of pleasure from owning expensive luxury goods</b><br>", name: 'q24', options: ['Very Inaccurate', 'Moderately Inaccurate', 'Neither Accurate nor Inaccurate', 'Moderately Accurate', 'Very Accurate'], required: true }
-    ];
+var IPIP_dim = [
+    "Extraversion_1",
+    "Agreeableness_2",
+    "Conscientiousness_3",
+    "Neuroticism_4",
+    "Openness_5",
+    "HonestyHumility_6_R",
+    "Extraversion_7_R",
+    "Agreeableness_8_R",
+    "Openness_9_R",
+    "Conscientiousness_10",
+    "Conscientiousness_11_R",
+    "HonestyHumility_12_R",
+    "Openness_13_R",
+    "Agreeableness_14",
+    "Neuroticism_15_R",
+    "Neuroticism_16",
+    "Neuroticism_17_R",
+    "HonestyHumility_18_R",
+    "Extraversion_19_R",
+    "Agreeableness_20_R",
+    "Openness_21_R",
+    "Conscientiousness_22_R",
 
-    // Create the jsPsych timeline for the questionnaire
-    var timeline = [];
+// AI attitudes
+var items_GAAIS = [
+    "<b>I think current Artificial Intelligence algorithms can generate very realistic images</b><br>",
+    "<b>Organisations use Artificial Intelligence unethically</b><br>", //OG scale item 3
+    "<b>I think videos generated by Artificial Intelligence are impossible to distinguish from real videos</b><br>",
+    "<b>I am interested in using artificially intelligent systems in my daily life</b><br>", //OG scale item 7
+    "<b>I think Computer-Generated Imagery (CGI) software is capable of perfectly imitating reality</b><br>",
+    "<b>I think Artificial Intelligence is dangerous</b><br>", //OG scale item 10
+    "<b>I think current Artificial Intelligence algorithms can generate very realistic videos</b><br>",
+    "<b>Artificial Intelligence is exciting</b><br>", // OG scale item 12
+    "<b>There are many beneficial applications of Artificial Intelligence</b><br>", //OG scale item 14
+    "<b>Images of faces or people generated by Artificial Intelligence will contain errors</b><br>"
+]
 
-    // Add each question to the timeline
-    for (var i = 0; i < questionnaire.length; i++) {
-        timeline.push({
-            type: 'survey-likert',
-            questions: [
-                {
-                    prompt: questionnaire[i].prompt,
-                    name: questionnaire[i].name,
-                    labels: questionnaire[i].options,
-                    required: questionnaire[i].required
-                }
-            ],
-            data: { question_number: i + 1 }
-        });
+var GAAIS_dim = [
+    "GAAIS_1",
+    "GAAIS_2_R",
+    "GAAIS_3",
+    "GAAIS_4",
+    "GAAIS_5",
+    "GAAIS_6_R",
+    "GAAIS_7",
+    "GAAIS_8",
+    "GAAIS_9",
+    "GAAIS_10_R",
+]
+
+    /* Mini IPIP *==========================*/
+    var IPIP_items = []
+    for (const [index, element] of IPIP.entries()) {
+        IPIP_items.push({
+            prompt: element,
+            name: IPIP_dim[index],
+            ticks: scale2,
+            required: true,
+            min: 0,
+            max: 1,
+            step: 0.01,
+            slider_start: 0.5
+        })
     }
-    return timeline;
-})();
+
+    var IPIP6 = {
+        type: jsPsychMultipleSlider,
+        questions: IPIP_items,
+        randomize_question_order: false,
+        preamble:
+            "<p><b>Survey 1/7</b></b></p>" +
+            "<p>Please answer the following questions based on how accurately each statement describes you.</p>",
+        require_movement: true,
+        on_start: function () {
+            ; (document.body.style.cursor = "auto"),
+                (document.querySelector(
+                    "#jspsych-progressbar-container"
+                ).style.display = "inline")
+        },
+        data: {
+            screen: "IPIP6",
+        },
+    }
+
+    /* Attitudes towards AI *==========================*/
+    var GAAIS_items = []
+    for (const [index, element] of GAAIS.entries()) {
+        GAAIS_items.push({
+            prompt: element,
+            name: GAAIS_dim[index],
+            ticks: scale2,
+            required: true,
+            min: 0,
+            max: 1,
+            step: 0.01,
+            slider_start: 0.5
+        })
+    }
+
+    var AI_attitudes = {
+        type: jsPsychMultipleSlider,
+        questions: GAAIS_items,
+        randomize_question_order: false,
+        preamble:
+            "<p><b>Survey 4/7</b></p>" +
+            "<p>We are interested in your attitudes towards Artificial Intelligence (AI).</p>" +
+            "<p>Please read the statements below carefully and indicate the extent to which you agree with each statement.</p>",
+        require_movement: true,
+        on_start: function () {
+            ; (document.body.style.cursor = "auto"),
+                (document.querySelector(
+                    "#jspsych-progressbar-container"
+                ).style.display = "inline")
+        },
+        data: {
+            screen: "GAAIS",    
+        },
+    }
