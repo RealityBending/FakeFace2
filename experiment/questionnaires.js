@@ -112,4 +112,5 @@ function format_questions_analog(items, dimensions, ticks = ["Inaccurate", "Accu
     slider_width: 600,
     data: {
         screen: "questionnaire_IPIP",
-    },
+        },
+}
