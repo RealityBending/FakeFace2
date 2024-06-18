@@ -37,6 +37,24 @@ var text_cue = { Reality: "Photograph", Fiction: "AI-generated" }
 stimuli = assignCondition(stimuli)
 
 // Screens =====================================================================
+var fiction_instructions1 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus:
+            "<h1>Part 3/4</h1>" +
+            "<div style='text-align: left'>" +
+            "<p>In this part of the experiment, images of faces will be briefly flashed on the screen.</p>" +
+            "<p>After each image, you will be asked a series of questions, such as:</p><ul>" +
+            "<li><p>To what extent do you find this person <b>good-looking</b> (the degree to which the face is aesthetically appealing).</p></li>" +
+            "<li><p>How <b>attractive</b> do you find this person (how drawn are you to this person).</p></li>" +
+            "<li><p>To what extent do you find this person <b>trustworthy</b> (reliable, honest, responsible etc.,).</p></li>" +
+            "<li><p>How much does this person remind you of <b>someone you know</b> (how familiar does this face look to you).</p></li><br>" +
+            "<p>Below is an example of how the questions will appear after each image:</p></div>" +
+            "<div style='float: center'><img src='utils/question_demo_2.png' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img>" +
+            "<p>We are interested in your <b>first impressions</b>. Please respond according to your gut feelings.</p>",
+            choices: ["Start"],
+        data: { screen: "task_instructions_1" },
+    }
+
 var fiction_preloadstims = {
     type: jsPsychPreload,
     images: stimuli.map((a) => "stimuli/AMFD/" + a.stimulus),
