@@ -11,7 +11,8 @@ var questionnaires_instructions0 = {
 
 // Questionnaires =================================================        
 // mini-ipip
-var items_IPIP = [
+// Mini IPIP scale
+var IPIP = [
     "<b>I am the life of the party</b><br>",
     "<b>I sympathize with others' feelings</b><br>",
     "<b>I get chores done right away</b><br>",
