@@ -1,3 +1,34 @@
+// Oosterhof and Todorov (2008) - 9 point scale (Not at all to Extremely) TRAIT VARIABLES
+var items = [
+    //"The face looked real to me",
+    "This face is good-looking",
+    "I find this person attractive",
+    // "Would you find this person approachable?",
+    "I find this person trustworthy",
+    "This person reminds me of someone I know",
+    // "How much does this face look like yours?",
+    // "How weird is the face you saw?",   // include eeriness as well? (cf uncanny valley effect)
+    // "How dominant is the face you saw?",
+    //"How musculine/feminine is the face you saw?",
+    // "How emotionally stable is the face you saw?",
+    // "How mean is the face you saw?",
+    // "How boring is the face you saw?",
+    // "How intelligent is the face you saw?",
+    // "How caring is the face you saw?",
+    // "How egoistic is the face you saw?",
+    // "How responsible is the face you saw?",
+]
+
+var dimensions = [
+    //"Real",
+    "Physical_Attractiveness",
+    "General_Attractiveness",
+    // "Approachability",
+    "Trustworthiness",
+    "Familiarity",   // Familiarity (van vugt et al., 2010)
+    // "Similarity"
+]
+
 // Condition assignment ============================================
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
