@@ -202,42 +202,40 @@ var text_instructions2 =
     "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>We will briefly present you <b>all the images</b> one last time (the AI-generated ones, as well as the photos), and you will have to rate them on how <b>real</b> (how realistic, photography-like) the image is.</p>" +
     "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>We are interested in your overall impression and gut feeling of whether you felt that the image was AI-generated or not.</p>"
 
-var fiction_ratings2 = {
-    type: jsPsychMultipleSlider,
-    on_start: function () {
-        document.body.style.cursor = "auto"
-    },
-    questions: [
-        {
-            prompt: text_rating_realness,
-            name: "Realness",
-            ticks: text_ticks,
-            required: false,
+// Add Item on Perception of Realness
+var stage2_realness = {
+        type: jsPsychMultipleSlider, // this is a custom plugin in utils
+        questions: [{
+            prompt: "I think this face is...",
+            name: "perceived_realness",
+            ticks: ["Fake", "Real"],
+            required: true,
             min: 0,
             max: 1,
             step: 0.01,
             slider_start: 0.5,
+        }],
+        randomize_question_order: false,
+        //preamble: '<div style="font-size:24px;"><b>Assuming that the face you saw was real</b><br></p></div>',
+        require_movement: true,
+        on_start: function () {
+            ; (document.body.style.cursor = "auto"),
+                (document.querySelector(
+                    "#jspsych-progressbar-container"
+                ).style.display = "inline")
         },
-    ],
-    randomize_question_order: false,
-    require_movement: true,
-    slider_width: 600,
-    data: function () {
-        return {
-            screen: "fiction_ratings2",
-            stimulus: jsPsych.timelineVariable("stimulus"),
-            condition: jsPsych.timelineVariable("Condition"),
-        }
-    },
-}
+        data: {
+            screen: "perceived_realness",
+        },
+    }
 
-var fiction_trials_realness = {
-    // timeline_variables: stimuli_list.slice(0, 2),
-    timeline_variables: stimuli_list,
-    randomize_order: true,
+var fiction_phase2 = {
+    timeline_variables: stimuli.slice(0, 6), // TODO: remove this
     timeline: [
-        fiction_fixationcross((isi = 500), (screen = "fiction_fixationcross2")),
-        fiction_showimage((duration = 1000), (screen = "fiction_image2")),
-        fiction_ratings2,
+        fiction_fixation1,
+        fiction_cue,
+        fiction_fixation1,
+        fiction_showimage1,
+        stage2_realness,
     ],
 }
