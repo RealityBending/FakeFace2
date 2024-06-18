@@ -115,3 +115,23 @@ var demographics_freetext = {
 var demographics_info = {
     timeline: [demographics_multichoice, demographics_freetext],
 }
+
+var sexual_orientation = {
+    type: jsPsychSurveyMultiChoice,
+    questions: [
+        {
+            prompt: "What sexual orientation do you identify with?",
+            options: [
+                "Heterosexual",
+                "Homosexual",
+                "Bisexual",
+                "Other",
+            ],
+            name: "sexual_orientation",
+            required: true,
+        },
+    ],
+    data: {
+        screen: "demographics",
+    },
+}
