@@ -40,6 +40,8 @@
     <script>
         // Initialize experiment =================================================
         var jsPsych = initJsPsych({
+            show_progress_bar: true,
+            message_progress_bar: "Completion",
             on_finish: function () {
                 jsPsych.data.displayData("json") // Display data in browser
             },
