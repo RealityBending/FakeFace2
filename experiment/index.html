@@ -57,16 +57,22 @@
         timeline.push(demographics_sexual_orientation)
 
         // Questionnaires ===========================================================
-        // Instructions Questionnaires
-        timeline.push(questionnaires_instructions0)
-        timeline.push(IPIP6) /* Mini IPIP *==========================*/
-        timeline.push(AI_attitudes) /* Attitudes towards AI *=====================*/
+        timeline.push(questionnaires_instructions0)  // Instructions Questionnaires
+        timeline.push(IPIP6) // Mini IPIP
+        timeline.push(AI_attitudes) // Attitudes towards AI 
         
-        // Fiction task ===========================================================
+        // Fiction stage 1 ===========================================================
         timeline.push(fiction_preloadstims)
         timeline.push(fiction_instructions1)
         timeline.push(fiction_phase1)
 
+        // Fiction stage 2 ===========================================================
+        timeline.push(fiction_preloadstims)
+        timeline.push(text_instructions2)
+        timeline.push(fiction_instructions2)
+        timeline.push(fiction_trials_realness)
+
+        
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
     </script>
