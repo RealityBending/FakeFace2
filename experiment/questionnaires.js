@@ -135,35 +135,35 @@ var GAAIS_dim = [
 
     /* Attitudes towards AI *==========================*/
     var GAAIS_items = []
-    for (const [index, element] of GAAIS.entries()) {
-        GAAIS_items.push({
-            prompt: element,
-            name: GAAIS_dim[index],
-            ticks: scale2,
-            required: true,
-            min: 0,
-            max: 1,
-            step: 0.01,
-            slider_start: 0.5
-        })
-    }
-
-    var AI_attitudes = {
-        type: jsPsychMultipleSlider,
-        questions: GAAIS_items,
-        randomize_question_order: false,
-        preamble:
-            "<p><b>Survey 4/7</b></p>" +
-            "<p>We are interested in your attitudes towards Artificial Intelligence (AI).</p>" +
-            "<p>Please read the statements below carefully and indicate the extent to which you agree with each statement.</p>",
-        require_movement: true,
-        on_start: function () {
-            ; (document.body.style.cursor = "auto"),
-                (document.querySelector(
-                    "#jspsych-progressbar-container"
-                ).style.display = "inline")
-        },
-        data: {
-            screen: "GAAIS",    
-        },
-    }
+        for (const [index, element] of GAAIS.entries()) {
+            GAAIS_items.push({
+                prompt: element,
+                name: GAAIS_dim[index],
+                ticks: scale2,
+                required: true,
+                min: 0,
+                max: 1,
+                step: 0.01,
+                slider_start: 0.5
+            })
+        }
+        
+        var AI_attitudes = {
+            type: jsPsychMultipleSlider,
+            questions: GAAIS_items,
+            randomize_question_order: false,
+            preamble:
+                "<p><b>Survey 2/2</b></p>" +
+                "<p>We are interested in your attitudes towards Artificial Intelligence (AI).</p>" +
+                "<p>Please read the statements below carefully and indicate the extent to which you agree with each statement.</p>",
+            require_movement: true,
+            on_start: function () {
+                ; (document.body.style.cursor = "auto"),
+                    (document.querySelector(
+                        "#jspsych-progressbar-container"
+                    ).style.display = "inline")
+            },
+            data: {
+                screen: "GAAIS",    
+            },
+        }
