@@ -116,7 +116,7 @@ var demographics_info = {
     timeline: [demographics_multichoice, demographics_freetext],
 }
 
-var sexual_orientation = {
+var demographics_sexual_orientation = {
     type: jsPsychSurveyMultiChoice,
     questions: [
         {
