@@ -1,3 +1,8 @@
+/* Measures */ //===============================================================
+// Scale Labels
+var scale1 = ["Not at All", "Extremely"]
+var scale2 = ["Strongly Disagree", "Strongly Agree"]
+
 // Oosterhof and Todorov (2008) - 9 point scale (Not at all to Extremely) TRAIT VARIABLES
 var items = [
     //"The face looked real to me",
