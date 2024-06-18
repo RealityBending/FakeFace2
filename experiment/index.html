@@ -64,80 +64,80 @@
             choices: ["Continue"],
             data: { screen: "instructions0" },
         }
-        timeline.push(instructions2)
+        timeline.push(instructions0)
         
          /* Mini IPIP *==========================*/
-            var IPIP_items = []
-            for (const [index, element] of IPIP.entries()) {
-                IPIP_items.push({
-                    prompt: element,
-                    name: IPIP_dim[index],
-                    ticks: scale2,
-                    required: true,
-                    min: 0,
-                    max: 1,
-                    step: 0.01,
-                    slider_start: 0.5
-                })
-            }
+        var IPIP_items = []
+        for (const [index, element] of IPIP.entries()) {
+            IPIP_items.push({
+                prompt: element,
+                name: IPIP_dim[index],
+                ticks: scale2,
+                required: true,
+                min: 0,
+                max: 1,
+                step: 0.01,
+                slider_start: 0.5
+            })
+        }
         
-            var IPIP6 = {
-                type: jsPsychMultipleSlider,
-                questions: IPIP_items,
-                randomize_question_order: false,
-                preamble:
-                    "<p><b>Survey 1/7</b></b></p>" +
-                    "<p>Please answer the following questions based on how accurately each statement describes you.</p>",
-                require_movement: true,
-                on_start: function () {
-                    ; (document.body.style.cursor = "auto"),
-                        (document.querySelector(
-                            "#jspsych-progressbar-container"
-                        ).style.display = "inline")
-                },
-                data: {
-                    screen: "IPIP6",
-                },
-            }
+        var IPIP6 = {
+            type: jsPsychMultipleSlider,
+            questions: IPIP_items,
+            randomize_question_order: false,
+            preamble:
+                "<p><b>Survey 1/7</b></b></p>" +
+                "<p>Please answer the following questions based on how accurately each statement describes you.</p>",
+            require_movement: true,
+            on_start: function () {
+                ; (document.body.style.cursor = "auto"),
+                    (document.querySelector(
+                        "#jspsych-progressbar-container"
+                    ).style.display = "inline")
+            },
+            data: {
+                screen: "IPIP6",
+            },
+        }
 
-            timeline.push(IPIP6)
+        timeline.push(IPIP6)
         
             /* Attitudes towards AI *==========================*/
-            var GAAIS_items = []
-            for (const [index, element] of GAAIS.entries()) {
-                GAAIS_items.push({
-                    prompt: element,
-                    name: GAAIS_dim[index],
-                    ticks: scale2,
-                    required: true,
-                    min: 0,
-                    max: 1,
-                    step: 0.01,
-                    slider_start: 0.5
-                })
-            }
+        var GAAIS_items = []
+        for (const [index, element] of GAAIS.entries()) {
+            GAAIS_items.push({
+                prompt: element,
+                name: GAAIS_dim[index],
+                ticks: scale2,
+                required: true,
+                min: 0,
+                max: 1,
+                step: 0.01,
+                slider_start: 0.5
+            })
+        }
         
-            var AI_attitudes = {
-                type: jsPsychMultipleSlider,
-                questions: GAAIS_items,
-                randomize_question_order: false,
-                preamble:
-                    "<p><b>Survey 4/7</b></p>" +
-                    "<p>We are interested in your attitudes towards Artificial Intelligence (AI).</p>" +
-                    "<p>Please read the statements below carefully and indicate the extent to which you agree with each statement.</p>",
-                require_movement: true,
-                on_start: function () {
-                    ; (document.body.style.cursor = "auto"),
-                        (document.querySelector(
-                            "#jspsych-progressbar-container"
-                        ).style.display = "inline")
-                },
-                data: {
-                    screen: "GAAIS",    
-                },
-            }
+        var AI_attitudes = {
+            type: jsPsychMultipleSlider,
+            questions: GAAIS_items,
+            randomize_question_order: false,
+            preamble:
+                "<p><b>Survey 4/7</b></p>" +
+                "<p>We are interested in your attitudes towards Artificial Intelligence (AI).</p>" +
+                "<p>Please read the statements below carefully and indicate the extent to which you agree with each statement.</p>",
+            require_movement: true,
+            on_start: function () {
+                ; (document.body.style.cursor = "auto"),
+                    (document.querySelector(
+                        "#jspsych-progressbar-container"
+                    ).style.display = "inline")
+            },
+            data: {
+                screen: "GAAIS",    
+            },
+        }
 
-         timeline.push(AI_attitudes)
+        timeline.push(AI_attitudes)
         
         // Fiction task ===========================================================
         timeline.push(fiction_preloadstims)
