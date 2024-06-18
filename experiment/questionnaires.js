@@ -10,6 +10,11 @@ var questionnaires_instructions0 = {
         }
 
 // Questionnaires =================================================        
+/* Measures */ //===============================================================
+// Scale Labels
+var scale1 = ["Not at All", "Extremely"]
+var scale2 = ["Strongly Disagree", "Strongly Agree"]
+
 // mini-ipip
 // Mini IPIP scale
 var IPIP = [
