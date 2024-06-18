@@ -202,13 +202,6 @@ var text_instructions2 =
     "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>We will briefly present you <b>all the images</b> one last time (the AI-generated ones, as well as the photos), and you will have to rate them on how <b>real</b> (how realistic, photography-like) the image is.</p>" +
     "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>We are interested in your overall impression and gut feeling of whether you felt that the image was AI-generated or not.</p>"
 
-var fiction_instructions2 = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: text_instructions_questionnaires,
-    choices: ["Continue"],
-    data: { screen: "instructions_questionnaires" },
-}
-
 var fiction_ratings2 = {
     type: jsPsychMultipleSlider,
     on_start: function () {
