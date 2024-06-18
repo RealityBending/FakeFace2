@@ -54,6 +54,17 @@
         timeline.push(demographics_info)
 
         // Questionnaires ===========================================================
+           // Instructions Questionnaires
+        var instructions0 = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus:
+                "<h1>Part 2/4</h1>" +
+                "<p>Great! We will continue with a series of questionnaires about your personality.<br>Again, it is important that you answer truthfully. Please read the statements carefully and answer according to what describe you the best.</p>",
+            choices: ["Continue"],
+            data: { screen: "instructions0" },
+        }
+        timeline.push(instructions2)
+        
          /* Mini IPIP *==========================*/
             var IPIP_items = []
             for (const [index, element] of IPIP.entries()) {
@@ -87,6 +98,8 @@
                     screen: "IPIP6",
                 },
             }
+
+            timeline.push(IPIP6)
         
             /* Attitudes towards AI *==========================*/
             var GAAIS_items = []
@@ -122,6 +135,8 @@
                     screen: "GAAIS",    
                 },
             }
+
+         timeline.push(AI_attitudes)
         
         // Fiction task ===========================================================
         timeline.push(fiction_preloadstims)
