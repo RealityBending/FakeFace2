@@ -85,7 +85,7 @@ var fiction_instructions1 = {
             "<li><p>To what extent do you find this person <b>trustworthy</b> (reliable, honest, responsible etc.,).</p></li>" +
             "<li><p>How much does this person remind you of <b>someone you know</b> (how familiar does this face look to you).</p></li><br>" +
             "<p>Below is an example of how the questions will appear after each image:</p></div>" +
-            "<div style='float: center'><img src='utils/question_demo_2.png' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img>" +
+            "<div style='float: center'><img src='stimuli/question_demo_2.png' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img>" +
             "<p>We are interested in your <b>first impressions</b>. Please respond according to your gut feelings.</p>",
             choices: ["Start"],
         data: { screen: "task_instructions_1" },
