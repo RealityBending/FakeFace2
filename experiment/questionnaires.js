@@ -1,5 +1,14 @@
 // FaceFake2 questionnaires
 
+var questionnaires_instructions0 = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus:
+                "<h1>Part 2/4</h1>" +
+                "<p>Great! We will continue with a series of questionnaires about your personality.<br>Again, it is important that you answer truthfully. Please read the statements carefully and answer according to what describe you the best.</p>",
+            choices: ["Continue"],
+            data: { screen: "instructions0" },
+        }
+
 // Questionnaires =================================================        
 // mini-ipip
 var items_IPIP = [
@@ -52,6 +61,10 @@ var IPIP_dim = [
     "Agreeableness_20_R",
     "Openness_21_R",
     "Conscientiousness_22_R",
+     "Extraversion_23",
+    "HonestyHumility_24_R",
+]
+    
 
 // AI attitudes
 var items_GAAIS = [
