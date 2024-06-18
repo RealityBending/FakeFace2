@@ -116,6 +116,38 @@ var fiction_showimage1 = {
     },
 }
 
+var trait_items = []
+    // Add Items on Attractiveness Trustworthiness and Familiarity
+    for (const [index, element] of items.entries()) {
+        trait_items.push({
+            prompt: element,
+            name: dimensions[index],
+            ticks: scale1,
+            required: true,
+            min: 0,
+            max: 1,
+            step: 0.01,
+            slider_start: 0.5
+        })
+    }
+
+    var questionnaire1 = {
+        type: jsPsychMultipleSlider, // this is a custom plugin in utils
+        questions: trait_items,
+        randomize_question_order: false,
+        //preamble: '<div style="font-size:24px;"><b>Assuming that the face you saw was real</b><br></p></div>',
+        require_movement: true,
+        on_start: function () {
+            ; (document.body.style.cursor = "auto"),
+                (document.querySelector(
+                    "#jspsych-progressbar-container"
+                ).style.display = "inline")
+        },
+        data: {
+            screen: "questionnaire1",
+        },
+    }
+
 var fiction_phase1 = {
     timeline_variables: stimuli.slice(0, 6), // TODO: remove this
     timeline: [
@@ -123,5 +155,6 @@ var fiction_phase1 = {
         fiction_cue,
         fiction_fixation1,
         fiction_showimage1,
+        questionnaire1,
     ],
 }
