@@ -289,11 +289,19 @@ var fiction_phase2 = {
         fiction_realness,
     ],
 }
-var text_instructions2 =
-    "<h1>Great!</h1>" +
-    "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>Thanks a lot. In the next phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
-    "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>We will briefly present you <b>all the images</b> one last time (the AI-generated ones, as well as the photos), and you will have to rate them on how <b>real</b> (how realistic, photography-like) the image is.</p>" +
-    "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>We are interested in your overall impression and gut feeling of whether you felt that the image was AI-generated or not.</p>"
+
+var fiction_instructions2 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus:
+            "<h1>Part 4/4</h1>" +
+            "<div style='text-align: left'>" +
+            "<p>Thanks a lot. In the next phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
+            "<p>Some images from the previous task were mislabelled.</p><ul>" +
+            "<li><p>We will briefly present you <b>all the images</b> one last time (the AI-generated ones, as well as the photos), and you will have to rate them on how <b>real</b> (how realistic, photography-like) the image is.</p></li>" +
+            "<li><p>We are interested in your overall impression and gut feeling of whether you felt that the image was AI-generated or not.</p></li>",
+            choices: ["Start"],
+        data: { screen: "task_instructions_1" },
+    }
 
 // Add Item on Perception of Realness
 var stage2_realness = {
