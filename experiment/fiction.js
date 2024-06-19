@@ -196,6 +196,99 @@ var fiction_phase1 = {
 }
 
 // Stage 2 loops and variables
+
+var fiction_fixation2 = {
+    type: jsPsychHtmlKeyboardResponse,
+    // on_start: function () {
+    //     document.body.style.cursor = "none"
+    // },
+    stimulus:
+        "<div  style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
+    choices: ["s"],
+    trial_duration: 500,
+    save_trial_parameters: { trial_duration: true },
+    data: { screen: "fiction_fixation1" },
+}
+
+var fiction_cue = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function () {
+        var cond = jsPsych.timelineVariable("Condition")
+        return (
+            "<div style='font-size:450%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%; color: " +
+            color_cues[cond] +
+            "'><b>" +
+            text_cue[cond] +
+            "</b></div>"
+        )
+    },
+     data: function () {
+        var cond = jsPsych.timelineVariable("Condition")
+        return {
+            screen: "fiction_cue",
+            color: color_cues[cond],
+            text: cond,
+        }
+    },
+    choices: ["s"],
+    trial_duration: 1000,
+    save_trial_parameters: { trial_duration: true },
+}
+
+var fiction_showimage2 = {
+    type: jsPsychImageKeyboardResponse,
+    stimulus: function () {
+        return "stimuli/AMFD/" + jsPsych.timelineVariable("stimulus")
+    },
+    stimulus_height: function () {
+        return 0.9 * window.innerHeight
+    },
+    trial_duration: 2000,
+    choices: ["s"],
+    save_trial_parameters: { trial_duration: true },
+    data: { screen: "fiction_image1" },
+    on_finish: function (data) {
+        data.trial_number = fiction_trialnumber
+        fiction_trialnumber += 1
+    },
+}
+
+var fiction_realness = {
+        type: jsPsychMultipleSlider, // this is a custom plugin in utils
+        questions: [{
+            prompt: "I think this face is...",
+            name: "perceived_realness",
+            ticks: ["Fake", "Real"],
+            required: true,
+            min: 0,
+            max: 1,
+            step: 0.01,
+            slider_start: 0.5,
+        }],
+        randomize_question_order: false,
+        //preamble: '<div style="font-size:24px;"><b>Assuming that the face you saw was real</b><br></p></div>',
+        require_movement: true,
+        on_start: function () {
+            ; (document.body.style.cursor = "auto"),
+                (document.querySelector(
+                    "#jspsych-progressbar-container"
+                ).style.display = "inline")
+        },
+        data: {
+            screen: "perceived_realness",
+        },
+    }
+
+var fiction_phase2 = {
+    timeline_variables: stimuli.slice(0, 6), // TODO: remove this
+    timeline: [
+        fiction_fixation2,
+        fiction_cue,
+        fiction_fixation2,
+        fiction_showimage2,
+        fiction_realness,
+    ],
+}
 var text_instructions2 =
     "<h1>Great!</h1>" +
     "<p style='text-align: left; margin-left: 30%; margin-right: 30%;'>Thanks a lot. In the next phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
@@ -229,13 +322,3 @@ var stage2_realness = {
         },
     }
 
-var fiction_phase2 = {
-    timeline_variables: stimuli.slice(0, 6), // TODO: remove this
-    timeline: [
-        fiction_fixation1,
-        fiction_cue,
-        fiction_fixation1,
-        fiction_showimage1,
-        stage2_realness,
-    ],
-}
