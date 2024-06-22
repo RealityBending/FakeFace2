@@ -160,15 +160,15 @@ var demographics_sexual_orientation = {
 // -------------------------
 var text_debriefing =
     "<h2>Debriefing</h2>" +
-    "<p align='left'>The purpose of this study was actually to study the effect on sexual arousal of <i>believing</i> that the content is AI-generated. " +
-    "Indeed, we want to test the hypothesis that believing that erotic images are fake would lead to a lower emotional arousal. " +
-    "As we are primarily interested in your <i>beliefs</i> about reality, all images were in fact taken from an existing database of real images used in psychology research to study emotions. " +
+    "<p align='left'>The purpose of this study was actually to study the effect on attraction of <i>believing</i> that the content is AI-generated. " +
+    "Indeed, we want to test the hypothesis that believing that facial images are fake would lead to lower attraction levels. " +
+    "As we are primarily interested in your <i>beliefs</i> about reality, all images were in fact taken from an existing database of real faces used in psychology research to study emotions. " +
     "We apologize for the necessary deception used in the instructions, and we hope that you understand its role in ensuring the validity of our experiment.</p>" +
-    "<p align='left'><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the project, please contact D.Makowski@sussex.ac.uk.</p>" +
+    "<p align='left'><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the project, please contact st633@sussex.ac.uk or D.Makowski@sussex.ac.uk.</p>" +
     "<p>To complete your participation in this study, click on 'Continue' and <b>wait until your responses have been successfully saved</b> before closing the tab.</p> "
 
 var text_endscreen = function (
-    link = "https://realitybending.github.io/FictionEro/experiment/english?exp=snow&lang=en"
+    link = "https://realitybending.github.io/FaceFake2/experiment/index.html"
 ) {
     return (
         "<h1>Thank you for participating</h1>" +
@@ -194,7 +194,7 @@ var demographics_debriefing = {
 }
 
 var demographics_endscreen = function (
-    link = "https://realitybending.github.io/FictionEro/experiment/english.html"
+    link = "https://realitybending.github.io/FaceFake2/experiment/index.html"
 ) {
     return {
         type: jsPsychHtmlButtonResponse,
