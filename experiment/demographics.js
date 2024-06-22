@@ -1,4 +1,8 @@
 // Full screen
+var fullscreen_text =
+    "<p>The experiment will switch to full screen mode when you press the button below</p>"
+var fullscreen_button = "Continue"
+
 var fullscreen_on = {
     type: jsPsychFullscreen,
     message: fullscreen_text,
