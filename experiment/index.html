@@ -54,6 +54,7 @@
         var timeline = []
 
         // Demographics ===========================================================
+        timeline.push(fullscreen_on) // Enter fullscreen mode
         timeline.push(demographics_browser_info)
         timeline.push(demographics_consent)
         timeline.push(demographics_info)
@@ -85,12 +86,14 @@
             data_string: () => jsPsych.data.get().csv(),
         })
 
+        // Exit fullscreen mode
+        timeline.push(fullscreen_off)
+        
         timeline.push(
             demographics_endscreen(
                 "https://realitybending.github.io/FictionEro/experiment/english?exp=snow&lang=en"
             )
         )
-
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
