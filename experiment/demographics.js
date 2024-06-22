@@ -1,3 +1,19 @@
+// Full screen
+var fullscreen_on = {
+    type: jsPsychFullscreen,
+    message: fullscreen_text,
+    button_label: fullscreen_button,
+    fullscreen_mode: true,
+    delay_after: 0,
+}
+
+var fullscreen_off = {
+    type: jsPsychFullscreen,
+    message: fullscreen_text,
+    button_label: fullscreen_button,
+    fullscreen_mode: false,
+}
+
 // Retrieve and save browser info ========================================================
 var demographics_browser_info = {
     type: jsPsychBrowserCheck,
@@ -161,6 +177,9 @@ var text_endscreen = function (
         "<p><b>You can safely close the tab now.</b></p>"
     )
 }
+
+var button_continue = "Continue"
+var button_end = "End"
 
 var demographics_debriefing = {
     type: jsPsychHtmlButtonResponse,
