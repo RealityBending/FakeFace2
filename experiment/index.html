@@ -62,10 +62,10 @@
         timeline.push(demographics_sexual_orientation)
 
         // Questionnaires ===========================================================
-        timeline.push(questionnaires_instructions0)  // Instructions Questionnaires
+        timeline.push(questionnaires_instructions0) // Instructions Questionnaires
         timeline.push(IPIP6) // Mini IPIP
-        timeline.push(AI_attitudes) // Attitudes towards AI 
-        
+        timeline.push(AI_attitudes) // Attitudes towards AI
+
         // Fiction stage 1 ===========================================================
         timeline.push(fiction_preloadstims)
         timeline.push(fiction_instructions1)
@@ -82,14 +82,14 @@
         timeline.push({
             type: jsPsychPipe,
             action: "save",
-            experiment_id: "OKYIgAxQu8cX", // This in generated in the DataPipe interface
+            experiment_id: "nboDkVu5hx3y", // This in generated in the DataPipe interface
             filename: `${jsPsych.randomization.randomID(10)}.csv`,
             data_string: () => jsPsych.data.get().csv(),
         })
 
         // Exit fullscreen mode
         timeline.push(fullscreen_off)
-        
+
         timeline.push(
             demographics_endscreen(
                 "https://realitybending.github.io/FictionEro/experiment/english?exp=snow&lang=en"
