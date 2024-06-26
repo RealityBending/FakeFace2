@@ -13,25 +13,26 @@
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-text"></script>
-        <script src="https://realitybending.github.io/JSmisc/jspsych_extensions/plugin-multiple-slider.js"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-likert"></script>
         <script src="https://unpkg.com/@jspsych/plugin-fullscreen"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey@1.0.1"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css"
+        />
 
         <!-- To save data via DataPipe (for online experiments) -->
         <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.3"></script>
 
         <!-- Custom scripts -->
+        <script src="https://realitybending.github.io/JSmisc/jspsych_extensions/plugin-multiple-slider.js"></script>
         <script src="stimuli/stimuli.js"></script>
         <script src="demographics.js"></script>
         <script src="fiction.js"></script>
         <script src="questionnaires.js"></script>
 
         <!-- CSS -->
-        <link
-            href="https://unpkg.com/jspsych/css/jspsych.css"
-            rel="stylesheet"
-            type="text/css"
-        />
+        <link href="https://unpkg.com/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
         <style>
             .narrow-text {
                 max-width: 50%;
@@ -45,7 +46,7 @@
         // Initialize experiment =================================================
         var jsPsych = initJsPsych({
             show_progress_bar: true,
-            message_progress_bar: "Completion",
+            message_progress_bar: "Progress",
             on_finish: function () {
                 jsPsych.data.displayData("json") // Display data in browser
             },
@@ -58,8 +59,7 @@
         timeline.push(fullscreen_on) // Enter fullscreen mode
         timeline.push(demographics_browser_info)
         timeline.push(demographics_consent)
-        timeline.push(demographics_info)
-        timeline.push(demographics_sexual_orientation)
+        timeline.push(demographics_questions)
 
         // Questionnaires ===========================================================
         timeline.push(questionnaires_instructions0) // Instructions Questionnaires

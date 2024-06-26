@@ -55,8 +55,7 @@ function assignCondition(stimuli) {
 
         // Assign half to "Reality" condition and half to "Fiction" condition
         for (let i = 0; i < cat_stimuli.length; i++) {
-            cat_stimuli[i].Condition =
-                i < cat_stimuli.length / 2 ? "Reality" : "Fiction"
+            cat_stimuli[i].Condition = i < cat_stimuli.length / 2 ? "Reality" : "Fiction"
         }
 
         // Add to new_stimuli_list
@@ -94,7 +93,7 @@ var fiction_instructions1 = {
         "<div style='float: center'><img src='stimuli/question_demo_2.png' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img>" +
         "<p>We are interested in your <b>first impressions</b>. Please respond according to your gut feelings.</p>",
     choices: ["Start"],
-    data: { screen: "task_instructions_1" },
+    data: { screen: "fiction_instructions1" },
 }
 
 var fiction_preloadstims = {
@@ -173,7 +172,7 @@ for (const [index, element] of items.entries()) {
     })
 }
 
-var questionnaire1 = {
+var fiction_ratings1 = {
     type: jsPsychMultipleSlider, // this is a custom plugin in utils
     questions: trait_items,
     randomize_question_order: false,
@@ -181,12 +180,10 @@ var questionnaire1 = {
     require_movement: true,
     on_start: function () {
         ;(document.body.style.cursor = "auto"),
-            (document.querySelector(
-                "#jspsych-progressbar-container"
-            ).style.display = "inline")
+            (document.querySelector("#jspsych-progressbar-container").style.display = "inline")
     },
     data: {
-        screen: "questionnaire1",
+        screen: "fiction_ratings1",
     },
 }
 
@@ -197,7 +194,7 @@ var fiction_phase1 = {
         fiction_cue,
         fiction_fixation1,
         fiction_showimage1,
-        questionnaire1,
+        fiction_ratings1,
     ],
 }
 
@@ -213,32 +210,7 @@ var fiction_fixation2 = {
     choices: ["s"],
     trial_duration: 500,
     save_trial_parameters: { trial_duration: true },
-    data: { screen: "fiction_fixation1" },
-}
-
-var fiction_cue = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function () {
-        var cond = jsPsych.timelineVariable("Condition")
-        return (
-            "<div style='font-size:450%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%; color: " +
-            color_cues[cond] +
-            "'><b>" +
-            text_cue[cond] +
-            "</b></div>"
-        )
-    },
-    data: function () {
-        var cond = jsPsych.timelineVariable("Condition")
-        return {
-            screen: "fiction_cue",
-            color: color_cues[cond],
-            text: cond,
-        }
-    },
-    choices: ["s"],
-    trial_duration: 1000,
-    save_trial_parameters: { trial_duration: true },
+    data: { screen: "fiction_fixation2" },
 }
 
 var fiction_showimage2 = {
@@ -252,14 +224,14 @@ var fiction_showimage2 = {
     trial_duration: 2000,
     choices: ["s"],
     save_trial_parameters: { trial_duration: true },
-    data: { screen: "fiction_image1" },
+    data: { screen: "fiction_image2" },
     on_finish: function (data) {
         data.trial_number = fiction_trialnumber
         fiction_trialnumber += 1
     },
 }
 
-var fiction_realness = {
+var fiction_ratings2 = {
     type: jsPsychMultipleSlider, // this is a custom plugin in utils
     questions: [
         {
@@ -278,24 +250,16 @@ var fiction_realness = {
     require_movement: true,
     on_start: function () {
         ;(document.body.style.cursor = "auto"),
-            (document.querySelector(
-                "#jspsych-progressbar-container"
-            ).style.display = "inline")
+            (document.querySelector("#jspsych-progressbar-container").style.display = "inline")
     },
     data: {
-        screen: "perceived_realness",
+        screen: "fiction_ratings2",
     },
 }
 
 var fiction_phase2 = {
     timeline_variables: stimuli.slice(0, 2), // TODO: remove this
-    timeline: [
-        fiction_fixation2,
-        fiction_cue,
-        fiction_fixation2,
-        fiction_showimage2,
-        fiction_realness,
-    ],
+    timeline: [fiction_fixation2, fiction_showimage2, fiction_ratings2],
 }
 
 var fiction_instructions2 = {
@@ -308,34 +272,5 @@ var fiction_instructions2 = {
         "<li><p>We will briefly present you <b>all the images</b> one last time (the AI-generated ones, as well as the photos), and you will have to rate them on how <b>real</b> (how realistic, photography-like) the image is.</p></li>" +
         "<li><p>We are interested in your overall impression and gut feeling of whether you felt that the image was AI-generated or not.</p></li>",
     choices: ["Start"],
-    data: { screen: "task_instructions_1" },
-}
-
-// Add Item on Perception of Realness
-var stage2_realness = {
-    type: jsPsychMultipleSlider, // this is a custom plugin in utils
-    questions: [
-        {
-            prompt: "I think this face is...",
-            name: "perceived_realness",
-            ticks: ["Fake", "Real"],
-            required: true,
-            min: 0,
-            max: 1,
-            step: 0.01,
-            slider_start: 0.5,
-        },
-    ],
-    randomize_question_order: false,
-    //preamble: '<div style="font-size:24px;"><b>Assuming that the face you saw was real</b><br></p></div>',
-    require_movement: true,
-    on_start: function () {
-        ;(document.body.style.cursor = "auto"),
-            (document.querySelector(
-                "#jspsych-progressbar-container"
-            ).style.display = "inline")
-    },
-    data: {
-        screen: "perceived_realness",
-    },
+    data: { screen: "fiction_instructions2" },
 }
