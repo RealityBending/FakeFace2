@@ -274,3 +274,56 @@ var fiction_instructions2 = {
     choices: ["Start"],
     data: { screen: "fiction_instructions2" },
 }
+
+
+// Feedback
+// -------------------------
+var text_feedback1 =
+    "<h1>Thank you!</h1>" +
+    "<p>Before we end, we wanted to know some of your thoughts on the experiment. Please tick all that apply:</p>"
+var text_feedback1_items = [
+    "I had fun",
+    "It was boring",
+    "I could tell which images were photos and which were AI-generated",
+    "I didn't see any difference between photos and AI-generated images",
+    "I felt like the AI-generated images were more arousing than the photos",
+    "I felt like the AI-generated images were less arousing than the photos",
+    "I felt like the labels ('Photograph' and 'AI-Generated') were not always correct",
+    "I felt like the labels were reversed (e.g., 'Photograph' for AI-generated images and vice versa)",
+    "Some pictures were really arousing",
+    "I didn't really feel anything when watching the images",
+]
+
+var text_feedback2 = "Do you have any other comments or feedback?"
+var text_feedback2_placeholder = "Type here"
+
+// ----------------------- feedback variables
+var fiction_feedback1 = {
+    type: jsPsychSurveyMultiSelect,
+    preamble: text_feedback1,
+    questions: [
+        {
+            prompt: " ",
+            options: text_feedback1_items,
+            name: "FeedbackChoice",
+        },
+    ],
+    data: {
+        screen: "fiction_feedback1",
+    },
+}
+
+var fiction_feedback2 = {
+    type: jsPsychSurveyText,
+    questions: [
+        {
+            prompt: text_feedback2,
+            placeholder: text_feedback2_placeholder,
+            name: "FeedbackFree",
+            required: false,
+        },
+    ],
+    data: {
+        screen: "fiction_feedback2",
+    },
+}
