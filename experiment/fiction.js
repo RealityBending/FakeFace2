@@ -6,11 +6,11 @@ var scale2 = ["Strongly Disagree", "Strongly Agree"]
 // Oosterhof and Todorov (2008) - 9 point scale (Not at all to Extremely) TRAIT VARIABLES
 var items = [
     //"The face looked real to me",
-    "This face is good-looking",
+    "This face is conventionally beautiful",
     "I find this person attractive",
     // "Would you find this person approachable?",
     "I find this person trustworthy",
-    "This person reminds me of someone I know",
+    //"This person reminds me of someone I know",
     // "How much does this face look like yours?",
     // "How weird is the face you saw?",   // include eeriness as well? (cf uncanny valley effect)
     // "How dominant is the face you saw?",
