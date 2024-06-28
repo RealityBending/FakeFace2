@@ -170,7 +170,7 @@ var demographics_questions = {
                     {
                         visibleIf:
                             "{Education} == 'High school' || {Education} == 'Master' || {Education} == 'Bachelor'",
-                        title: "Are you currrently a student?",
+                        title: "Are you currently a student?",
                         name: "Student",
                         type: "boolean",
                         swapOrder: true,
