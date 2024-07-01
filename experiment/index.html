@@ -33,7 +33,11 @@
         <script src="questionnaires.js"></script>
 
         <!-- CSS -->
-        <link href="https://unpkg.com/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link
+            href="https://unpkg.com/jspsych/css/jspsych.css"
+            rel="stylesheet"
+            type="text/css"
+        />
         <style>
             .narrow-text {
                 max-width: 50%;
@@ -81,14 +85,14 @@
         // End =======================================================================
         timeline.push(demographics_debriefing)
 
-        // Save data via DataPipe
-        timeline.push({
-            type: jsPsychPipe,
-            action: "save",
-            experiment_id: "nboDkVu5hx3y", // This in generated in the DataPipe interface
-            filename: `${jsPsych.randomization.randomID(10)}.csv`,
-            data_string: () => jsPsych.data.get().csv(),
-        })
+        // // Save data via DataPipe
+        // timeline.push({
+        //     type: jsPsychPipe,
+        //     action: "save",
+        //     experiment_id: "nboDkVu5hx3y", // This in generated in the DataPipe interface
+        //     filename: `${jsPsych.randomization.randomID(10)}.csv`,
+        //     data_string: () => jsPsych.data.get().csv(),
+        // })
 
         // Exit fullscreen mode
         timeline.push(fullscreen_off)
