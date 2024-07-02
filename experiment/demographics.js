@@ -212,7 +212,7 @@ var demographics_questions = {
                         isRequired: false,
                     },
                     {
-                        title: "What sexual orientation do you identify with?What sexual orientation do you identify with?",
+                        title: "What sexual orientation do you identify with?",
                         name: "SexualOrientation",
                         type: "radiogroup",
                         choices: ["Heterosexual", "Homosexual", "Bisexual"],
