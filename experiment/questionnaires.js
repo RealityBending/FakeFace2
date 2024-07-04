@@ -255,7 +255,6 @@ var questionnaire_bait = {
                 screen: "questionnaire_bait",
             },
         }
-        timeline.push(questionnaire_bait)
 
 var feedback_bait = {
             type: jsPsychHtmlButtonResponse,
@@ -265,4 +264,3 @@ var feedback_bait = {
             choices: ["Continue"],
             data: { screen: "feedback_bait" },
         }
-        timeline.push(feedback_bait)
