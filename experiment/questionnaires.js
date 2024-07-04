@@ -239,3 +239,30 @@ function bait_feedback(screen = "questionnaire_bait") {
         "% positivity).<br></p>"
     return feedback
 }
+
+// Initialize experiment =================================================
+var questionnaire_bait = {
+            type: jsPsychSurvey,
+            survey_json: {
+                title: "Artificial Intelligence",
+                // description: "",
+                showQuestionNumbers: false,
+                goNextPageAutomatic: true,
+                // showProgressBar: "aboveHeader",
+                pages: bait_questions(),
+            },
+            data: {
+                screen: "questionnaire_bait",
+            },
+        }
+        timeline.push(questionnaire_bait)
+
+var feedback_bait = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: function () {
+                return bait_feedback((screen = "questionnaire_bait"))
+            },
+            choices: ["Continue"],
+            data: { screen: "feedback_bait" },
+        }
+        timeline.push(feedback_bait)
