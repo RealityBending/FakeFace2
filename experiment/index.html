@@ -25,6 +25,11 @@
         <!-- To save data via DataPipe (for online experiments) -->
         <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.3"></script>
 
+         <!-- Plots -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://realitybending.github.io/JSmisc/misc/plots.js"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-canvas-button-response"></script>
+
         <!-- Custom scripts -->
         <script src="https://realitybending.github.io/JSmisc/jspsych_extensions/plugin-multiple-slider.js"></script>
         <script src="stimuli/stimuli.js"></script>
@@ -64,7 +69,8 @@
 
         // Questionnaires ===========================================================
         timeline.push(questionnaires_instructions0) // Instructions Questionnaires
-        timeline.push(IPIP6) // Mini IPIP
+        timeline.push(questionnaire_hexaco18) // HexaCo-18 questionnaire
+        timeline.push(results_hexaco18)
         timeline.push(questionnaire_bait)
         timeline.push(feedback_bait) // Attitudes towards AI
 
