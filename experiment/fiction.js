@@ -220,7 +220,7 @@ var fiction_showimage2 = {
     stimulus_height: function () {
         return 0.9 * window.innerHeight
     },
-    trial_duration: 2000,
+    trial_duration: 1000,
     choices: ["s"],
     save_trial_parameters: { trial_duration: true },
     data: { screen: "fiction_image2" },
@@ -246,46 +246,46 @@ var fiction_ratings2 = {
                         title: "I think this face is...",
                         description: "Indicate your confidence that the image is fake or real",
                         isRequired: true,
-                        rateValues: [
-                            {
-                                value: -1,
-                                text: "-4",
-                            },
-                            {
-                                value: -0.75,
-                                text: "-3",
-                            },
-                            {
-                                value: -0.5, // 1/2
-                                text: "-2",
-                            },
-                            {
-                                value: -0.25, // 1/4
-                                text: "-1",
-                            },
-                            // {
-                            //     value: 0,
-                            //     text: "0",
-                            // },
-                            {
-                                value: 0.25, // 1/4
-                                text: "1",
-                            },
-                            {
-                                value: 0.5, // 1/2
-                                text: "2",
-                            },
-                            {
-                                value: 0.75, // 3/4
-                                text: "3",
-                            },
-                            {
-                                value: 1,
-                                text: "4", // "4 (100% Certain)",
-                            },
-                        ],
-                        // rateMin: -4,
-                        // rateMax: 4,
+                        // rateValues: [
+                        //     {
+                        //         value: -1,
+                        //         text: "-4",
+                        //     },
+                        //     {
+                        //         value: -0.75,
+                        //         text: "-3",
+                        //     },
+                        //     {
+                        //         value: -0.5, // 1/2
+                        //         text: "-2",
+                        //     },
+                        //     {
+                        //         value: -0.25, // 1/4
+                        //         text: "-1",
+                        //     },
+                        //     // {
+                        //     //     value: 0,
+                        //     //     text: "0",
+                        //     // },
+                        //     {
+                        //         value: 0.25, // 1/4
+                        //         text: "1",
+                        //     },
+                        //     {
+                        //         value: 0.5, // 1/2
+                        //         text: "2",
+                        //     },
+                        //     {
+                        //         value: 0.75, // 3/4
+                        //         text: "3",
+                        //     },
+                        //     {
+                        //         value: 1,
+                        //         text: "4", // "4 (100% Certain)",
+                        //     },
+                        // ],
+                        rateMin: -3,
+                        rateMax: 3,
                         minRateDescription: "AI-Generated",
                         maxRateDescription: "Photograph",
                     },
@@ -309,14 +309,13 @@ var fiction_instructions2 = {
     stimulus:
         "<h1>Part 4/4</h1>" +
         "<div style='text-align: left'>" +
-        "<p>Thank you for your participation. In this final phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
-        "<p>Important Note: Some images from the previous task were intentionally mislabelled. Instructions:.</p><ul>" +
-        "<li><p>We will briefly present <b>all the images</b> once more, including both the AI-generated images and the real photographs.</p></li>" +
-        "<li><p>Your task is to rate each image on its realism by assessing how convincing and error-free the images appear to be. You will have to rate them on how <b>real</b> (how realistic, photography-like) the image is.</p></li>" +
-        "<p>We are interested and value your overall impression and gut feeling on whether each image is AI-generated or a real photograph.</p>" +
-        "<p>Your feedback is crucial in evaluating the effectiveness of our technology.</p>" +
-        "<div style='float: center'><img src='stimuli/imagequestion_phase2.pdf' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img>" +
-        "<p>Click <b>Start</b> to proceed.</p>",
+        "<img src='media/phase2_img.png' height='300' align='right'></img>" +
+        "<p>Thank you! In this final phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
+        "<p>But there is <b>something important</b> we need to tell you... In the previous phase, some images were <b style='color: orange'>intentionally mislabelled</b> (we told you it was a photograph when it was actually AI-generated and vice versa).</p>" +
+        "<p>In this phase, we want you to tell us for each image <b>what you think is the true category</b>! " +
+        "We will briefly present all the images once more, and your task is to tell us if you think the image is AI-generated or a photograph. Indicate your degree of <b>confidence</b> and certainty by selecting larger numbers.</p>" +
+        // TODO: Add screenshot of scale
+        "<p style='text-align: center';>Press start once you are ready.</p>",
     choices: ["Start"],
     data: { screen: "fiction_instructions2" },
 }
