@@ -63,10 +63,10 @@ var demographics_consent = {
         "<p align='left'><b>Consent</b><br></p>" +
         // Bullet points
         "<li align='left'>I understand that by signing below I am agreeing to take part in the University of Sussex research described here, and that I have read and understood this information sheet</li>" +
-        "<li align='left'>I understand that my participation is entirely voluntary, that I can choose not to participate in part or all of the study, and that I can withdraw at any stage without having to give a reason and without being penalised in any way (e.g., if I am a student, my decision whether or not to take part will not affect my grades).</li>" +
+        "<li align='left'>I understand that my participation is entirely voluntary, that I can choose not to participate in part or all of the study, and that I can withdraw at any stage without having to give a reason and without being penalized in any way (e.g., if I am a student, my decision whether or not to take part will not affect my grades).</li>" +
         "<li align='left'>I understand that since the study is anonymous, it will be impossible to withdraw my data once I have completed it.</li>" +
         "<li align='left'>I understand that my personal data will be used for the purposes of this research study and will be handled in accordance with Data Protection legislation. I understand that the University's Privacy Notice provides further information on how the University uses personal data in its research.</li>" +
-        "<li align='left'>I understand that my collected data will be stored in a de-identified way. De-identified data may be made publically available through secured scientific online data repositories.</li>" +
+        "<li align='left'>I understand that my collected data will be stored in a de-identified way. De-identified data may be made publicly available through secured scientific online data repositories.</li>" +
         // Incentive
         "<li align='left'>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, ...).</li>" +
         "<li align='left'>By participating, you agree to follow the instructions and provide honest answers. If you do not wish to participate, simply close your browser.</li>" +
@@ -213,6 +213,8 @@ var demographics_questions = {
                     },
                     {
                         title: "What sexual orientation do you identify with?",
+                        description:
+                            "This information is important for the later part of the experiment.",
                         name: "SexualOrientation",
                         type: "radiogroup",
                         choices: ["Heterosexual", "Homosexual", "Bisexual"],
@@ -232,7 +234,42 @@ var demographics_questions = {
 }
 
 // Thank you ========================================================================
-// -------------------------
+
+var experiment_feedback = {
+    type: jsPsychSurvey,
+    survey_json: {
+        title: "Feedback",
+        description:
+            "It is the end of the experiment! Don't hesitate to leave us a feedback. After clicking 'Complete', your data will be saved on our secure servers, after what we will provide you with more information about the study.",
+        completeText: "Complete the experiment",
+        showQuestionNumbers: false,
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "rating",
+                        name: "Feedback_Enjoyment",
+                        title: "Did you enjoy doing this experiment?",
+                        isRequired: false,
+                        rateMin: 0,
+                        rateMax: 4,
+                        rateType: "stars",
+                    },
+                    {
+                        type: "comment",
+                        name: "Feedback_Text",
+                        title: "Anything else you would like to share with us?",
+                        isRequired: false,
+                    },
+                ],
+            },
+        ],
+    },
+    data: {
+        screen: "experiment_feedback",
+    },
+}
+
 var text_debriefing =
     "<h2>Debriefing</h2>" +
     "<p align='left'>The purpose of this study was actually to study the effect on attraction of <i>believing</i> that the content is AI-generated. " +
