@@ -1,39 +1,3 @@
-/* Measures */ //===============================================================
-// Scale Labels
-var scale1 = ["Not at All", "Extremely"]
-var scale2 = ["Strongly Disagree", "Strongly Agree"]
-
-// Oosterhof and Todorov (2008) - 9 point scale (Not at all to Extremely) TRAIT VARIABLES
-var items = [
-    //"The face looked real to me",
-    "This face is conventionally beautiful",
-    "I find this person attractive",
-    // "Would you find this person approachable?",
-    "I find this person trustworthy",
-    //"This person reminds me of someone I know",
-    // "How much does this face look like yours?",
-    // "How weird is the face you saw?",   // include eeriness as well? (cf uncanny valley effect)
-    // "How dominant is the face you saw?",
-    //"How musculine/feminine is the face you saw?",
-    // "How emotionally stable is the face you saw?",
-    // "How mean is the face you saw?",
-    // "How boring is the face you saw?",
-    // "How intelligent is the face you saw?",
-    // "How caring is the face you saw?",
-    // "How egoistic is the face you saw?",
-    // "How responsible is the face you saw?",
-]
-
-var dimensions = [
-    //"Real",
-    "Physical_Attractiveness",
-    "General_Attractiveness",
-    // "Approachability",
-    "Trustworthiness",
-    // "Familiarity", // Familiarity (van vugt et al., 2010)
-    // "Similarity"
-]
-
 // Condition assignment ============================================
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -99,6 +63,23 @@ var fiction_instructions1 = {
     data: { screen: "fiction_instructions1" },
 }
 
+var fiction_instructions2 = {
+    type: jsPsychHtmlButtonResponse,
+    css_classes: ["narrow-text"],
+    stimulus:
+        "<h1>Part 4/4</h1>" +
+        "<div style='text-align: left'>" +
+        "<img src='media/phase2_img.png' height='300' align='right'></img>" +
+        "<p>Thank you! In this final phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
+        "<p>But there is <b>something important</b> we need to tell you... In the previous phase, some images were <b style='color: orange'>intentionally mislabelled</b> (we told you it was a photograph when it was actually AI-generated and vice versa).</p>" +
+        "<p>In this phase, we want you to tell us for each image <b>what you think is the true category</b>! " +
+        "We will briefly present all the images once more, and your task is to tell us if you think the image is AI-generated or a photograph. Indicate your degree of <b>confidence</b> and certainty by selecting larger numbers.</p>" +
+        // TODO: Add screenshot of scale
+        "<p style='text-align: center';>Press start once you are ready.</p>",
+    choices: ["Start"],
+    data: { screen: "fiction_instructions2" },
+}
+
 var fiction_preloadstims = {
     type: jsPsychPreload,
     images: stimuli.map((a) => "stimuli/AMFD/" + a.stimulus),
@@ -160,27 +141,67 @@ var fiction_showimage1 = {
     },
 }
 
-var trait_items = []
-// Add Items on Attractiveness Trustworthiness and Familiarity
-for (const [index, element] of items.entries()) {
-    trait_items.push({
-        prompt: element,
-        name: dimensions[index],
-        ticks: scale1,
-        required: true,
-        min: 0,
-        max: 1,
-        step: 0.01,
-        slider_start: 0.5,
-    })
-}
-
+// Oosterhof and Todorov (2008) - 9 point scale (Not at all to Extremely) TRAIT VARIABLES
 var fiction_ratings1 = {
-    type: jsPsychMultipleSlider, // this is a custom plugin in utils
-    questions: trait_items,
-    randomize_question_order: false,
-    //preamble: '<div style="font-size:24px;"><b>Assuming that the face you saw was real</b><br></p></div>',
-    require_movement: true,
+    type: jsPsychSurvey,
+    css_classes: ["narrow-text"],
+    survey_json: {
+        goNextPageAutomatic: true,
+        showQuestionNumbers: false,
+        showNavigationButtons: false,
+        title: "Rating",
+        description: "Think of the person that you just saw.",
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "rating",
+                        name: "Beauty",
+                        title: "This face is beautiful",
+                        isRequired: true,
+                        rateMin: -3,
+                        rateMax: 3,
+                        minRateDescription: "Disagree",
+                        maxRateDescription: "Agree",
+                    },
+                    {
+                        type: "rating",
+                        name: "Attractiveness",
+                        title: "I found this person attractive",
+                        isRequired: true,
+                        rateMin: -3,
+                        rateMax: 3,
+                        minRateDescription: "Disagree",
+                        maxRateDescription: "Agree",
+                    },
+                    {
+                        type: "rating",
+                        name: "Trustworthiness",
+                        title: "I found this person trustworthy",
+                        isRequired: true,
+                        rateMin: -3,
+                        rateMax: 3,
+                        minRateDescription: "Disagree",
+                        maxRateDescription: "Agree",
+                    },
+                    // "This face is conventionally beautiful",
+                    // "Would you find this person approachable?",
+                    // "This person reminds me of someone I know", // Familiarity (van vugt et al., 2010)
+                    // "How much does this face look like yours?",
+                    // "How weird is the face you saw?",   // include eeriness as well? (cf uncanny valley effect)
+                    // "How dominant is the face you saw?",
+                    // "How musculine/feminine is the face you saw?",
+                    // "How emotionally stable is the face you saw?",
+                    // "How mean is the face you saw?",
+                    // "How boring is the face you saw?",
+                    // "How intelligent is the face you saw?",
+                    // "How caring is the face you saw?",
+                    // "How egoistic is the face you saw?",
+                    // "How responsible is the face you saw?",
+                ],
+            },
+        ],
+    },
     data: {
         screen: "fiction_ratings1",
     },
@@ -301,23 +322,6 @@ var fiction_ratings2 = {
 var fiction_phase2 = {
     timeline_variables: shuffleArray(stimuli.slice(0, 3)), // TODO: remove this
     timeline: [fiction_fixation2, fiction_showimage2, fiction_ratings2],
-}
-
-var fiction_instructions2 = {
-    type: jsPsychHtmlButtonResponse,
-    css_classes: ["narrow-text"],
-    stimulus:
-        "<h1>Part 4/4</h1>" +
-        "<div style='text-align: left'>" +
-        "<img src='media/phase2_img.png' height='300' align='right'></img>" +
-        "<p>Thank you! In this final phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
-        "<p>But there is <b>something important</b> we need to tell you... In the previous phase, some images were <b style='color: orange'>intentionally mislabelled</b> (we told you it was a photograph when it was actually AI-generated and vice versa).</p>" +
-        "<p>In this phase, we want you to tell us for each image <b>what you think is the true category</b>! " +
-        "We will briefly present all the images once more, and your task is to tell us if you think the image is AI-generated or a photograph. Indicate your degree of <b>confidence</b> and certainty by selecting larger numbers.</p>" +
-        // TODO: Add screenshot of scale
-        "<p style='text-align: center';>Press start once you are ready.</p>",
-    choices: ["Start"],
-    data: { screen: "fiction_instructions2" },
 }
 
 // Feedback
