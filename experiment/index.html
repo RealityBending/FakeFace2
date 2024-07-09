@@ -25,6 +25,13 @@
         <!-- To save data via DataPipe (for online experiments) -->
         <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.4.0"></script>
 
+        <!-- Eye-tacking -->
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.3"></script>
+
         <!-- Plots -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://realitybending.github.io/JSmisc/misc/plots.js"></script>
@@ -36,6 +43,7 @@
         <script src="demographics.js"></script>
         <script src="fiction.js"></script>
         <script src="questionnaires.js"></script>
+        <script src="eyetracking.js"></script>
 
         <!-- CSS -->
         <link href="https://unpkg.com/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
@@ -56,46 +64,53 @@
             on_finish: function () {
                 jsPsych.data.displayData("json") // Display data in browser
             },
+            extensions: [{ type: jsPsychExtensionWebgazer }],
         })
+
+        // Generate participant ID
+        var participant_id = jsPsych.randomization.randomID(10)
 
         // Initialize timeline
         var timeline = []
 
         // Demographics ===========================================================
         timeline.push(fullscreen_on) // Enter fullscreen mode
-        timeline.push(demographics_browser_info)
-        timeline.push(demographics_consent)
-        timeline.push(demographics_questions)
+        // timeline.push(demographics_browser_info)
+        // timeline.push(demographics_consent)
+        // timeline.push(demographics_questions)
 
-        // Questionnaires ===========================================================
-        timeline.push(questionnaires_instructions0) // Instructions Questionnaires
-        timeline.push(questionnaire_hexaco18) // HexaCo-18 questionnaire
-        timeline.push(results_hexaco18)
-        timeline.push(questionnaire_bait)
-        timeline.push(feedback_bait) // Attitudes towards AI
+        // // Questionnaires ===========================================================
+        // timeline.push(questionnaires_instructions0) // Instructions Questionnaires
+        // timeline.push(questionnaire_hexaco18) // HexaCo-18 questionnaire
+        // timeline.push(results_hexaco18)
+        // timeline.push(questionnaire_bait)
+        // timeline.push(feedback_bait) // Attitudes towards AI
 
-        // Fiction stage 1 ===========================================================
+        // // Fiction stage 1 ===========================================================
         timeline.push(fiction_preloadstims)
+        timeline.push(eyetracking_consent)
+        timeline.push(eyetracking_calibration)
+
         timeline.push(fiction_instructions1)
         timeline.push(fiction_phase1)
         timeline.push(fiction_feedback1)
 
-        // Fiction stage 2 ===========================================================
-        timeline.push(fiction_instructions2)
-        timeline.push(fiction_phase2)
-        timeline.push(experiment_feedback)
+        // // Fiction stage 2 ===========================================================
+        // timeline.push(fiction_instructions2)
+        // timeline.push(fiction_phase2)
+        // timeline.push(experiment_feedback)
 
-        // End =======================================================================
-        timeline.push(demographics_debriefing)
+        // // End =======================================================================
+        // timeline.push(demographics_debriefing)
 
-        // // Save data via DataPipe
-        // timeline.push({
-        //     type: jsPsychPipe,
-        //     action: "save",
-        //     experiment_id: "nboDkVu5hx3y", // This in generated in the DataPipe interface
-        //     filename: `${jsPsych.randomization.randomID(10)}.csv`,
-        //     data_string: () => jsPsych.data.get().csv(),
-        // })
+        // Save data via DataPipe
+        timeline.push({
+            type: jsPsychPipe,
+            action: "save",
+            experiment_id: "nboDkVu5hx3y", // This in generated in the DataPipe interface
+            filename: `${participant_id}.csv`,
+            data_string: () => jsPsych.data.get().csv(),
+        })
 
         // Exit fullscreen mode
         timeline.push(fullscreen_off)

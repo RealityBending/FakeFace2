@@ -139,6 +139,13 @@ var fiction_showimage1 = {
         data.trial_number = fiction_trialnumber
         fiction_trialnumber += 1
     },
+    // Enable webgazer
+    extensions: [
+        {
+            type: jsPsychExtensionWebgazer,
+            params: { targets: ["#jspsych-image-keyboard-response-stimulus"] },
+        },
+    ],
 }
 
 // Oosterhof and Todorov (2008) - 9 point scale (Not at all to Extremely) TRAIT VARIABLES
