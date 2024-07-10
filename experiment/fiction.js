@@ -129,7 +129,18 @@ var fiction_showimage1 = {
         return "stimuli/AMFD/" + jsPsych.timelineVariable("stimulus")
     },
     stimulus_height: function () {
-        return 0.9 * window.innerHeight
+        if (window.innerHeight < window.innerWidth) {
+            return Math.round(0.9 * window.innerHeight)
+        } else {
+            return null
+        }
+    },
+    stimulus_width: function () {
+        if (window.innerHeight > window.innerWidth) {
+            return Math.round(0.9 * window.innerWidth)
+        } else {
+            return null
+        }
     },
     trial_duration: 2000,
     choices: ["s"],
@@ -249,7 +260,18 @@ var fiction_showimage2 = {
         return "stimuli/AMFD/" + jsPsych.timelineVariable("stimulus")
     },
     stimulus_height: function () {
-        return 0.9 * window.innerHeight
+        if (window.innerHeight < window.innerWidth) {
+            return Math.round(0.9 * window.innerHeight)
+        } else {
+            return null
+        }
+    },
+    stimulus_width: function () {
+        if (window.innerHeight > window.innerWidth) {
+            return Math.round(0.9 * window.innerWidth)
+        } else {
+            return null
+        }
     },
     trial_duration: 1000,
     choices: ["s"],
@@ -331,7 +353,7 @@ var fiction_ratings2 = {
 }
 
 var fiction_phase2 = {
-    timeline_variables: shuffleArray(stimuli.slice(0, 3)), // TODO: remove this
+    timeline_variables: shuffleArray(stimuli), // .slice(0, 3) TODO: remove this
     timeline: [fiction_fixation2, fiction_showimage2, fiction_ratings2],
 }
 

@@ -68,25 +68,25 @@
         })
 
         // Generate participant ID
-        var participant_id = jsPsych.randomization.randomID(10)
+        // var participant_id = jsPsych.randomization.randomID(10)
 
         // Initialize timeline
         var timeline = []
 
         // Demographics ===========================================================
         timeline.push(fullscreen_on) // Enter fullscreen mode
-        // timeline.push(demographics_browser_info)
-        // timeline.push(demographics_consent)
-        // timeline.push(demographics_questions)
+        timeline.push(demographics_browser_info)
+        timeline.push(demographics_consent)
+        timeline.push(demographics_questions)
 
-        // // Questionnaires ===========================================================
-        // timeline.push(questionnaires_instructions0) // Instructions Questionnaires
-        // timeline.push(questionnaire_hexaco18) // HexaCo-18 questionnaire
-        // timeline.push(results_hexaco18)
-        // timeline.push(questionnaire_bait)
-        // timeline.push(feedback_bait) // Attitudes towards AI
+        // Questionnaires ===========================================================
+        timeline.push(questionnaires_instructions0) // Instructions Questionnaires
+        timeline.push(questionnaire_hexaco18) // HexaCo-18 questionnaire
+        timeline.push(results_hexaco18)
+        timeline.push(questionnaire_bait)
+        timeline.push(feedback_bait) // Attitudes towards AI
 
-        // // Fiction stage 1 ===========================================================
+        // Fiction stage 1 ===========================================================
         timeline.push(fiction_preloadstims)
         timeline.push(eyetracking_consent)
         timeline.push(eyetracking_calibration)
@@ -95,20 +95,20 @@
         timeline.push(fiction_phase1)
         timeline.push(fiction_feedback1)
 
-        // // Fiction stage 2 ===========================================================
-        // timeline.push(fiction_instructions2)
-        // timeline.push(fiction_phase2)
-        // timeline.push(experiment_feedback)
+        // Fiction stage 2 ===========================================================
+        timeline.push(fiction_instructions2)
+        timeline.push(fiction_phase2)
+        timeline.push(experiment_feedback)
 
-        // // End =======================================================================
-        // timeline.push(demographics_debriefing)
+        // End =======================================================================
+        timeline.push(demographics_debriefing)
 
         // Save data via DataPipe
         timeline.push({
             type: jsPsychPipe,
             action: "save",
             experiment_id: "nboDkVu5hx3y", // This in generated in the DataPipe interface
-            filename: `${participant_id}.csv`,
+            filename: `${jsPsych.randomization.randomID(10)}.csv`,
             data_string: () => jsPsych.data.get().csv(),
         })
 
