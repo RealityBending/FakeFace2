@@ -215,7 +215,7 @@ var fiction_ratings1 = {
 }
 
 var fiction_phase1 = {
-    timeline_variables: stimuli.slice(0, 3), // TODO: remove this
+    timeline_variables: stimuli, //.slice(0, 3), // TODO: remove this
     timeline: [
         fiction_fixation1,
         fiction_cue,
