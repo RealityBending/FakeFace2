@@ -170,6 +170,7 @@ var fiction_ratings1 = {
                         rateMax: 3,
                         minRateDescription: "Disagree",
                         maxRateDescription: "Agree",
+                        displayMode: "buttons",
                     },
                     {
                         type: "rating",
@@ -180,6 +181,7 @@ var fiction_ratings1 = {
                         rateMax: 3,
                         minRateDescription: "Disagree",
                         maxRateDescription: "Agree",
+                        displayMode: "buttons",
                     },
                     {
                         type: "rating",
@@ -190,6 +192,7 @@ var fiction_ratings1 = {
                         rateMax: 3,
                         minRateDescription: "Disagree",
                         maxRateDescription: "Agree",
+                        displayMode: "buttons",
                     },
                     // "This face is conventionally beautiful",
                     // "Would you find this person approachable?",
@@ -316,6 +319,7 @@ var fiction_ratings2 = {
                         rateMax: 3,
                         minRateDescription: "AI-Generated",
                         maxRateDescription: "Photograph",
+                        displayMode: "buttons",
                     },
                 ],
             },
