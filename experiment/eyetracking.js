@@ -13,6 +13,16 @@ var eyetracking_consent = {
 }
 
 // Calibration ====================================================================
+const calibration_points = [
+    [25, 25],
+    [75, 25],
+    [25, 50],
+    [50, 50],
+    [75, 50],
+    [25, 75],
+    [75, 75],
+]
+
 var eyetracking_webcam = {
     type: jsPsychWebgazerInitCamera,
     instructions:
@@ -36,13 +46,7 @@ var eyetracking_calibration_instructions = {
 
 var eyetracking_calibration_run = {
     type: jsPsychWebgazerCalibrate,
-    calibration_points: [
-        [25, 25],
-        [75, 25],
-        [50, 50],
-        [25, 75],
-        [75, 75],
-    ],
+    calibration_points: calibration_points,
     repetitions_per_point: 2,
     randomize_calibration_order: true,
     data: {
@@ -64,13 +68,7 @@ var eyetracking_validation_instructions = {
 
 var eyetracking_validation_run = {
     type: jsPsychWebgazerValidate,
-    validation_points: [
-        [25, 25],
-        [75, 25],
-        [50, 50],
-        [25, 75],
-        [75, 75],
-    ],
+    validation_points: calibration_points,
     roi_radius: function () {
         return Math.round(0.02 * window.innerWidth)
     },
