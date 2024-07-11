@@ -145,12 +145,16 @@ var fiction_showimage1 = {
     trial_duration: 2000,
     choices: ["s"],
     save_trial_parameters: { trial_duration: true },
-    data: { screen: "fiction_image1" },
+    data: function () {
+        return {
+            screen: "fiction_image1",
+            window_width: window.innerWidth,
+            window_height: window.innerHeight,
+        }
+    },
     on_finish: function (data) {
         data.trial_number = fiction_trialnumber
         fiction_trialnumber += 1
-        window_width = window.innerWidth
-        window_height = window.innerHeight
     },
     // Enable webgazer
     extensions: [
