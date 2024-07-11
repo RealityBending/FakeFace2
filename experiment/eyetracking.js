@@ -26,7 +26,7 @@ var eyetracking_webcam = {
 var eyetracking_calibration_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
-        "<h2>Calibration</h2>" +
+        "<h2>Gaze Calibration (1/2)</h2>" +
         "<p>You will now see a series of <b>black dots</b> appear on the screen. Look at each dot and <b>click on it</b>.</p>",
     choices: ["Ready"],
     data: {
@@ -53,7 +53,7 @@ var eyetracking_calibration_run = {
 var eyetracking_validation_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
-        "<h2>Calibration</h2>" +
+        "<h2>Gaze Calibration (2/2)</h2>" +
         "<p>Again, look at each dot as it appears on the screen, but <b>do not click on them this time.</b></p>",
     choices: ["Ready"],
     post_trial_gap: 1000,
@@ -101,6 +101,7 @@ var eyetracking_calibration_process = {
 var eyetracking_recalibrate_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
+        "<h2>Gaze Calibration (1/2)</h2>" +
         "<p>The calibration accuracy is a little lower than we'd like.</p>" +
         "<p>Let's try calibrating one more time.</p>" +
         "<p>On the next screen, look at the dots and <b>click on them</b>.<p>",
@@ -134,6 +135,22 @@ var eyetracking_calibration = {
         eyetracking_calibration_instructions,
         eyetracking_calibration_process,
         eyetracking_recalibrate_process,
+        calibration_done,
+    ],
+    conditional_function: function () {
+        var consent = jsPsych.data.get().filter({ screen: "eyetracking_consent" })["trials"][0]
+        if (consent["response"] == 0) {
+            return true
+        } else {
+            return false
+        }
+    },
+}
+
+var eyetracking_recalibration = {
+    timeline: [
+        eyetracking_calibration_instructions,
+        eyetracking_calibration_process,
         calibration_done,
     ],
     conditional_function: function () {

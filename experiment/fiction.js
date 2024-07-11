@@ -78,6 +78,9 @@ var fiction_instructions2 = {
         "<p style='text-align: center';>Press start once you are ready.</p>",
     choices: ["Start"],
     data: { screen: "fiction_instructions2" },
+    on_finish: function () {
+        fiction_trialnumber = 1 // Reset trial counter
+    },
 }
 
 var fiction_preloadstims = {
@@ -173,7 +176,11 @@ var fiction_ratings1 = {
         goNextPageAutomatic: true,
         showQuestionNumbers: false,
         showNavigationButtons: false,
-        title: "Rating",
+        title: function () {
+            return (
+                "Rating - " + Math.round(((fiction_trialnumber - 1) / stimuli.length) * 100) + "%"
+            )
+        },
         description: "Think of the person that you just saw.",
         pages: [
             {
@@ -183,8 +190,8 @@ var fiction_ratings1 = {
                         name: "Beauty",
                         title: "This face is beautiful",
                         isRequired: true,
-                        rateMin: -3,
-                        rateMax: 3,
+                        rateMin: 0,
+                        rateMax: 6,
                         minRateDescription: "Disagree",
                         maxRateDescription: "Agree",
                         displayMode: "buttons",
@@ -194,8 +201,8 @@ var fiction_ratings1 = {
                         name: "Attractiveness",
                         title: "I found this person attractive",
                         isRequired: true,
-                        rateMin: -3,
-                        rateMax: 3,
+                        rateMin: 0,
+                        rateMax: 6,
                         minRateDescription: "Disagree",
                         maxRateDescription: "Agree",
                         displayMode: "buttons",
@@ -205,8 +212,8 @@ var fiction_ratings1 = {
                         name: "Trustworthiness",
                         title: "I found this person trustworthy",
                         isRequired: true,
-                        rateMin: -3,
-                        rateMax: 3,
+                        rateMin: 0,
+                        rateMax: 6,
                         minRateDescription: "Disagree",
                         maxRateDescription: "Agree",
                         displayMode: "buttons",
@@ -234,8 +241,31 @@ var fiction_ratings1 = {
     },
 }
 
-var fiction_phase1 = {
-    timeline_variables: stimuli, //.slice(0, 3), // TODO: remove this
+var fiction_phase1a = {
+    timeline_variables: stimuli.slice(0, Math.ceil(stimuli.length / 2)), //.slice(0, 3), // TODO: remove this
+    timeline: [
+        fiction_fixation1,
+        fiction_cue,
+        fiction_fixation1,
+        fiction_showimage1,
+        fiction_ratings1,
+    ],
+}
+
+var fiction_phase1_break = {
+    type: jsPsychHtmlButtonResponse,
+    css_classes: ["narrow-text"],
+    stimulus:
+        "<h1>Break Time</h1>" +
+        "<div style='text-align: left'>" +
+        "<p>We know these types of experiment can feel a bit repetitive and tedious, " +
+        "but it is important for us that you stay focus until the end. Please take this opportunity to <b>take a break and relax your neck and eyes</b>.</p>",
+    choices: ["Ready to continue!"],
+    data: { screen: "fiction_phase1_break" },
+}
+
+var fiction_phase1b = {
+    timeline_variables: stimuli.slice(Math.ceil(stimuli.length / 2), stimuli.length), //.slice(0, 3), // TODO: remove this
     timeline: [
         fiction_fixation1,
         fiction_cue,
@@ -295,6 +325,11 @@ var fiction_ratings2 = {
         goNextPageAutomatic: true,
         showQuestionNumbers: false,
         showNavigationButtons: false,
+        title: function () {
+            return (
+                "Rating - " + Math.round(((fiction_trialnumber - 1) / stimuli.length) * 100) + "%"
+            )
+        },
         pages: [
             {
                 elements: [
@@ -358,7 +393,7 @@ var fiction_ratings2 = {
 }
 
 var fiction_phase2 = {
-    timeline_variables: shuffleArray(stimuli), // .slice(0, 3) TODO: remove this
+    timeline_variables: shuffleArray(stimuli).slice(0, 3), // .slice(0, 3) TODO: remove this
     timeline: [fiction_fixation2, fiction_showimage2, fiction_ratings2],
 }
 

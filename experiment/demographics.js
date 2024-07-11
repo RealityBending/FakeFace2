@@ -210,13 +210,33 @@ var demographics_questions = {
                         placeholder: "e.g., France",
                         isRequired: false,
                     },
+                ],
+            },
+            {
+                elements: [
                     {
                         title: "What sexual orientation do you identify with?",
                         description:
-                            "This information is important for the later part of the experiment.",
+                            "These questions are important to understand the results in the latter part of the experiment.",
                         name: "SexualOrientation",
                         type: "radiogroup",
                         choices: ["Heterosexual", "Homosexual", "Bisexual"],
+                        showOtherItem: true,
+                        otherText: "Other",
+                        otherPlaceholder: "Please specify",
+                        isRequired: true,
+                        colCount: 1,
+                    },
+                    {
+                        title: "I am currently...",
+                        name: "SexualStatus",
+                        type: "radiogroup",
+                        choices: [
+                            "Single and not open to dating",
+                            "Single and open to dating",
+                            "In a relationship and not open to dating",
+                            "In a relationship and open to dating",
+                        ],
                         showOtherItem: true,
                         otherText: "Other",
                         otherPlaceholder: "Please specify",
