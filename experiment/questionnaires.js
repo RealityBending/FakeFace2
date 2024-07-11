@@ -1,109 +1,14 @@
 // FaceFake2 questionnaires
 var questionnaires_instructions0 = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus:
-                "<h1>Part 2/4</h1>" +
-                "<p>Great! We will continue with a series of questionnaires about your personality.<br>Again, it is important that you answer truthfully. Please read the statements carefully and answer according to what describe you the best.</p>",
-            choices: ["Continue"],
-            data: { screen: "instructions0" },
-        }
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+        "<h1>Part 2/4</h1>" +
+        "<p>Great! We will continue with a series of questionnaires about your personality.<br>Again, it is important that you answer truthfully. Please read the statements carefully and answer according to what describe you the best.</p>",
+    choices: ["Continue"],
+    data: { screen: "part2_instructions" },
+}
 
-// Questionnaires =================================================        
-/* Measures */ //===============================================================
-// Scale Labels
-var scale1 = ["Not at All", "Extremely"]
-var scale2 = ["Strongly Disagree", "Strongly Agree"]
-
-// mini-ipip
-// Mini IPIP scale
-var IPIP = [
-    "<b>I am the life of the party</b><br>",
-    "<b>I sympathize with others' feelings</b><br>",
-    "<b>I get chores done right away</b><br>",
-    "<b>I have frequent mood swings</b><br>",
-    "<b>I have a vivid imagination</b><br>",
-    "<b>I feel entitled to more of everything</b><br>",
-    "<b>I do not talk a lot</b><br>",
-    "<b>I am not interested in other people's problems</b><br>",
-    "<b>I have difficulty understanding abstract ideas</b><br>",
-    "<b>I like order</b><br>",
-    "<b>I make a mess of things</b><br>",
-    "<b>I deserve more things in life</b><br>",
-    "<b>I do not have a good imagination</b><br>",
-    "<b>I feel other's emotions</b><br>",
-    "<b>I am relaxed most of the time</b><br>",
-    "<b>I get upset easily</b><br>",
-    "<b>I seldom feel blue</b><br>",
-    "<b>I would like to be seen driving around in a very expensive car</b><br>",
-    "<b>I keep in the background</b><br>",
-    "<b>I am not really interested in others</b><br>",
-    "<b>I am not interested in abstract ideas</b><br>",
-    "<b>I often forget to put things back in their proper place</b><br>",
-    "<b>I talk to a lot of different people at parties</b><br>",
-    "<b>I would get a lot of pleasure from owning expensive luxury goods</b><br>",
-]
-
-var IPIP_dim = [
-    "Extraversion_1",
-    "Agreeableness_2",
-    "Conscientiousness_3",
-    "Neuroticism_4",
-    "Openness_5",
-    "HonestyHumility_6_R",
-    "Extraversion_7_R",
-    "Agreeableness_8_R",
-    "Openness_9_R",
-    "Conscientiousness_10",
-    "Conscientiousness_11_R",
-    "HonestyHumility_12_R",
-    "Openness_13_R",
-    "Agreeableness_14",
-    "Neuroticism_15_R",
-    "Neuroticism_16",
-    "Neuroticism_17_R",
-    "HonestyHumility_18_R",
-    "Extraversion_19_R",
-    "Agreeableness_20_R",
-    "Openness_21_R",
-    "Conscientiousness_22_R",
-     "Extraversion_23",
-    "HonestyHumility_24_R",
-]
-    
-    /* Mini IPIP *==========================*/
-    var IPIP_items = []
-        for (const [index, element] of IPIP.entries()) {
-            IPIP_items.push({
-                prompt: element,
-                name: IPIP_dim[index],
-                ticks: scale2,
-                required: true,
-                min: 0,
-                max: 1,
-                step: 0.01,
-                slider_start: 0.5
-            })
-        }
-        
-        var IPIP6 = {
-            type: jsPsychMultipleSlider,
-            questions: IPIP_items,
-            randomize_question_order: false,
-            preamble:
-                "<p><b>Survey 1/2</b></b></p>" +
-                "<p>Please answer the following questions based on how accurately each statement describes you.</p>",
-            require_movement: true,
-            on_start: function () {
-                ; (document.body.style.cursor = "auto"),
-                    (document.querySelector(
-                        "#jspsych-progressbar-container"
-                    ).style.display = "inline")
-            },
-            data: {
-                screen: "IPIP6",
-            },
-        }
-
+// Questionnaires =================================================
 // HEX-ACO-18
 // Olaru, G., & Jankowsky, K. (2022). The HEX-ACO-18: Developing an age-invariant HEXACO short scale using ant colony optimization. Journal of Personality Assessment, 104(4), 435-446.
 // A selection of HEXACO items using a new methodology to develop a short scale that is invariant across age groups.
@@ -265,50 +170,50 @@ function hexaco18_plot(screen = "questionnaire_hexaco18") {
     return output
 }
 
- var questionnaire_hexaco18 = {
-            type: jsPsychSurvey,
-            survey_json: {
-                title: "About your personality",
-                description:
-                    "Please answer the following questions based on how accurately each statement describes you in general.",
-                showQuestionNumbers: false,
-                goNextPageAutomatic: true,
-                pageNextText: "Next",
-                pagePrevText: "Previous",
-                showProgressBar: "aboveHeader",
-                pages: hexaco18(),
-            },
-            data: {
-                screen: "questionnaire_hexaco18",
-            },
-        }
+var questionnaire_hexaco18 = {
+    type: jsPsychSurvey,
+    survey_json: {
+        title: "About your personality",
+        description:
+            "Please answer the following questions based on how accurately each statement describes you in general.",
+        showQuestionNumbers: false,
+        goNextPageAutomatic: true,
+        pageNextText: "Next",
+        pagePrevText: "Previous",
+        showProgressBar: "aboveHeader",
+        pages: hexaco18(),
+    },
+    data: {
+        screen: "questionnaire_hexaco18",
+    },
+}
 
 var results_hexaco18 = {
-            type: jsPsychCanvasButtonResponse,
-            on_load: function () {
-                document.querySelector("canvas").style.removeProperty("display") // Force it to center
-            },
-            stimulus: function (c) {
-                var data = hexaco18_plot((screen = "questionnaire_hexaco18"))
-                var ctx = c.getContext("2d")
-                var plot = new Chart(
-                    ctx,
-                    make_radarplot(
-                        (names = data.names),
-                        (scores = data.scores),
-                        (minmax = [0, 100]),
-                        (label = data.label),
-                        (color = [255, 99, 132])
-                    )
-                )
-            },
-            canvas_size: plot_getsize(),
-            choices: ["Continue"],
-            prompt: "<p>This chart represents how much you score on various personality traits. Remember that there are no good or bad trait, and that there is no 'normal'. Everybody is different!</p>",
-        }
+    type: jsPsychCanvasButtonResponse,
+    on_load: function () {
+        document.querySelector("canvas").style.removeProperty("display") // Force it to center
+    },
+    stimulus: function (c) {
+        var data = hexaco18_plot((screen = "questionnaire_hexaco18"))
+        var ctx = c.getContext("2d")
+        var plot = new Chart(
+            ctx,
+            make_radarplot(
+                (names = data.names),
+                (scores = data.scores),
+                (minmax = [0, 100]),
+                (label = data.label),
+                (color = [255, 99, 132])
+            )
+        )
+    },
+    canvas_size: plot_getsize(),
+    choices: ["Continue"],
+    prompt: "<p>This chart represents how much you score on various personality traits. Remember that there are no good or bad trait, and that there is no 'normal'. Everybody is different!</p>",
+}
 
-    /* Attitudes towards AI *==========================*/
-    // Beliefs about Artificial Images Technology (BAIT)
+/* Attitudes towards AI *==========================*/
+// Beliefs about Artificial Images Technology (BAIT)
 // History:
 // - BAIT-Original: Items specifically about CGI and artificial media originally in Makowski et al. (FakeFace study)
 // - BAIT-14: Validated in FictionEro (with new items + removal of "I think"), where it was mixed with the 6 most
@@ -445,25 +350,25 @@ function bait_feedback(screen = "questionnaire_bait") {
 
 // Initialize experiment =================================================
 var questionnaire_bait = {
-            type: jsPsychSurvey,
-            survey_json: {
-                title: "Artificial Intelligence",
-                // description: "",
-                showQuestionNumbers: false,
-                goNextPageAutomatic: true,
-                // showProgressBar: "aboveHeader",
-                pages: bait_questions(),
-            },
-            data: {
-                screen: "questionnaire_bait",
-            },
-        }
+    type: jsPsychSurvey,
+    survey_json: {
+        title: "Artificial Intelligence",
+        // description: "",
+        showQuestionNumbers: false,
+        goNextPageAutomatic: true,
+        // showProgressBar: "aboveHeader",
+        pages: bait_questions(),
+    },
+    data: {
+        screen: "questionnaire_bait",
+    },
+}
 
 var feedback_bait = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus: function () {
-                return bait_feedback((screen = "questionnaire_bait"))
-            },
-            choices: ["Continue"],
-            data: { screen: "feedback_bait" },
-        }
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function () {
+        return bait_feedback((screen = "questionnaire_bait"))
+    },
+    choices: ["Continue"],
+    data: { screen: "feedback_bait" },
+}
