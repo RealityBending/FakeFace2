@@ -162,7 +162,6 @@ var fiction_showimage1 = {
 // Oosterhof and Todorov (2008) - 9 point scale (Not at all to Extremely) TRAIT VARIABLES
 var fiction_ratings1 = {
     type: jsPsychSurvey,
-    css_classes: ["narrow-text"],
     survey_json: {
         goNextPageAutomatic: true,
         showQuestionNumbers: false,
@@ -285,7 +284,6 @@ var fiction_showimage2 = {
 
 var fiction_ratings2 = {
     type: jsPsychSurvey,
-    css_classes: ["narrow-text"],
     survey_json: {
         goNextPageAutomatic: true,
         showQuestionNumbers: false,

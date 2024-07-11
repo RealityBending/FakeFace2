@@ -86,7 +86,6 @@ var demographics_questions = {
         pagePrevText: "Previous",
         goNextPageAutomatic: false,
         showQuestionNumbers: false,
-        showProgressBar: "aboveHeader",
         pages: [
             {
                 elements: [
