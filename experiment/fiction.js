@@ -83,6 +83,7 @@ var fiction_instructions2 = {
 var fiction_preloadstims = {
     type: jsPsychPreload,
     images: stimuli.map((a) => "stimuli/AMFD/" + a.stimulus),
+    message: "Please wait while the experiment is being loaded (it can take a few seconds)",
 }
 
 var fiction_fixation1 = {
