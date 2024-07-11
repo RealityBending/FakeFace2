@@ -149,6 +149,8 @@ var fiction_showimage1 = {
     on_finish: function (data) {
         data.trial_number = fiction_trialnumber
         fiction_trialnumber += 1
+        window_width = window.innerWidth
+        window_height = window.innerHeight
     },
     // Enable webgazer
     extensions: [
