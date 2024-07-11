@@ -393,7 +393,7 @@ var fiction_ratings2 = {
 }
 
 var fiction_phase2 = {
-    timeline_variables: shuffleArray(stimuli).slice(0, 3), // .slice(0, 3) TODO: remove this
+    timeline_variables: shuffleArray(stimuli), // .slice(0, 3) TODO: remove this
     timeline: [fiction_fixation2, fiction_showimage2, fiction_ratings2],
 }
 
