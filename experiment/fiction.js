@@ -53,8 +53,8 @@ var fiction_instructions1 = {
         "'>Photograph</b>') taken from public picture databases, adjusted to be of similar dimension and aspect as the artificially-generated images.</p > " +
         "<p>The faces will be <b>briefly flashed on the screen</b>. Imagine that they belong to a real person (for example, it is the <b>profile picture</b> on someone's social media). After each image, you will be asked a series of questions:</p>" +
         '<li><b style="color: purple">Beauty</b>: To what extent do you think the face is "objectively" <b>good-looking</b> (the degree to which the face is aesthetically appealing).</li>' +
-        '<li><b style="color: purple">Attractiveness</b>: To what extent do <b>you personally</b> find the person <b>attractive</b> (how drawn are you to this person).</li>' +
-        '<li><b style="color: purple">Trustworthiness</b>: To what extent do you find this person <b>trustworthy</b> (reliable, honest, responsible etc.,).</li>' +
+        '<li><b style="color: purple">Attractiveness</b>: To what extent do <b>you personally</b> find the person <b>attractive</b> (how drawn are you to this person). While this dimension can often be aligned with the previous ones, we can also sometimes a face not necessarily "conventionally" beautiful and yet very attractive (and vice versa).</li>' +
+        '<li><b style="color: purple">Trustworthiness</b>: To what extent do you find this person <b>trustworthy</b> (reliable, honest, responsible, etc.).</li>' +
         "<p>Note that we are interested in your <b>first impression</b>, so please respond according to your gut feelings.</p>" +
         "<p>Below is an example of how the questions will appear after each image:</p>" +
         "<div style='text-align: center;'><img src='media/scales_phase1.png' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>" +
@@ -89,7 +89,7 @@ var fiction_preloadstims = {
     message: "Please wait while the experiment is being loaded (it can take a few seconds)",
 }
 
-var fiction_fixation1 = {
+var fiction_fixation1a = {
     type: jsPsychHtmlKeyboardResponse,
     // on_start: function () {
     //     document.body.style.cursor = "none"
@@ -99,14 +99,12 @@ var fiction_fixation1 = {
     choices: ["s"],
     trial_duration: 500,
     save_trial_parameters: { trial_duration: true },
-    data: { screen: "fiction_fixation1" },
-    // Enable webgazer
-    extensions: [
-        {
-            type: jsPsychExtensionWebgazer,
-            params: { targets: ["#jspsych-html-keyboard-response-stimulus"] },
-        },
-    ],
+    data: function () {
+        return {
+            screen: "fiction_fixation1a",
+            item: jsPsych.timelineVariable("stimulus"),
+        }
+    },
 }
 
 var fiction_cue = {
@@ -127,11 +125,33 @@ var fiction_cue = {
             screen: "fiction_cue",
             color: color_cues[cond],
             condition: cond,
+            item: jsPsych.timelineVariable("stimulus"),
         }
     },
     choices: ["s"],
     trial_duration: 1000,
     save_trial_parameters: { trial_duration: true },
+}
+
+var fiction_fixation1b = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus:
+        "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
+    choices: ["s"],
+    trial_duration: 500,
+    save_trial_parameters: { trial_duration: true },
+    data: function () {
+        return {
+            screen: "fiction_fixation1b",
+            item: jsPsych.timelineVariable("stimulus"),
+        }
+    },
+    extensions: [
+        {
+            type: jsPsychExtensionWebgazer,
+            params: { targets: ["#jspsych-html-keyboard-response-stimulus"] },
+        },
+    ],
 }
 
 var fiction_showimage1 = {
@@ -251,9 +271,9 @@ var fiction_ratings1 = {
 var fiction_phase1a = {
     timeline_variables: stimuli.slice(0, Math.ceil(stimuli.length / 2)), //.slice(0, 3), // TODO: remove this
     timeline: [
-        fiction_fixation1,
+        fiction_fixation1a,
         fiction_cue,
-        fiction_fixation1,
+        fiction_fixation1b,
         fiction_showimage1,
         fiction_ratings1,
     ],
