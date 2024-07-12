@@ -14,13 +14,16 @@ var eyetracking_consent = {
 
 // Calibration ====================================================================
 const calibration_points = [
-    [25, 25],
-    [75, 25],
-    [25, 50],
+    [20, 20],
+    [50, 20],
+    [80, 20],
+    [20, 50],
     [50, 50],
-    [75, 50],
-    [25, 75],
-    [75, 75],
+    [50, 50],
+    [80, 50],
+    [20, 80],
+    [50, 80],
+    [80, 80],
 ]
 
 var eyetracking_webcam = {
@@ -37,7 +40,7 @@ var eyetracking_calibration_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
         "<h2>Gaze Calibration (1/2)</h2>" +
-        "<p>You will now see a series of <b>black dots</b> appear on the screen. Look at each dot and <b>click on it</b>.</p>",
+        "<p>You will now see a series of <b>black dots</b> appear on the screen. Look at each dot and <b>click on it</b> without moving your head too much.</p>",
     choices: ["Ready"],
     data: {
         screen: "eyetracking_calibration_instructions",
@@ -47,7 +50,7 @@ var eyetracking_calibration_instructions = {
 var eyetracking_calibration_run = {
     type: jsPsychWebgazerCalibrate,
     calibration_points: calibration_points,
-    repetitions_per_point: 2,
+    repetitions_per_point: 1,
     randomize_calibration_order: true,
     data: {
         screen: "eyetracking_calibration_run",
@@ -58,7 +61,7 @@ var eyetracking_validation_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
         "<h2>Gaze Calibration (2/2)</h2>" +
-        "<p>Again, look at each dot as it appears on the screen, but <b>do not click on them this time.</b></p>",
+        "<p>Again, look at each dot as it appears on the screen, but <b>do not click on them this time</b>. Don't forget to keep your head still.</p>",
     choices: ["Ready"],
     post_trial_gap: 1000,
     data: {
@@ -70,7 +73,7 @@ var eyetracking_validation_run = {
     type: jsPsychWebgazerValidate,
     validation_points: calibration_points,
     roi_radius: function () {
-        return Math.round(0.02 * window.innerWidth)
+        return Math.round(0.03 * window.innerWidth)
     },
     time_to_saccade: 1000,
     validation_duration: 2000,
@@ -86,15 +89,6 @@ var calibration_done = {
     choices: ["Understood"],
 }
 
-// Timeline
-var eyetracking_calibration_process = {
-    timeline: [
-        eyetracking_calibration_run,
-        eyetracking_validation_instructions,
-        eyetracking_validation_run,
-    ],
-}
-
 // Recalibration ====================================================================
 var eyetracking_recalibrate_instructions = {
     type: jsPsychHtmlButtonResponse,
@@ -108,7 +102,12 @@ var eyetracking_recalibrate_instructions = {
 
 // Timeline
 var eyetracking_recalibrate_process = {
-    timeline: [eyetracking_recalibrate_instructions, eyetracking_calibration_process],
+    timeline: [
+        eyetracking_recalibrate_instructions,
+        eyetracking_calibration_run,
+        eyetracking_validation_instructions,
+        eyetracking_validation_run,
+    ],
     conditional_function: function () {
         var validation_data = jsPsych.data
             .get()
@@ -131,7 +130,9 @@ var eyetracking_calibration = {
     timeline: [
         eyetracking_webcam,
         eyetracking_calibration_instructions,
-        eyetracking_calibration_process,
+        eyetracking_calibration_run,
+        eyetracking_validation_instructions,
+        eyetracking_validation_run,
         eyetracking_recalibrate_process,
         calibration_done,
     ],
@@ -148,7 +149,9 @@ var eyetracking_calibration = {
 var eyetracking_recalibration = {
     timeline: [
         eyetracking_calibration_instructions,
-        eyetracking_calibration_process,
+        eyetracking_calibration_run,
+        eyetracking_validation_instructions,
+        eyetracking_validation_run,
         calibration_done,
     ],
     conditional_function: function () {

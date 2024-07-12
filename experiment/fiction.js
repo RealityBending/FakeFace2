@@ -95,11 +95,18 @@ var fiction_fixation1 = {
     //     document.body.style.cursor = "none"
     // },
     stimulus:
-        "<div  style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
+        "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
     choices: ["s"],
     trial_duration: 500,
     save_trial_parameters: { trial_duration: true },
     data: { screen: "fiction_fixation1" },
+    // Enable webgazer
+    extensions: [
+        {
+            type: jsPsychExtensionWebgazer,
+            params: { targets: ["#jspsych-html-keyboard-response-stimulus"] },
+        },
+    ],
 }
 
 var fiction_cue = {
@@ -119,7 +126,7 @@ var fiction_cue = {
         return {
             screen: "fiction_cue",
             color: color_cues[cond],
-            text: cond,
+            condition: cond,
         }
     },
     choices: ["s"],
@@ -154,10 +161,10 @@ var fiction_showimage1 = {
             screen: "fiction_image1",
             window_width: window.innerWidth,
             window_height: window.innerHeight,
+            trial_number: fiction_trialnumber,
         }
     },
-    on_finish: function (data) {
-        data.trial_number = fiction_trialnumber
+    on_finish: function () {
         fiction_trialnumber += 1
     },
     // Enable webgazer
@@ -312,9 +319,8 @@ var fiction_showimage2 = {
     trial_duration: 1000,
     choices: ["s"],
     save_trial_parameters: { trial_duration: true },
-    data: { screen: "fiction_image2" },
-    on_finish: function (data) {
-        data.trial_number = fiction_trialnumber
+    data: { screen: "fiction_image2", trial_number: fiction_trialnumber },
+    on_finish: function () {
         fiction_trialnumber += 1
     },
 }
