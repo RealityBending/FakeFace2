@@ -71,7 +71,7 @@ var demographics_consent = {
         "<li align='left'>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, ...).</li>" +
         "<li align='left'>By participating, you agree to follow the instructions and provide honest answers. If you do not wish to participate, simply close your browser.</li>" +
         "</p>" +
-        "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Sofia Turcany Diaz (st633@sussex.ac.uk) or Dr Dominique Makowski (D.Makowski@sussex.ac.uk). This research has been approved (ER/HER27/1) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>",
+        "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Sofia Turcany Diaz (st633@sussex.ac.uk) or Dr Dominique Makowski (D.Makowski@sussex.ac.uk). This research has been approved (ER/ST633/1) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>",
     choices: ["I read, understood, and I consent"],
     data: { screen: "consent" },
 }
