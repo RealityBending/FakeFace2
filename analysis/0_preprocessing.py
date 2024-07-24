@@ -89,6 +89,13 @@ for i, file in enumerate(files):
         df[item] = float(bait[item])
 
     # Task data -----------------------------------------------------------
+    df["Instruction_Duration1"] = (
+        data[data["screen"] == "fiction_instructions1"].iloc[0]["rt"] / 1000
+    )
+    df["Instruction_Duration2"] = (
+        data[data["screen"] == "fiction_instructions2"].iloc[0]["rt"] / 1000
+    )
+
     # Phase 1
     stims1 = data[data["screen"] == "fiction_image1"].copy()
     ratings1 = data[data["screen"] == "fiction_ratings1"].copy()
