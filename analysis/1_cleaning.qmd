@@ -11,3 +11,214 @@ format:
 ---
 
 ## Data Preparation
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(easystats)
+library(patchwork)
+library(ggside)
+```
+
+```{r}
+#| code-fold: false
+
+dftask <- read.csv("../data/rawdata_task.csv") |> 
+  full_join(
+    df[c("Participant", "Sex", "SexualOrientation")],
+    by = join_by(Participant)
+    )
+```
+
+The initial sample consisted of `r report::report_participants(df, age="Age", sex="Sex", education="Education")`.
+
+### Summary
+
+The final sample includes `r report::report_participants(df, age="Age", sex="Sex", education="Education")`.
+
+### Origin
+
+```{r p_demographics_country}
+p_country <- dplyr::select(df, region = Country) |>
+  group_by(region) |>
+  summarize(n = n()) |>
+  right_join(map_data("world"), by = "region") |>
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = n)) +
+  scale_fill_gradientn(colors = c("#FFEB3B", "red", "purple")) +
+  labs(fill = "N") +
+  theme_void() +
+  labs(title = "A Geographically Diverse Sample", subtitle = "Number of participants by country")  +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2))
+  )
+p_country
+```
+
+```{r p_ethnicity}
+ggwaffle::waffle_iron(df, ggwaffle::aes_d(group = Ethnicity), rows=10) |> 
+  ggplot(aes(x, y, fill = group)) + 
+  ggwaffle::geom_waffle() + 
+  coord_equal() + 
+  scale_fill_flat_d() + 
+  ggwaffle::theme_waffle() +
+  labs(title = "Self-reported Ethnicity", subtitle = "Each square represents a participant", fill="")  +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2)),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
+
+### Age
+
+```{r p_demographics_age}
+p_age <- estimate_density(df$Age) |>
+  normalize(select = y) |> 
+  mutate(y = y * 86) |>  # To match the binwidth
+  ggplot(aes(x = x)) +
+  geom_histogram(data=df, aes(x = Age), fill = "#616161", bins=28) +
+  # geom_line(aes(y = y), color = "orange", linewidth=2) +
+  geom_vline(xintercept = mean(df$Age), color = "red", linewidth=1.5) +
+  # geom_label(data = data.frame(x = mean(df$Age) * 1.15, y = 0.95 * 75), aes(y = y), color = "red", label = paste0("Mean = ", format_value(mean(df$Age)))) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  labs(title = "Age", y = "Number of Participants", color = NULL, subtitle = "Distribution of participants' age") +
+  theme_modern(axis.title.space = 10) +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2), vjust = 7),
+    axis.text.y = element_text(size = rel(1.1)),
+    axis.text.x = element_text(size = rel(1.1)),
+    axis.title.x = element_blank()
+  )
+p_age
+```
+
+### Education
+
+```{r p_demographics_education}
+p_edu <- df |>
+  mutate(Education = fct_relevel(Education, "Other", "Primary School", "High School", "Bachelor", "Master", "Doctorate")) |> 
+  ggplot(aes(x = Education)) +
+  geom_bar(aes(fill = Education)) +
+  scale_y_continuous(expand = c(0, 0), breaks= scales::pretty_breaks()) +
+  scale_fill_viridis_d(guide = "none") +
+  labs(title = "Education", y = "Number of Participants", subtitle = "Participants per achieved education level") +
+  theme_modern(axis.title.space = 15) +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2), vjust = 7),
+    axis.text.y = element_text(size = rel(1.1)),
+    axis.text.x = element_text(size = rel(1.1)),
+    axis.title.x = element_blank()
+  )
+p_edu
+```
+
+
+
+### Score Computation
+
+#### HEXACO-18
+
+```{r}
+SD_per_dim <- function(x, dims="") {
+  m <- matrix(nrow=nrow(x), ncol=0)
+  for(s in dims) {
+    m <- cbind(m, sapply(as.data.frame(t(x[grepl(s, names(x))])), sd))
+  }
+  m
+}
+```
+```{r}
+#| code-fold: false
+
+hexaco18 <- select(dfsub, starts_with("HEXACO18_"), -HEXACO18_Duration, -HEXACO18_Order)
+hexaco18[grepl("_R", names(hexaco18))] <- 1 - hexaco18[grepl("_R", names(hexaco18))]
+
+dfsub$IPIP6_Extraversion <- rowMeans(ipip6[grepl("Extraversion", names(ipip6))])
+dfsub$IPIP6_Conscientiousness <- rowMeans(ipip6[grepl("Conscientiousness", names(ipip6))])
+dfsub$IPIP6_Neuroticism <- rowMeans(ipip6[grepl("Neuroticism", names(ipip6))])
+dfsub$IPIP6_Openness <- rowMeans(ipip6[grepl("Openness", names(ipip6))])
+dfsub$IPIP6_HonestyHumility <- rowMeans(ipip6[grepl("HonestyHumility", names(ipip6))])
+dfsub$IPIP6_Agreeableness <- rowMeans(ipip6[grepl("Agreeableness", names(ipip6))])
+dfsub$IPIP6_SD <- rowMeans(SD_per_dim(ipip6, c("Extraversion", "Conscientiousness", "Neuroticism",
+                                               "Openness", "HonestyHumility", "Agreeableness")))
+```
+
+### Task Duration 
+
+```{r}
+plot_hist <- function(dat) {
+  dens <- rbind(
+    mutate(bayestestR::estimate_density(filter(dftask, RT1 < 40 & RT2 < 40)$RT1), 
+           Phase="Emotional ratings",
+           y = y / max(y)),
+    mutate(bayestestR::estimate_density(filter(dftask, RT1 < 40 & RT2 < 40)$RT2), 
+           Phase="Reality rating",
+           y = y / max(y))
+  )
+  
+  dat |> 
+    filter(RT1 < 40 & RT2 < 40) |>  # Remove very long RTs
+    # mutate(Participant = fct_reorder(Participant, RT1)) |> 
+    pivot_longer(cols = c(RT1, RT2), names_to = "Phase", values_to = "RT") |>
+    mutate(Phase = ifelse(Phase == "RT1", "Emotional ratings", "Reality rating")) |>
+    ggplot(aes(x=RT)) +
+    geom_area(data=dens, aes(x=x, y=y, fill=Phase), alpha=0.33, position="identity") +
+    geom_density(aes(color=Phase, y=after_stat(scaled)), linewidth=1.5) + 
+    scale_x_sqrt(breaks=c(0, 2, 5, 10, 20)) +
+    theme_minimal() +
+    theme(axis.title.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.text.y = element_blank(),
+          axis.line.y = element_blank()) +
+    labs(title = "Distribution of Response Time for each Participant", x="Response time per stimuli (s)") +
+    facet_wrap(~Participant, ncol=5, scales="free_y") +
+    coord_cartesian(xlim = c(0, 25))
+}
+```
+
+### BAIT Questionnaire Duration
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+
+df |>
+  mutate(Participant = fct_reorder(Participant, BAIT_Duration),
+         Category = ifelse(BAIT_Duration > 5, "extra", "ok"),
+         Duration = ifelse(BAIT_Duration > 5, 5, BAIT_Duration),
+         Group = ifelse(Participant %in% outliers, "Outlier", "ok")) |>
+  ggplot(aes(y = Participant, x = Duration)) +
+  geom_point(aes(color = Group, shape = Category)) +
+  geom_vline(xintercept = median(df$BAIT_Duration), color = "red", linetype = "dashed") +
+  geom_vline(xintercept = 0.5, color = "orange", linetype = "dotted") +
+  scale_shape_manual(values = c("extra" = 3, ok = 19)) +
+  scale_color_manual(values = c("Outlier" = "red", ok = "black"), guide="none") +
+  guides(color = "none", shape = "none") +
+  ggside::geom_xsidedensity(fill = "#9C27B0", color=NA) +
+  ggside::scale_xsidey_continuous(expand = c(0, 0)) +
+  labs(
+    title = "Questionnaire Completion Time",
+    x = "Duration (in minutes)",
+    y = "Participant"
+  )  +
+  theme_modern() +
+  ggside::theme_ggside_void() +
+  theme(ggside.panel.scale = .3,
+        panel.border = element_blank(),
+        axis.ticks.y = element_blank(),
+          axis.text.y = element_blank()) 
+
+outliers$bait_duration <- filter(df, BAIT_Duration < 0.5)$Participant
+df[df$Participant %in% outliers$bait_duration, str_detect(names(df), "BAIT_\\d+")] <- NA
+```
+
+We excluded the BAIT data of `r length(outliers$bait_duration)` participants who completed the questionnaire in less than 30 seconds.
+
