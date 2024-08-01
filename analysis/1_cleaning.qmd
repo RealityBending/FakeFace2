@@ -9,6 +9,11 @@ format:
     self-contained: true
     toc: true
 ---
+## loading the data to quarto script
+## Hexac0-18 dimensions
+## describe final sample
+## outlier detection
+## exclusion based on time reading instructions
 
 ## Data Preparation
 
