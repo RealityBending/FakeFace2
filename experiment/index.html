@@ -64,13 +64,11 @@
             show_progress_bar: true,
             message_progress_bar: "Progress",
             on_finish: function () {
-                jsPsych.data.displayData("json") // Display data in browser
+                //     jsPsych.data.displayData("json") // Display data in browser
+                window.location = "https://realitybending.github.io/" // Redirect to lab website
             },
             extensions: [{ type: jsPsychExtensionWebgazer }],
         })
-
-        // Generate participant ID
-        // var participant_id = jsPsych.randomization.randomID(10)
 
         // Initialize timeline
         var timeline = []
@@ -93,7 +91,7 @@
         timeline.push(eyetracking_consent)
         timeline.push(eyetracking_calibration)
 
-        // // Fiction stage 1 ===========================================================
+        // Fiction stage 1 ===========================================================
         timeline.push(fiction_instructions1)
         timeline.push(fiction_phase1a)
         timeline.push(fiction_phase1_break)
@@ -101,7 +99,7 @@
         timeline.push(fiction_phase1b)
         timeline.push(fiction_feedback1)
 
-        // // Fiction stage 2 ===========================================================
+        // Fiction stage 2 ===========================================================
         timeline.push(fiction_instructions2)
         timeline.push(fiction_phase2)
         timeline.push(experiment_feedback)
@@ -120,12 +118,7 @@
 
         // Exit fullscreen mode
         timeline.push(fullscreen_off)
-
-        timeline.push(
-            demographics_endscreen(
-                "https://realitybending.github.io/FakeFace2/experiment/index?exp=snow"
-            )
-        )
+        timeline.push(demographics_endscreen)
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)

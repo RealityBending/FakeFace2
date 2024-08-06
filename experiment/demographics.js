@@ -289,49 +289,43 @@ var experiment_feedback = {
     },
 }
 
-var text_debriefing =
-    "<h2>Debriefing</h2>" +
-    "<p align='left'>The purpose of this study was actually to study the effect on attraction of <i>believing</i> that the content is AI-generated. " +
-    "Indeed, we want to test the hypothesis that believing that facial images are fake would lead to lower attraction levels. " +
-    "As we are primarily interested in your <i>beliefs</i> about reality, all images were in fact taken from an existing database of real faces used in psychology research to study emotions. " +
-    "We apologize for the necessary deception used in the instructions, and we hope that you understand its role in ensuring the validity of our experiment.</p>" +
-    "<p align='left'><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the project, please contact st633@sussex.ac.uk or D.Makowski@sussex.ac.uk.</p>" +
-    "<p>To complete your participation in this study, click on 'Continue' and <b>wait until your responses have been successfully saved</b> before closing the tab.</p> "
-
-var text_endscreen = function (
-    link = "https://realitybending.github.io/FaceFake2/experiment/index.html"
-) {
-    return (
-        "<h1>Thank you for participating</h1>" +
-        "<p>It means a lot to us. Don't hesitate to share the study by sending this link <i>(but please don't reveal the details of the experiment)</i>:</p>" +
-        "<p><a href='" +
-        link +
-        "'>" +
-        link +
-        "<a/></p>" +
-        "<p><b>You can safely close the tab now.</b></p>"
-    )
-}
-
-var button_continue = "Continue"
-var button_end = "End"
-
 var demographics_debriefing = {
     type: jsPsychHtmlButtonResponse,
     css_classes: ["narrow-text"],
-    stimulus: text_debriefing,
-    choices: [button_continue],
+    stimulus:
+        "<h2>Debriefing</h2>" +
+        "<p align='left'>The purpose of this study was actually to study the effect on attraction of <i>believing</i> that the content is AI-generated. " +
+        "Indeed, we want to test the hypothesis that believing that facial images are fake would lead to lower attraction levels. " +
+        "As we are primarily interested in your <i>beliefs</i> about reality, all images were in fact taken from an existing database of real faces used in psychology research to study emotions. " +
+        "We apologize for the necessary deception used in the instructions, and we hope that you understand its role in ensuring the validity of our experiment.</p>" +
+        "<p align='left'><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the project, please contact st633@sussex.ac.uk or D.Makowski@sussex.ac.uk.</p>" +
+        "<p>To complete your participation in this study, click on 'Continue' and <b>wait until your responses have been successfully saved</b> before closing the tab.</p> ",
+    choices: ["Continue"],
     data: { screen: "debriefing" },
 }
 
-var demographics_endscreen = function (
-    link = "https://realitybending.github.io/FaceFake2/experiment/index.html"
-) {
-    return {
-        type: jsPsychHtmlButtonResponse,
-        css_classes: ["narrow-text"],
-        stimulus: text_endscreen(link),
-        choices: [button_end],
-        data: { screen: "endscreen" },
-    }
+var demographics_endscreen = {
+    type: jsPsychHtmlButtonResponse,
+    css_classes: ["narrow-text"],
+    stimulus: function () {
+        let text =
+            "<h1>Thank you for participating</h1>" +
+            "<p>It means a lot to us. Don't hesitate to share the study by sending this link <i>(but please don't reveal the details of the experiment)</i>:</p>" +
+            "<p><a href='" +
+            "https://realitybending.github.io/FakeFace2/experiment/index?exp=snow" + // Modify this link to the actual experiment
+            "'>" +
+            "https://realitybending.github.io/FakeFace2/experiment/index?exp=snow" + // Modify this link to the actual experiment
+            "<a/></p>"
+
+        // Deal with Prolific/SurveyCircle/SONA
+        if (jsPsych.data.urlVariables()["exp"] == "SurveyCircle") {
+            text +=
+                "<p style='color:red;'><b>Click " +
+                "<a href='https://www.surveycircle.com/HZPT-7R9E-GVNM-PQ45/'>here<a/>" +
+                " to redeem your SurveyCircle participation</b><br>(In case the link doesn't work, the code is: HZPT-7R9E-GVNM-PQ45)</p>"
+        }
+        return text + "<p><b>You can safely close the tab now.</b></p>"
+    },
+    choices: ["End"],
+    data: { screen: "endscreen" },
 }
