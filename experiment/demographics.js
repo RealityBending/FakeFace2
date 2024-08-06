@@ -318,7 +318,7 @@ var demographics_endscreen = {
             "<a/></p>"
 
         // Deal with Prolific/SurveyCircle/SONA
-        if (jsPsych.data.urlVariables()["exp"] == "SurveyCircle") {
+        if (jsPsych.data.urlVariables()["exp"] == "surveycircle") {
             text +=
                 "<p style='color:red;'><b>Click " +
                 "<a href='https://www.surveycircle.com/HZPT-7R9E-GVNM-PQ45/'>here<a/>" +
