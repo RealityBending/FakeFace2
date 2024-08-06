@@ -221,6 +221,14 @@ for i, file in enumerate(files):
     # Concatenate data ------------------------------------------------------
     data_demo = pd.concat([data_demo, df], axis=0, ignore_index=True)
 
+
+# Reanonimize =============================================================
+data_demo = data_demo.sort_values(["Date_OSF"])
+ppt = {s: f"S{i+1:03d}" for i, s in enumerate(data_demo["Participant"].unique())}
+data_demo["Participant"] = [ppt[s] for s in data_demo["Participant"]]
+data_task["Participant"] = [ppt[s] for s in data_task["Participant"]]
+data_eye["Participant"] = [ppt[s] for s in data_eye["Participant"]]
+
 # Save data ==============================================================
 
 data_demo.to_csv("../data/rawdata_participants.csv", index=False)
