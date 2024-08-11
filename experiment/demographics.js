@@ -338,11 +338,11 @@ var demographics_endscreen = {
                 "<a href='https://www.surveycircle.com/HZPT-7R9E-GVNM-PQ45/'>here<a/>" +
                 " to redeem your SurveyCircle participation</b><br>(in case the link doesn't work, the code is: HZPT-7R9E-GVNM-PQ45)</p>"
         }
-        if (jsPsych.data.urlVariables()["exp"] == "surveyswaptest") {
+        if (jsPsych.data.urlVariables()["exp"] == "surveyswap") {
             text +=
                 "<p style='color:red;'><b>Click " +
-                "<a href='https://surveyswap.io/sr/9OH6-371C-NUSX/'>here<a/>" +
-                " to redeem your SurveySwap participation</b><br>(in case the link doesn't work, the code is: 9OH6-371C-NUSX)</p>"
+                "<a href='https://surveyswap.io/sr/E9XP-DWMS-BHA3'>here<a/>" +
+                " to redeem your SurveySwap participation</b><br>(in case the link doesn't work, the code is: E9XP-DWMS-BHA3)</p>"
         }
         return text + "<p><b>You can safely close the tab now.</b></p>"
     },
