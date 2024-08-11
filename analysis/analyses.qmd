@@ -1,0 +1,229 @@
+---
+title: "Cleaning and analyses"
+author: "Sofia Turcany"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+  html:
+    code-fold: true
+    self-contained: true
+    toc: true
+---
+
+# Cleaning
+```{r}
+library(readr)
+```
+
+## Read CSV files
+```{r}
+df1 <- read_csv("https://raw.githubusercontent.com/RealityBending/FakeFace2/main/data/rawdata_task.csv")
+df2 <- read_csv("https://raw.githubusercontent.com/RealityBending/FakeFace2/main/data/rawdata_participants.csv")
+```
+
+## Create dataframes for task and participant data
+### Task data
+```{r}
+df1_selected <- data.frame(
+  Participant = df1$Participant,
+  Stimulus = df1$Stimulus,
+  Condition = df1$Condition,
+  Beauty = df1$Beauty,
+  Attractiveness = df1$Attractiveness,
+  Trustworthiness = df1$Trustworthiness,
+  Realness = df1$Realness)
+```
+
+### Task data
+```{r}
+df2_selected <- data.frame(
+  Participant = df2$Participant,
+  Age = df2$Age,
+  Gender = df2$Gender,
+  Education = df2$Education,
+  Ethnicity = df2$Ethnicity,
+  SexualOrientation = df2$SexualOrientation,
+  SexualStatus = df2$SexualStatus,
+  Instruction_Duration1 = df2$Instruction_Duration1,
+  Instruction_Duration2 = df2$Instruction_Duration2,
+  HEXACO18_HonestyHumility_Sincerity_1_NR = df2$HEXACO18_HonestyHumility_Sincerity_1_NR,
+  HEXACO18_HonestyHumility_GreedAvoidance_2_R = df2$HEXACO18_HonestyHumility_GreedAvoidance_2_R,
+  HEXACO18_HonestyHumility_Modesty_3_R = df2$HEXACO18_HonestyHumility_Modesty_3_R,
+  HEXACO18_Emotionality_Fearfulness_4_R = df2$HEXACO18_Emotionality_Fearfulness_4_R,
+  HEXACO18_Emotionality_Dependence_5_NR = df2$HEXACO18_Emotionality_Dependence_5_NR,
+  HEXACO18_Emotionality_Anxiety_6_NR = df2$HEXACO18_Emotionality_Anxiety_6_NR,
+  HEXACO18_Extraversion_SocialSelfEsteem_7_R = df2$HEXACO18_Extraversion_SocialSelfEsteem_7_R,
+  HEXACO18_Extraversion_SocialBoldness_8_R = df2$HEXACO18_Extraversion_SocialBoldness_8_R,
+  HEXACO18_Extraversion_Liveliness_9_R = df2$HEXACO18_Extraversion_Liveliness_9_R,
+  HEXACO18_Agreeableness_Forgiveness_10_NR = df2$HEXACO18_Agreeableness_Forgiveness_10_NR,
+  HEXACO18_Agreeableness_Gentleness_11_NR = df2$HEXACO18_Agreeableness_Gentleness_11_NR,
+  HEXACO18_Agreeableness_Patience_12_R = df2$HEXACO18_Agreeableness_Patience_12_R,
+  HEXACO18_Conscientiousnes_Diligence_13_R = df2$HEXACO18_Conscientiousnes_Diligence_13_R,
+  HEXACO18_Conscientiousnes_Prudence_14_R = df2$HEXACO18_Conscientiousnes_Prudence_14_R,
+  HEXACO18_Conscientiousnes_Organization_15_R = df2$HEXACO18_Conscientiousnes_Organization_15_R,
+  HEXACO18_Openness_Unconventionality_16_R = df2$HEXACO18_Openness_Unconventionality_16_R,
+  HEXACO18_Openness_AestheticAppreciation_17_NR = df2$HEXACO18_Openness_AestheticAppreciation_17_NR,
+  HEXACO18_Openness_Creativity_18_NR = df2$HEXACO18_Openness_Creativity_18_NR,
+  BAIT_AI_Knowledge = df2$BAIT_AI_Knowledge,
+  BAIT_1_ImagesRealistic = df2$BAIT_1_ImagesRealistic,
+  BAIT_2_ImagesIssues = df2$BAIT_2_ImagesIssues,
+  BAIT_3_VideosRealistic = df2$BAIT_3_VideosRealistic,
+  BAIT_4_VideosIssues = df2$BAIT_4_VideosIssues,
+  BAIT_5_ImitatingReality = df2$BAIT_5_ImitatingReality,
+  BAIT_6_EnvironmentReal = df2$BAIT_6_EnvironmentReal,
+  BAIT_7_TextRealistic = df2$BAIT_7_TextRealistic,
+  BAIT_8_TextIssues = df2$BAIT_8_TextIssues,
+  BAIT_9_NegativeAttitutes = df2$BAIT_9_NegativeAttitutes,
+  BAIT_10_NegativeAttitutes = df2$BAIT_10_NegativeAttitutes,
+  BAIT_11_PositiveAttitutes = df2$BAIT_11_PositiveAttitutes,
+  BAIT_12_PositiveAttitutes = df2$BAIT_12_PositiveAttitutes)
+```
+
+## Outlier detection based on time reading instructions
+```{r}
+# Specify the minimum duration threshold
+min_duration <- 0.05
+
+# Filter df2_selected to exclude rows where either duration is below the minimum
+df2_filtered <- df2_selected[!(df2_selected$Instruction_Duration1 < min_duration | df2_selected$Instruction_Duration2 < min_duration), ]
+
+# Identify participants that were removed
+removed_participants <- setdiff(df2_selected$Participant, df2_filtered$Participant)
+
+# Filter df1_selected to remove these participants
+df1_filtered <- df1_selected[!df1_selected$Participant %in% removed_participants, ]
+
+```
+
+# Analyses
+```{r}
+install.packages("mediation")
+
+library(dplyr)  
+library(mediation)
+library(ggplot2)
+```
+
+## Perceived realness and Attractiveness
+### H1: T-test or ANOVA for attractiveness ratings between conditions
+```{r}
+t.test(Attractiveness ~ Condition, data = df1_filtered)
+# or
+anova(lm(Attractiveness ~ Condition, data = df1_filtered))
+```
+### H2: Moderation analysis using regression
+```{r}
+model_H2 <- lm(Attractiveness ~ Condition * Trustworthiness, data = df1_filtered)
+summary(model_H2)
+
+# Create interaction plot manually
+df1_filtered$Condition <- as.factor(df1_filtered$Condition)
+interaction_plot_data <- df1_filtered %>%
+  group_by(Condition, Trustworthiness) %>%
+  summarize(Mean_Attractiveness = mean(Attractiveness), .groups = 'drop')
+
+# Plot H2 regression
+h2plot <- ggplot(df1_filtered, aes(x = Trustworthiness, y = Attractiveness, color = Condition)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Interaction Plot: Condition and Trustworthiness on Attractiveness",
+       x = "Trustworthiness",
+       y = "Attractiveness") +
+  theme_minimal()
+
+# Display plot
+h2plot
+```
+### H3: Quadratic regression
+```{r}
+df1_filtered$Attractiveness_sq <- df1_filtered$Attractiveness^2
+model_H3 <- lm(Realness ~ Attractiveness + Attractiveness_sq, data = df1_filtered)
+summary(model_H3)
+```
+
+## Trustworthiness and Attractiveness
+### H4: Correlation or regression between trustworthiness and attractiveness
+```{r}
+cor(df1_filtered$Trustworthiness, df1_filtered$Attractiveness)
+# or
+model_H4 <- lm(Attractiveness ~ Trustworthiness, data = df1_filtered)
+summary(model_H4)
+```
+
+### H5: T-test or ANOVA for trustworthiness ratings between conditions
+```{r}
+t.test(Trustworthiness ~ Condition, data = df1_filtered)
+# or
+anova(lm(Trustworthiness ~ Condition, data = df1_filtered))
+```
+
+## Demographic Influences
+```{r}
+# Function to perform analysis for a given participant
+analyze_participant <- function(participant_id, df1, df2) {
+  task_data <- df1[df1$Participant == participant_id, ]
+  participant_data <- df2[df2$Participant == participant_id, ]
+  
+  if (nrow(task_data) > 0 && nrow(participant_data) > 0) {
+    # Add demographic data to task data
+    task_data$Age <- participant_data$Age
+    task_data$Gender <- participant_data$Gender
+    task_data$Education <- participant_data$Education
+    task_data$HEXACO_Openness <- participant_data$HEXACO18_Openness_Creativity_18_NR
+    task_data$HEXACO_Agreeableness <- participant_data$HEXACO18_Agreeableness_Patience_12_R
+    task_data$BAIT_AI_Knowledge <- participant_data$BAIT_AI_Knowledge
+    
+    return(task_data)
+  } else {
+    return(NULL)
+  }
+}
+
+# Apply function to all participants and combine results
+results <- lapply(unique(df1_filtered$Participant), analyze_participant, df1 = df1_filtered, df2 = df2_filtered)
+combined_results <- do.call(rbind, results)
+
+# Perform statistical tests on combined results
+```
+
+### H6: Influence of perceived realness on attractiveness across different age groups
+```{r}
+anova(lm(Attractiveness ~ Condition * Age, data = combined_results))
+```
+
+### H7: Gender differences in attractiveness ratings
+```{r}
+anova(lm(Attractiveness ~ Condition * Gender, data = combined_results))
+```
+
+### H8: Influence of education on attractiveness ratings
+```{r}
+anova(lm(Attractiveness ~ Condition * Education, data = combined_results))
+```
+
+## Personality traits
+### H9: Openness to Experience and attractiveness ratings
+```{r}
+anova(lm(Attractiveness ~ Condition * HEXACO_Openness, data = combined_results))
+```
+
+### H10: Agreeableness and trustworthiness influence on attractiveness
+```{r}
+model_mediator <- lm(Trustworthiness ~ HEXACO_Agreeableness, data = combined_results)
+model_outcome <- lm(Attractiveness ~ Trustworthiness + HEXACO_Agreeableness, data = combined_results)
+med_model <- mediate(model_mediator, model_outcome, treat = "HEXACO_Agreeableness", mediator = "Trustworthiness")
+summary(med_model)
+```
+
+### H11: Beliefs about AI and attractiveness ratings
+```{r}
+anova(lm(Attractiveness ~ Condition * BAIT_AI_Knowledge, data = combined_results))
+```
+
+## Eye-tracking patterns
+### H12: Complexity and distrubution change with beliefs
+```{r}
+## unsure how to model this
+```
+
