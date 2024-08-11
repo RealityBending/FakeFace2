@@ -9,13 +9,10 @@ format:
     self-contained: true
     toc: true
 ---
-## loading the data to quarto script !!
-## Hexac0-18 dimensions
-## outlier detection (empty): exclusion based on time reading instructions
-## describe final sample
-
-## Data Preparation
+# Data Cleaning and Preparation
+## Loading data to script 
 ```{r}
+#load the data from web
 df <- read.csv("https://raw.githubusercontent.com/RealityBending/FakeFace2/main/data/rawdata_participants.csv")
 ```
 
@@ -27,5 +24,244 @@ library(tidyverse)
 library(easystats)
 library(patchwork)
 library(ggside)
+library(ggplot2)
+library(readr)
+
 ```
+
+```{r}
+head(df)
+df$Participant
+
+```
+
+## Hexaco18 dimensions
+```{r}
+# Function to calculate standard deviations per dimension
+SD_per_dim <- function(x, dims="") {
+  m <- matrix(nrow=nrow(x), ncol=0)
+  for(s in dims) {
+    m <- cbind(m, sapply(as.data.frame(t(x[grepl(s, names(x))])), sd))
+  }
+  m
+}
+```
+
+```{r}
+# Dataframe (hexaco) containing HEXACO18 questionnaire responses
+hexaco18 <- data.frame(
+  HEXACO18_HonestyHumility_Sincerity_1_NR = runif(100, 1, 5),
+  HEXACO18_HonestyHumility_GreedAvoidance_2_R = runif(100, 1, 5),
+  HEXACO18_HonestyHumility_Modesty_3_R = runif(100, 1, 5),
+  HEXACO18_Emotionality_Fearfulness_4_R = runif(100, 1, 5),
+  HEXACO18_Emotionality_Dependence_5_NR = runif(100, 1, 5),
+  HEXACO18_Emotionality_Anxiety_6_NR = runif(100, 1, 5),
+  HEXACO18_Extraversion_SocialSelfEsteem_7_R = runif(100, 1, 5),
+  HEXACO18_Extraversion_SocialBoldness_8_R = runif(100, 1, 5),
+  HEXACO18_Extraversion_Liveliness_9_R = runif(100, 1, 5),
+  HEXACO18_Agreeableness_Forgiveness_10_NR = runif(100, 1, 5),
+  HEXACO18_Agreeableness_Gentleness_11_NR = runif(100, 1, 5),
+  HEXACO18_Agreeableness_Patience_12_R = runif(100, 1, 5),
+  HEXACO18_Conscientiousnes_Diligence_13_R = runif(100, 1, 5),
+  HEXACO18_Conscientiousnes_Prudence_14_R = runif(100, 1, 5),
+  HEXACO18_Conscientiousnes_Organization_15_R = runif(100, 1, 5),
+  HEXACO18_Openness_Unconventionality_16_R = runif(100, 1, 5),
+  HEXACO18_Openness_AestheticAppreciation_17_NR = runif(100, 1, 5),
+  HEXACO18_Openness_Creativity_18_NR = runif(100, 1, 5)
+)
+
+# Reverse score items
+reverse_items <- grepl("_R", names(hexaco18))
+hexaco18[reverse_items] <- 1 - hexaco18[reverse_items]
+
+# Calculate means for each HEXACO dimension
+hexaco18$HEXACO18_HonestyHumility <- rowMeans(hexaco18[grepl("HonestyHumility", names(hexaco18))])
+hexaco18$HEXACO18_Emotionality <- rowMeans(hexaco18[grepl("Emotionality", names(hexaco18))])
+hexaco18$HEXACO18_Extraversion <- rowMeans(hexaco18[grepl("Extraversion", names(hexaco18))])
+hexaco18$HEXACO18_Agreeableness <- rowMeans(hexaco18[grepl("Agreeableness", names(hexaco18))])
+hexaco18$HEXACO18_Conscientiousness <- rowMeans(hexaco18[grepl("Conscientiousnes", names(hexaco18))])
+hexaco18$HEXACO18_Openness <- rowMeans(hexaco18[grepl("Openness", names(hexaco18))])
+
+# Calculate standard deviations for each dimension
+hexaco18$HEXACO18_SD <- rowMeans(SD_per_dim(hexaco18, c("HonestyHumility", "Emotionality", "Extraversion", "Agreeableness", "Conscientiousnes", "Openness")))
+
+# View the results
+head(hexaco18)
+
+```
+
+
+The initial sample consisted of `r report::report_participants(df, age="Age", gender="Gender", education="Education")`, for a total trial number of `r nrow(df)`.
+
+## outlier detection (empty): exclusion based on time reading instructions
+
+### Experiment Duration
+The experiment's median duration is `r insight::format_value(median(df$Experiment_Duration))` min (`r insight::format_ci(bayestestR::hdi(df$Experiment_Duration, ci=0.5))`).
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+
+#| echo: true
+#| code-fold: false
+
+outliers <- list()
+
+df |>
+  mutate(Participant = fct_reorder(Participant, Experiment_Duration),
+         Category = ifelse(Experiment_Duration > 60, "extra", "ok"),
+         Duration = ifelse(Experiment_Duration > 60, 60, Experiment_Duration),
+         Group = ifelse(Participant %in% outliers, "Outlier", "ok")) |>
+  ggplot(aes(y = Participant, x = Duration)) +
+  geom_point(aes(color = Group, shape = Category)) +
+  geom_vline(xintercept = median(df$Experiment_Duration), color = "red", linetype = "dashed") +
+  geom_vline(xintercept = 15, color = "orange", linetype = "dotted") +
+  scale_shape_manual(values = c("extra" = 3, ok = 19)) +
+  scale_color_manual(values = c("Outlier" = "red", ok = "black"), guide="none") +
+  guides(color = "none", shape = "none") +
+  ggside::geom_xsidedensity(fill = "#4CAF50", color=NA) +
+  ggside::scale_xsidey_continuous(expand = c(0, 0)) +
+  labs(
+    title = "Experiment Completion Time",
+    x = "Duration (in minutes)",
+    y = "Participants"
+  )  +
+  theme_modern() +
+  ggside::theme_ggside_void() +
+  theme(ggside.panel.scale = .3,
+        panel.border = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+
+outliers$expe_duration <- filter(df, Experiment_Duration < 15)$Participant
+```
+
+## Exclusion
+### Mobile
+
+```{r}
+df |>
+  ggplot(aes(x=Mobile)) +
+  geom_bar() +
+  geom_hline(yintercept=0.5*nrow(df), linetype="dashed") +
+  theme_modern()
+```
+
+There were `r sum(df$Mobile=="True")` participants that used a mobile device.
+
+```{r}
+# df <- filter(df, Mobile == "False")
+# dftask <- filter(dftask, Participant %in% df$Participant)
+```
+
+### outlier detection based on instruction time
+### BAIT Questionnaire Duration
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+
+df |>
+  mutate(Participant = fct_reorder(Participant, Instruction_Duration1),
+         Category = ifelse(Instruction_Duration1 > 5, "extra", "ok"),
+         Duration = ifelse(Instruction_Duration1 > 5, 5, Instruction_Duration1),
+         Group = ifelse(Participant %in% outliers, "Outlier", "ok")) |>
+  ggplot(aes(y = Participant, x = Duration)) +
+  geom_point(aes(color = Group, shape = Category)) +
+  geom_vline(xintercept = median(df$Instruction_Duration1), color = "red", linetype = "dashed") +
+  geom_vline(xintercept = 0.5, color = "orange", linetype = "dotted") +
+  scale_shape_manual(values = c("extra" = 3, ok = 19)) +
+  scale_color_manual(values = c("Outlier" = "red", ok = "black"), guide="none") +
+  guides(color = "none", shape = "none") +
+  ggside::geom_xsidedensity(fill = "#9C27B0", color=NA) +
+  ggside::scale_xsidey_continuous(expand = c(0, 0)) +
+  labs(
+    title = "Instructions 1 Completion Time",
+    x = "Duration (in seconds)",
+    y = "Participant"
+  )  +
+  theme_modern() +
+  ggside::theme_ggside_void() +
+  theme(ggside.panel.scale = .3,
+        panel.border = element_blank(),
+        axis.ticks.y = element_blank(),
+          axis.text.y = element_blank()) 
+
+outliers$Instruction_Duration1 <- filter(df, Instruction_Duration1 < 0.5)$Participant
+df[df$Participant %in% outliers$Instruction_Duration1, str_detect(names(df), "BAIT_\\d+")] <- NA
+```
+
+We excluded the data of `r length(outliers$bait_duration)` participants who read the first set of instructions in less than 30 seconds.
+
+
+## describe final sample
+## Final Sample
+
+```{r}
+dfdsub <- filter(df, !Participant %in% outliers)
+df <- filter(df, Participant %in% df$Participant)
+```
+
+### Age
+
+```{r}
+p_age <- estimate_density(df$Age) |>
+  normalize(select = y) |>
+  mutate(y = y * 86) |>  # To match the binwidth
+  ggplot(aes(x = x)) +
+  geom_histogram(data=df, aes(x = Age, fill=Gender), bins=28) +
+  # geom_line(aes(y = y), color = "orange", linewidth=2) +
+  geom_vline(xintercept = mean(df$Age), color = "red", linewidth=1.5) +
+  # geom_label(data = data.frame(x = mean(df$Age) * 1.15, y = 0.95 * 75), aes(y = y), color = "red", label = paste0("Mean = ", format_value(mean(df$Age)))) +
+  scale_fill_manual(values = c("Male"= "#64B5F6", "Female"= "#F06292", "Other"="orange")) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  labs(title = "Age", y = "Number of Participants", color = NULL, subtitle = "Distribution of participants' age") +
+  theme_modern(axis.title.space = 10) +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2), vjust = 7),
+    axis.text.y = element_text(size = rel(1.1)),
+    axis.text.x = element_text(size = rel(1.1)),
+    axis.title.x = element_blank()
+  )
+p_age
+```
+
+
+### Education
+
+```{r}
+p_edu <- df |>
+  mutate(Education = fct_relevel(Education, "Other", "High School", "Bachelor", "Master", "Doctorate")) |>
+  ggplot(aes(x = Education)) +
+  geom_bar(aes(fill = Education)) +
+  scale_y_continuous(expand = c(0, 0), breaks= scales::pretty_breaks()) +
+  scale_fill_viridis_d(guide = "none") +
+  labs(title = "Education", y = "Number of Participants", subtitle = "Participants per achieved education level") +
+  theme_modern(axis.title.space = 15) +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2), vjust = 7),
+    axis.text.y = element_text(size = rel(1.1)),
+    axis.text.x = element_text(size = rel(1.1)),
+    axis.title.x = element_blank()
+  )
+p_edu
+```
+
+
+### Summary
+
+The final sample includes `r report::report_participants(df, age="Age", sex="Sex", education="Education")`.
+
+## Save
+
+```{r}
+#| code-fold: false
+
+write.csv(df, "../data/data_participants.csv", row.names = FALSE)
+write.csv(df, "../data/data_FaceFake2.csv", row.names = FALSE)
+```
+
 
