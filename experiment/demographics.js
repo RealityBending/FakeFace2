@@ -55,7 +55,7 @@ var demographics_consent = {
 
         if (jsPsych.data.urlVariables()["exp"] == "surveyswaptest") {
             text +=
-                "<p style='color:green;' align='left'><b>Note: You will receive a <i style='color:purple;'>SurveySwap</i> completion code at the end of the experiment.</b></p>"
+                "<p style='color:green;' align='left'><b>Note: You will receive a <i style='color:purple;'>SurveySwap.io</i> completion code at the end of the experiment.</b></p>"
         }
 
         // Consent Form
