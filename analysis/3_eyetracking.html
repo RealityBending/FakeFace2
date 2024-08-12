@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>FaceFake2 - Eyetracking</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="3_eyetracking_files/libs/clipboard/clipboard.min.js"></script>
+<script src="3_eyetracking_files/libs/quarto-html/quarto.js"></script>
+<script src="3_eyetracking_files/libs/quarto-html/popper.min.js"></script>
+<script src="3_eyetracking_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="3_eyetracking_files/libs/quarto-html/anchor.min.js"></script>
+<link href="3_eyetracking_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="3_eyetracking_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="3_eyetracking_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="3_eyetracking_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="3_eyetracking_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#signal-preprocessing" id="toc-signal-preprocessing" class="nav-link active" data-scroll-target="#signal-preprocessing">Signal Preprocessing</a>
+  <ul class="collapse">
+  <li><a href="#remove-bad-trials" id="toc-remove-bad-trials" class="nav-link" data-scroll-target="#remove-bad-trials">Remove Bad Trials</a></li>
+  </ul></li>
+  <li><a href="#gaze-patterns" id="toc-gaze-patterns" class="nav-link" data-scroll-target="#gaze-patterns">Gaze Patterns</a></li>
+  <li><a href="#fixations" id="toc-fixations" class="nav-link" data-scroll-target="#fixations">Fixations</a></li>
+  <li><a href="#dispersion" id="toc-dispersion" class="nav-link" data-scroll-target="#dispersion">Dispersion</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">FaceFake2 - Eyetracking</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(easystats)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magick)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggside)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="signal-preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="signal-preprocessing">Signal Preprocessing</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dfori <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/rawdata_eyetracking.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(<span class="fu">select</span>(<span class="fu">read.csv</span>(<span class="st">"../data/rawdata_task.csv"</span>), Participant, Stimulus, Condition),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(Participant, Stimulus))  <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Participant = fct_relevel(Participant, rev(levels(dfval$Participant))),</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Condition =</span> <span class="fu">fct_relevel</span>(Condition, <span class="fu">c</span>(<span class="st">"Reality"</span>, <span class="st">"Fiction"</span>)),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rescale Gaze_x as a percentage where 0 is the left corner and 1 is the right corner of the image</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> (Gaze_x <span class="sc">-</span> Target_TopLeft_x) <span class="sc">/</span> (Target_BottomRight_x <span class="sc">-</span> Target_TopLeft_x),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> (Gaze_y <span class="sc">-</span> Target_TopLeft_y) <span class="sc">/</span> (Target_BottomRight_y <span class="sc">-</span> Target_TopLeft_y),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Distance from center (0, 0)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance =</span> <span class="fu">sqrt</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Time <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># d_time = c(NA, ifelse(diff(Time) &lt; 0, NA, diff(Time))),</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Velocity =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">sqrt</span>(<span class="fu">diff</span>(x)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">diff</span>(y)<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">/</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">ifelse</span>(<span class="fu">diff</span>(Time) <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>, <span class="fu">diff</span>(Time))),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Velocity =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.finite</span>(Velocity), <span class="cn">NA</span>, Velocity)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Validation Scores</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Fixation Cross Pattern</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Bad Trials</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dfval <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/rawdata_participants.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Participant, <span class="fu">starts_with</span>(<span class="st">"Eyetracking_"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>Participant, <span class="at">names_to=</span><span class="st">"Index"</span>, <span class="at">values_to=</span><span class="st">"Value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Value)) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(Index, <span class="st">"_Mean"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Participant =</span> <span class="fu">fct_reorder</span>(Participant, Value)) <span class="sc">|&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Index =</span> <span class="fu">str_remove</span>(Index, <span class="st">"Eyetracking_Validation"</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">Index =</span> <span class="fu">str_remove</span>(Index, <span class="st">"_Mean"</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">Index =</span> <span class="fu">ifelse</span>(Index <span class="sc">==</span> <span class="st">"1"</span>, <span class="st">"Initial"</span>,  <span class="st">"Midgame"</span>))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>p_val1 <span class="ot">&lt;-</span> dfval <span class="sc">|&gt;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Value, <span class="at">y=</span>Participant)) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="fu">aes</span>(<span class="at">fill=</span>Index), <span class="at">position =</span> <span class="fu">position_dodge2</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Validation Scores"</span>, <span class="at">fill=</span><span class="st">"Validation Phase"</span>, <span class="at">color=</span><span class="st">"Validation Phase"</span>, <span class="at">x=</span><span class="st">"Validation Score"</span>, <span class="at">y=</span><span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">geom_xsidedensity</span>(<span class="fu">aes</span>(<span class="at">fill=</span>Index, <span class="at">color=</span>Index), <span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">theme_ggside_void</span>() <span class="sc">+</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>p_val2 <span class="ot">&lt;-</span> dfval <span class="sc">|&gt;</span> </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span><span class="st">"Index"</span>, <span class="at">values_from=</span><span class="st">"Value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Initial, <span class="at">y=</span>Midgame)) <span class="sc">+</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept=</span><span class="dv">0</span>, <span class="at">slope=</span><span class="dv">1</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point2</span>(<span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">"forestgreen"</span>) <span class="sc">+</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>, <span class="at">formula =</span> <span class="st">'y ~ x'</span>, <span class="at">color=</span><span class="st">"forestgreen"</span>) <span class="sc">+</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Initial vs. Midgame Validation Scores"</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>p_val1 <span class="sc">|</span> p_val2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p_fix <span class="ot">&lt;-</span> dfori <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Fixation Cross"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Participant =</span> <span class="fu">fct_relevel</span>(Participant, <span class="fu">rev</span>(<span class="fu">levels</span>(dfval<span class="sc">$</span>Participant))),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> Gaze_x <span class="sc">/</span> (Target_TopLeft_x <span class="sc">*</span> <span class="dv">2</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> Gaze_y <span class="sc">/</span> (Target_TopLeft_y <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="fu">interaction</span>(Participant, Stimulus), <span class="at">color=</span>Participant, <span class="at">linewidth=</span>Time),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">alpha=</span><span class="fl">0.7</span>, <span class="at">linewidth=</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.5</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">0.5</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_rect</span>(<span class="at">xmin=</span><span class="dv">0</span>, <span class="at">ymin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="dv">1</span>, <span class="at">ymax=</span><span class="dv">1</span>, <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">color=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  see<span class="sc">::</span><span class="fu">scale_color_material_d</span>(<span class="at">guide=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linewidth_continuous</span>(<span class="at">range=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.1</span>), <span class="at">guide=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.3</span>, <span class="fl">1.3</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.3</span>, <span class="fl">1.3</span>)) <span class="sc">+</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Participant, <span class="at">scales=</span><span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Fixation Cross Pattern"</span>, <span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="cn">NULL</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>p_fix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>invalid <span class="ot">&lt;-</span> dfori <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">!=</span> <span class="st">"Fixation_Cross"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">xout =</span> <span class="fu">mean</span>(<span class="fu">is.na</span>(x) <span class="sc">|</span> (<span class="sc">!</span><span class="fu">is.finite</span>(x)) <span class="sc">|</span> (x <span class="sc">&lt;</span> <span class="dv">0</span>) <span class="sc">|</span> (x <span class="sc">&gt;</span> <span class="dv">1</span>)),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">yout =</span> <span class="fu">mean</span>(<span class="fu">is.na</span>(y) <span class="sc">|</span> (<span class="sc">!</span><span class="fu">is.finite</span>(y)) <span class="sc">|</span> (y <span class="sc">&lt;</span> <span class="dv">0</span>) <span class="sc">|</span> (y <span class="sc">&gt;</span> <span class="dv">1</span>)),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">.by=</span><span class="fu">c</span>(<span class="st">"Participant"</span>, <span class="st">"Stimulus"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Bad =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">is.na</span>(xout) <span class="sc">|</span> <span class="fu">is.na</span>(yout) <span class="sc">~</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    xout <span class="sc">&gt;</span> <span class="fl">0.9</span> <span class="sc">|</span> yout <span class="sc">&gt;</span> <span class="fl">0.9</span> <span class="sc">~</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>dfsub_bad <span class="ot">&lt;-</span> invalid <span class="sc">|&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Bad =</span> <span class="fu">sum</span>(Bad) <span class="sc">/</span> <span class="fu">n</span>(),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">.by=</span><span class="fu">c</span>(<span class="st">"Participant"</span>))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>p_bad1 <span class="ot">&lt;-</span> dfsub_bad <span class="sc">|&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Participant = fct_reorder(Participant, Bad)</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Participant =</span> <span class="fu">fct_relevel</span>(Participant, <span class="fu">levels</span>(dfval<span class="sc">$</span>Participant))</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y=</span>Participant, <span class="at">x=</span>Bad)) <span class="sc">+</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">fill=</span><span class="st">"darkred"</span>) <span class="sc">+</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="cn">NULL</span>, <span class="at">title=</span><span class="st">"% of Bad Trials"</span>) <span class="sc">+</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">geom_xsidedensity</span>(<span class="at">fill=</span><span class="st">"darkred"</span>, <span class="at">color=</span><span class="st">"darkred"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">theme_ggside_void</span>()</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>p_bad2 <span class="ot">&lt;-</span> <span class="fu">merge</span>(dfsub_bad, dfval, <span class="at">by=</span><span class="st">"Participant"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Value, <span class="at">y=</span>Bad)) <span class="sc">+</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point2</span>(<span class="fu">aes</span>(<span class="at">color=</span>Index), <span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">color=</span>Index, <span class="at">fill=</span>Index), <span class="at">method=</span><span class="st">"lm"</span>, <span class="at">formula =</span> <span class="st">'y ~ x'</span>, <span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Validation Phase"</span>, <span class="at">fill =</span> <span class="st">"Validation Phase"</span>, <span class="at">y =</span> <span class="st">"% Bad Trials"</span>, <span class="at">title=</span><span class="st">"Validation Scores vs. Bad Trials"</span>, <span class="at">x=</span><span class="st">"Validation Score"</span>)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>p_bad1 <span class="sc">|</span> p_bad2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>((p_val1 <span class="sc">|</span> p_bad1 <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())) <span class="sc">/</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  (p_val2 <span class="sc">|</span> p_bad2)) <span class="sc">|</span> p_fix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/fig_eyetracking1-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="remove-bad-trials" class="level3">
+<h3 class="anchored" data-anchor-id="remove-bad-trials">Remove Bad Trials</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> dfori <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">!=</span> <span class="st">"Fixation Cross"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(<span class="fu">select</span>(invalid, Participant, Stimulus, Bad), <span class="at">by=</span><span class="fu">join_by</span>(Participant, Stimulus)) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Bad <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Bad) <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(x), <span class="fu">is.finite</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We removed <code>insight::format_percent((nrow(filter(dfori, Type != "Fixation Cross")) - nrow(df)) / nrow(filter(dfori, Type != "Fixation Cross")))</code> “bad” trials.</p>
+</section>
+</section>
+<section id="gaze-patterns" class="level2">
+<h2 class="anchored" data-anchor-id="gaze-patterns">Gaze Patterns</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plot_eyetrace <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">stim=</span><span class="st">"NF-1041"</span>) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  img <span class="ot">&lt;-</span> magick<span class="sc">::</span><span class="fu">image_read</span>(<span class="fu">paste0</span>(<span class="st">"../experiment/stimuli/AMFD/"</span>, stim, <span class="st">".jpg"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    magick<span class="sc">::</span><span class="fu">image_resize</span>(<span class="st">"400x"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Image"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Stimulus <span class="sc">==</span> stim) <span class="sc">|&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> datawizard<span class="sc">::</span><span class="fu">rescale</span>(x, <span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">to=</span><span class="fu">c</span>(<span class="dv">0</span>, magick<span class="sc">::</span><span class="fu">image_info</span>(img)<span class="sc">$</span>width)),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> datawizard<span class="sc">::</span><span class="fu">rescale</span>(y, <span class="at">range=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">to=</span><span class="fu">c</span>(<span class="dv">0</span>, magick<span class="sc">::</span><span class="fu">image_info</span>(img)<span class="sc">$</span>height))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  img <span class="sc">|&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    magick<span class="sc">::</span><span class="fu">image_ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_density_2d</span>(</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">data=</span>dat,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">fill =</span> <span class="fu">after_stat</span>(level)),</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">geom =</span> <span class="st">"polygon"</span>, <span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_path</span>(</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">data=</span>dat,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">group =</span> Participant, <span class="at">color=</span>Condition),</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha=</span><span class="fl">0.3</span>, <span class="at">linewidth=</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"Reality"</span><span class="ot">=</span><span class="st">"red"</span>, <span class="st">"Fiction"</span><span class="ot">=</span><span class="st">"blue"</span>)) <span class="sc">+</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradientn</span>(<span class="at">colors=</span><span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title=</span>stim) <span class="sc">+</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>,</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>))  <span class="sc">+</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(<span class="sc">~</span>Condition)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (stim <span class="cf">in</span> <span class="fu">unique</span>(df<span class="sc">$</span>Stimulus)) {</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  plots[[stim]] <span class="ot">&lt;-</span> <span class="fu">plot_eyetrace</span>(stim)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">wrap_plots</span>(plots, <span class="at">ncol=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/fig_eyetracking2-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="fixations" class="level2">
+<h2 class="anchored" data-anchor-id="fixations">Fixations</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean disengaging gazes</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Velocity)) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Velocity <span class="sc">&lt;</span> <span class="dv">10</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Velocity)) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill=</span><span class="st">"grey"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove outside of image fixations (max distance = sqrt(2))</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(distance)) <span class="sc">|&gt;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(distance <span class="sc">&lt;</span> <span class="fu">sqrt</span>(<span class="dv">2</span>))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>distance, <span class="at">color=</span>Condition)) <span class="sc">+</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">|</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(distance <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption># Fixed Effects</caption>
+<colgroup>
+<col style="width: 27%">
+<col style="width: 17%">
+<col style="width: 13%">
+<col style="width: 20%">
+<col style="width: 9%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+<th style="text-align: center;">SE</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;">z</th>
+<th style="text-align: center;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: center;">0.79</td>
+<td style="text-align: center;">0.02</td>
+<td style="text-align: center;">(0.74, 0.84)</td>
+<td style="text-align: center;">32.26</td>
+<td style="text-align: center;">&lt; .001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Condition [Fiction]</td>
+<td style="text-align: center;">3.18e-03</td>
+<td style="text-align: center;">7.28e-03</td>
+<td style="text-align: center;">(-0.01, 0.02)</td>
+<td style="text-align: center;">0.44</td>
+<td style="text-align: center;">0.662</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-sm table-striped small">
+<caption># Random Effects</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SD (Intercept: Participant)</td>
+<td style="text-align: center;">0.15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SD (Intercept: Stimulus)</td>
+<td style="text-align: center;">0.04</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SD (ConditionFiction: Participant)</td>
+<td style="text-align: center;">0.03</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
+<td style="text-align: center;">0.05</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
+<td style="text-align: center;">-0.11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
+<td style="text-align: center;">-0.55</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SD (Residual)</td>
+<td style="text-align: center;">0.18</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_means</span>(m, <span class="at">by=</span><span class="st">"Condition"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Condition)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_slab</span>(<span class="at">data=</span><span class="fu">filter</span>(dat, Condition<span class="sc">==</span><span class="st">"Reality"</span>), <span class="fu">aes</span>(<span class="at">y=</span>distance, <span class="at">fill=</span>Condition), <span class="at">side=</span><span class="st">"left"</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_slab</span>(<span class="at">data=</span><span class="fu">filter</span>(dat, Condition<span class="sc">==</span><span class="st">"Fiction"</span>), <span class="fu">aes</span>(<span class="at">y=</span>distance, <span class="at">fill=</span>Condition), <span class="at">side=</span><span class="st">"right"</span>) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>Mean, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">y=</span>Mean, <span class="at">ymin=</span>CI_low, <span class="at">ymax=</span>CI_high)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Distance from center"</span>, <span class="at">x=</span><span class="st">"Condition"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dispersion" class="level2">
+<h2 class="anchored" data-anchor-id="dispersion">Dispersion</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exploratory gaze</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(distance)) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(distance <span class="sc">&lt;</span> <span class="fu">sqrt</span>(<span class="dv">2</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_position =</span> (<span class="fu">sd</span>(x, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">sd</span>(y, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mad_position =</span> (<span class="fu">mad</span>(x, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">mad</span>(y, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by=</span><span class="fu">c</span>(<span class="st">"Participant"</span>, <span class="st">"Condition"</span>, <span class="st">"Stimulus"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(sd_position, mad_position), <span class="at">names_to=</span><span class="st">"Metric"</span>, <span class="at">values_to=</span><span class="st">"Value"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Value, <span class="at">color=</span>Condition)) <span class="sc">+</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Metric) <span class="sc">+</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 9 rows containing non-finite outside the scale range
+(`stat_density()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_eyetracking_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(sd_position <span class="sc">~</span> Condition <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Stimulus),</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption># Fixed Effects</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 28%">
+<col style="width: 7%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+<th style="text-align: center;">SE</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;">z</th>
+<th style="text-align: center;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: center;">0.17</td>
+<td style="text-align: center;">0.02</td>
+<td style="text-align: center;">(0.13, 0.20)</td>
+<td style="text-align: center;">9.63</td>
+<td style="text-align: center;">&lt; .001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Condition [Fiction]</td>
+<td style="text-align: center;">3.75e-04</td>
+<td style="text-align: center;">2.37e-03</td>
+<td style="text-align: center;">(-4.27e-03, 5.02e-03)</td>
+<td style="text-align: center;">0.16</td>
+<td style="text-align: center;">0.874</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-sm table-striped small">
+<caption># Random Effects</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SD (Intercept: Participant)</td>
+<td style="text-align: center;">0.11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SD (Intercept: Stimulus)</td>
+<td style="text-align: center;">7.36e-03</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SD (Residual)</td>
+<td style="text-align: center;">0.07</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(mad_position <span class="sc">~</span> Condition <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Participant) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>Stimulus),</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption># Fixed Effects</caption>
+<colgroup>
+<col style="width: 24%">
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 28%">
+<col style="width: 8%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+<th style="text-align: center;">SE</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;">z</th>
+<th style="text-align: center;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: center;">0.16</td>
+<td style="text-align: center;">0.02</td>
+<td style="text-align: center;">(0.13, 0.20)</td>
+<td style="text-align: center;">9.21</td>
+<td style="text-align: center;">&lt; .001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Condition [Fiction]</td>
+<td style="text-align: center;">-8.92e-04</td>
+<td style="text-align: center;">2.73e-03</td>
+<td style="text-align: center;">(-6.24e-03, 4.46e-03)</td>
+<td style="text-align: center;">-0.33</td>
+<td style="text-align: center;">0.744</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-sm table-striped small">
+<caption># Random Effects</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SD (Intercept: Participant)</td>
+<td style="text-align: center;">0.11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SD (Intercept: Stimulus)</td>
+<td style="text-align: center;">5.25e-03</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SD (Residual)</td>
+<td style="text-align: center;">0.08</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
