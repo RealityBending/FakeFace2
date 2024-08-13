@@ -29,12 +29,6 @@ library(readr)
 
 ```
 
-```{r}
-head(df)
-df$Participant
-
-```
-
 ## Hexaco18 dimensions
 ```{r}
 # Function to calculate standard deviations per dimension
@@ -86,7 +80,6 @@ hexaco18$HEXACO18_Openness <- rowMeans(hexaco18[grepl("Openness", names(hexaco18
 hexaco18$HEXACO18_SD <- rowMeans(SD_per_dim(hexaco18, c("HonestyHumility", "Emotionality", "Extraversion", "Agreeableness", "Conscientiousnes", "Openness")))
 
 # View the results
-head(hexaco18)
 
 ```
 
@@ -261,7 +254,7 @@ The final sample includes `r report::report_participants(df, age="Age", sex="Sex
 #| code-fold: false
 
 write.csv(df, "../data/data_participants.csv", row.names = FALSE)
-write.csv(df, "../data/data_FaceFake2.csv", row.names = FALSE)
+write.csv(df, "../data/data_task.csv", row.names = FALSE)
 ```
 
 
