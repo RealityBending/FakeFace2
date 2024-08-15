@@ -8,6 +8,8 @@ format:
     code-fold: true
     self-contained: false
     toc: true
+execute: 
+  cache: true
 ---
 
 
@@ -279,6 +281,13 @@ p2 <- dat |>
 p1 | p2
 ```
 
+```{r}
+#| code-fold: false
+
+m <- glmmTMB::glmmTMB(y ~ Condition + (Condition|Participant) + (Condition|Stimulus),
+                      data=dat)
+insight::display(parameters::parameters(m))
+```
 
 ```{r}
 #| code-fold: false
@@ -327,7 +336,7 @@ dat |>
 ```{r}
 #| code-fold: false
 
-m <- glmmTMB::glmmTMB(sd_position ~ Condition + (1|Participant) + (1|Stimulus),
+m <- glmmTMB::glmmTMB(sd_position ~ Condition + (Condition|Participant) + (Condition|Stimulus),
                       data=dat)
 insight::display(parameters::parameters(m))
 ```
@@ -335,7 +344,9 @@ insight::display(parameters::parameters(m))
 ```{r}
 #| code-fold: false
 
-m <- glmmTMB::glmmTMB(mad_position ~ Condition + (1|Participant) + (1|Stimulus),
+m <- glmmTMB::glmmTMB(mad_position ~ Condition + (Condition|Participant) + (Condition|Stimulus),
                       data=dat)
 insight::display(parameters::parameters(m))
 ```
+
+

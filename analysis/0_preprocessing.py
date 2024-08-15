@@ -70,7 +70,12 @@ for i, file in enumerate(files):
     demo = json.loads(demo["response"])
 
     for item in demo:
-        df[item] = demo[item]
+        if "Comment" in item:
+            answer = demo[item]
+            demo[item.replace("-Comment", "")] = "Other_" + answer
+            demo[item] = "Other_" + answer
+            item = item.replace("-Comment", "")
+        df[item] = "Prefer not to say" if demo[item] == None else demo[item]
 
     # HEXACO ----------------------------------------------------------------
     hexaco = data[data["screen"] == "questionnaire_hexaco18"].iloc[0]
@@ -87,6 +92,63 @@ for i, file in enumerate(files):
     bait = json.loads(bait["response"])
     for item in bait:
         df[item] = float(bait[item])
+
+    # Feedback -------------------------------------------------------------
+    f1 = data[data["screen"] == "fiction_feedback1"].iloc[0]
+    f1 = json.loads(f1["response"])
+
+    df["Feedback_NoFacesAttractive"] = False
+    df["Feedback_SomeFacesAttractive"] = False
+    df["Feedback_AIMoreAttractive"] = False
+    df["Feedback_AILessAttractive"] = False
+    for f in f1["Feedback_1"]:
+        if "No face" in f:
+            df["Feedback_NoFacesAttractive"] = True
+        if "Some faces" in f:
+            df["Feedback_SomeFacesAttractive"] = True
+        if "more attractive" in f:
+            df["Feedback_AIMoreAttractive"] = True
+        if "less attractive" in f:
+            df["Feedback_AILessAttractive"] = True
+
+    df["Feedback_DiffObvious"] = False
+    df["Feedback_DiffSubtle"] = False
+    df["Feedback_DiffNone"] = False
+    df["Feedback_LabelsIncorrect"] = False
+    df["Feedback_LabelsReversed"] = False
+    df["Feedback_AllReal"] = False
+    df["Feedback_AllFake"] = False
+    for f in f1["Feedback_2"]:
+        if "obvious" in f:
+            df["Feedback_DiffObvious"] = True
+        if "subtle" in f:
+            df["Feedback_DiffSubtle"] = False
+        if "any difference" in f:
+            df["Feedback_DiffNone"] = True
+        if "not always correct" in f:
+            df["Feedback_LabelsIncorrect"] = True
+        if "reversed" in f:
+            df["Feedback_LabelsReversed"] = True
+        if "were photos" in f:
+            df["Feedback_AllReal"] = True
+        if "were AI-generated" in f:
+            df["Feedback_AllFake"] = True
+
+    df["Feedback_AllRealConfidence"] = (
+        np.nan
+        if f1["Feedback_2_ConfidenceReal"] == None
+        else f1["Feedback_2_ConfidenceReal"]
+    )
+    df["Feedback_AllFakeConfidence"] = (
+        np.nan
+        if f1["Feedback_2_ConfidenceFake"] == None
+        else f1["Feedback_2_ConfidenceFake"]
+    )
+
+    f2 = data[data["screen"] == "experiment_feedback"].iloc[0]
+    f2 = json.loads(f2["response"])
+    df["Feedback_Enjoyment"] = f2["Feedback_Enjoyment"]
+    df["Feedback_Text"] = f2["Feedback_Text"]
 
     # Task data -----------------------------------------------------------
     df["Instruction_Duration1"] = (
@@ -228,6 +290,43 @@ ppt = {s: f"S{i+1:03d}" for i, s in enumerate(data_demo["Participant"].unique())
 data_demo["Participant"] = [ppt[s] for s in data_demo["Participant"]]
 data_task["Participant"] = [ppt[s] for s in data_task["Participant"]]
 data_eye["Participant"] = [ppt[s] for s in data_eye["Participant"]]
+
+
+# Manual clean-up ---------------------------------------------------------
+def replace_value(df, column, old, new):
+    df = df.copy()
+    df.loc[df[column] == old, column] = new
+    return df
+
+
+# data_demo["Ethnicity"][data_demo["Ethnicity"].str.contains("Other_").values]
+data_demo = replace_value(data_demo, "Ethnicity", "Other_White, Hispanic", "Mixed")
+
+
+# data_demo["Discipline"][data_demo["Discipline"].str.contains("Other_").values]
+data_demo = replace_value(
+    data_demo, "Discipline", "Other_Business Psychology", "Psychology"
+)
+data_demo = replace_value(data_demo, "Discipline", "Other_Journalism", "Other")
+data_demo = replace_value(data_demo, "Discipline", "Other_Industrial Design", "Other")
+data_demo = replace_value(data_demo, "Discipline", "Other_pharmacy", "Other")
+
+# data_demo["SexualOrientation"][data_demo["SexualOrientation"].str.contains("Other_").values]
+data_demo = replace_value(data_demo, "SexualOrientation", "Other_Pansexual", "Other")
+
+# data_demo["SexualStatus"][data_demo["SexualStatus"].str.contains("Other_").values]
+data_demo = replace_value(
+    data_demo,
+    "SexualStatus",
+    "Other_Married not open to dating",
+    "In a relationship and not open to dating",
+)
+
+
+# data_demo["Gender"][data_demo["Gender"].str.contains("Other_").values]
+# data_demo["Country"][data_demo["Country"].str.contains("Other_").values]
+# data_demo["Education"][data_demo["Education"].str.contains("Other_").values]
+
 
 # Save data ==============================================================
 
