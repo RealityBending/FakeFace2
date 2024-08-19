@@ -45,8 +45,6 @@ dftask <- read.csv("../data/rawdata_task.csv") |>
     SexualOrientation %in% c("Other") ~ "Irrelevant",  # What to do with "Other"? 
     .default = "Irrelevant"
   )) 
-  
-names(df)
 ```
 
 The initial sample consisted of `r report::report_participants(df, age="Age", gender="Gender", education="Education")`, for a total trial number of `r nrow(df)`.
@@ -76,8 +74,6 @@ df$HEXACO18_Openness <- rowMeans(df[grepl("Openness", names(df))])
 
 ```{r}
 #| message: false
-#| fig-width: 12
-#| fig-height: 12
 
 df |>
   mutate(Date = as.Date(Date, format = "%d/%m/%Y")) |> 
@@ -164,6 +160,8 @@ df |>
 #### Co-occurence
 
 ```{r}
+#| warning: false
+
 cor <- df |> 
   select(starts_with("Feedback"), -Feedback_Text, -ends_with("Confidence"), -Feedback_Enjoyment)  |> 
   select(-Feedback_DiffSubtle) |>  # No variance
