@@ -310,9 +310,13 @@ data_demo = replace_value(
 data_demo = replace_value(data_demo, "Discipline", "Other_Journalism", "Other")
 data_demo = replace_value(data_demo, "Discipline", "Other_Industrial Design", "Other")
 data_demo = replace_value(data_demo, "Discipline", "Other_pharmacy", "Other")
+data_demo = replace_value(data_demo, "Discipline", "Other_Geography", "Other")
 
 # data_demo["SexualOrientation"][data_demo["SexualOrientation"].str.contains("Other_").values]
 data_demo = replace_value(data_demo, "SexualOrientation", "Other_Pansexual", "Other")
+data_demo = replace_value(
+    data_demo, "SexualOrientation", "Other_Mainly heterosexual", "Heterosexual"
+)
 
 # data_demo["SexualStatus"][data_demo["SexualStatus"].str.contains("Other_").values]
 data_demo = replace_value(
@@ -326,7 +330,7 @@ data_demo = replace_value(
 # data_demo["Gender"][data_demo["Gender"].str.contains("Other_").values]
 # data_demo["Country"][data_demo["Country"].str.contains("Other_").values]
 # data_demo["Education"][data_demo["Education"].str.contains("Other_").values]
-
+data_demo = replace_value(data_demo, "Education", "Other_Diploma in TEFL", "Other")
 
 # Save data ==============================================================
 

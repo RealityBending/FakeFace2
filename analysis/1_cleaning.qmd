@@ -199,6 +199,13 @@ cor |>
 
 ### Comments
 
+In summary:
+
+- The term "trustworthiness" seemed to cause some confusion, as some participants lowered trustworthiness when asked about it. Also, image presentation format (few seconds and with no background whatsoever) seemed to affect ratings of trustworthiness. I think some found the term misleading and inherently suspicious so maybe clarify it or change wording for next time.
+- Lots of people said faces from database were "too ugly to be real" and someone suggested that 1-10 scales for attractiveness, trustworthiness and beauty might work better than "Agree-Disagree" scales.
+- In general, the most important bit is that the experiment is too long and tiring. For future improvement either have some incentives and add more breaks in-between or cut the number of faces in half as I think people started to get fatigued near the end and definitely distracted (some didn't really read the tags at the start). Participants propose either a controlled experimental setting like the lab or a shorter time to complete to avoid fatigue and getting distracted.
+- Some thought the eye-tracking was a very cool idea.
+
 ```{r}
 data.frame(Source = df$Source,
            Comments = trimws(df$Feedback_Text)) |> 
