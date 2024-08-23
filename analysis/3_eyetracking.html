@@ -310,7 +310,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Bad) <span class="sc">|&gt;</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(x), <span class="fu">is.finite</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We removed <code>insight::format_percent((nrow(filter(dfori, Type != "Fixation Cross")) - nrow(df)) / nrow(filter(dfori, Type != "Fixation Cross")))</code> “bad” trials.</p>
+<p>We removed 23.08% “bad” trials.</p>
 </section>
 </section>
 <section id="gaze-patterns" class="level2">
@@ -430,17 +430,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">(Intercept)</td>
 <td style="text-align: center;">0.48</td>
 <td style="text-align: center;">0.02</td>
-<td style="text-align: center;">(0.43, 0.52)</td>
-<td style="text-align: center;">20.23</td>
+<td style="text-align: center;">(0.44, 0.53)</td>
+<td style="text-align: center;">22.88</td>
 <td style="text-align: center;">&lt; .001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">-1.67e-03</td>
-<td style="text-align: center;">9.48e-03</td>
-<td style="text-align: center;">(-0.02, 0.02)</td>
-<td style="text-align: center;">-0.18</td>
-<td style="text-align: center;">0.860</td>
+<td style="text-align: center;">1.41e-03</td>
+<td style="text-align: center;">8.30e-03</td>
+<td style="text-align: center;">(-0.01, 0.02)</td>
+<td style="text-align: center;">0.17</td>
+<td style="text-align: center;">0.865</td>
 </tr>
 </tbody>
 </table>
@@ -459,7 +459,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (Intercept: Stimulus)</td>
-<td style="text-align: center;">0.05</td>
+<td style="text-align: center;">0.04</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (ConditionFiction: Participant)</td>
@@ -467,19 +467,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">0.06</td>
+<td style="text-align: center;">0.05</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
-<td style="text-align: center;">0.11</td>
+<td style="text-align: center;">0.13</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">-0.68</td>
+<td style="text-align: center;">-0.70</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (Residual)</td>
-<td style="text-align: center;">0.25</td>
+<td style="text-align: center;">0.26</td>
 </tr>
 </tbody>
 </table>
@@ -493,10 +493,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <table class="table table-sm table-striped small">
 <caption># Fixed Effects</caption>
 <colgroup>
-<col style="width: 27%">
-<col style="width: 17%">
-<col style="width: 13%">
-<col style="width: 20%">
+<col style="width: 25%">
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 24%">
 <col style="width: 9%">
 <col style="width: 10%">
 </colgroup>
@@ -513,19 +513,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">0.79</td>
+<td style="text-align: center;">0.80</td>
 <td style="text-align: center;">0.02</td>
-<td style="text-align: center;">(0.75, 0.83)</td>
-<td style="text-align: center;">40.75</td>
+<td style="text-align: center;">(0.77, 0.83)</td>
+<td style="text-align: center;">47.31</td>
 <td style="text-align: center;">&lt; .001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">6.74e-04</td>
-<td style="text-align: center;">6.52e-03</td>
-<td style="text-align: center;">(-0.01, 0.01)</td>
-<td style="text-align: center;">0.10</td>
-<td style="text-align: center;">0.918</td>
+<td style="text-align: center;">2.21e-03</td>
+<td style="text-align: center;">5.85e-03</td>
+<td style="text-align: center;">(-9.26e-03, 0.01)</td>
+<td style="text-align: center;">0.38</td>
+<td style="text-align: center;">0.706</td>
 </tr>
 </tbody>
 </table>
@@ -548,7 +548,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (ConditionFiction: Participant)</td>
-<td style="text-align: center;">0.03</td>
+<td style="text-align: center;">0.04</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
@@ -556,11 +556,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
-<td style="text-align: center;">4.77e-03</td>
+<td style="text-align: center;">-0.02</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">-0.64</td>
+<td style="text-align: center;">-0.66</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (Residual)</td>
@@ -615,7 +615,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 6 rows containing non-finite outside the scale range
+<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
 (`stat_density()`).</code></pre>
 </div>
 <div class="cell-output-display">
@@ -630,16 +630,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(sd_position <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in (function (start, objective, gradient = NULL, hessian = NULL, :
-NA/NaN function evaluation
-Warning in (function (start, objective, gradient = NULL, hessian = NULL, :
-NA/NaN function evaluation
-Warning in (function (start, objective, gradient = NULL, hessian = NULL, :
-NA/NaN function evaluation
-Warning in (function (start, objective, gradient = NULL, hessian = NULL, :
-NA/NaN function evaluation</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
 <pre><code>Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
 problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</code></pre>
 </div>
@@ -648,24 +638,44 @@ problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</
 problem; singular convergence (7). See vignette('troubleshooting'),
 help('diagnose')</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <caption># Fixed Effects</caption>
+<colgroup>
+<col style="width: 24%">
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 28%">
+<col style="width: 8%">
+<col style="width: 9%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Parameter</th>
 <th style="text-align: center;">Coefficient</th>
+<th style="text-align: center;">SE</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;">z</th>
+<th style="text-align: center;">p</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
 <td style="text-align: center;">0.16</td>
+<td style="text-align: center;">0.01</td>
+<td style="text-align: center;">(0.13, 0.18)</td>
+<td style="text-align: center;">11.64</td>
+<td style="text-align: center;">&lt; .001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">6.40e-04</td>
+<td style="text-align: center;">1.78e-04</td>
+<td style="text-align: center;">1.72e-03</td>
+<td style="text-align: center;">(-3.19e-03, 3.55e-03)</td>
+<td style="text-align: center;">0.10</td>
+<td style="text-align: center;">0.918</td>
 </tr>
 </tbody>
 </table>
@@ -680,23 +690,23 @@ help('diagnose')</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">SD (Intercept: Participant)</td>
-<td style="text-align: center;">0.10</td>
+<td style="text-align: center;">0.11</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (Intercept: Stimulus)</td>
-<td style="text-align: center;">6.07e-03</td>
+<td style="text-align: center;">4.91e-03</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (ConditionFiction: Participant)</td>
-<td style="text-align: center;">5.50e-56</td>
+<td style="text-align: center;">7.06e-36</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">4.31e-03</td>
+<td style="text-align: center;">5.49e-03</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
-<td style="text-align: center;">-0.99</td>
+<td style="text-align: center;">-1.00</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
@@ -711,18 +721,9 @@ help('diagnose')</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(mad_position <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
-problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
-problem; singular convergence (7). See vignette('troubleshooting'),
-help('diagnose')</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(mad_position <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <caption># Fixed Effects</caption>
@@ -750,16 +751,16 @@ help('diagnose')</code></pre>
 <td style="text-align: center;">0.15</td>
 <td style="text-align: center;">0.01</td>
 <td style="text-align: center;">(0.13, 0.18)</td>
-<td style="text-align: center;">10.61</td>
+<td style="text-align: center;">11.11</td>
 <td style="text-align: center;">&lt; .001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">5.15e-04</td>
-<td style="text-align: center;">2.37e-03</td>
-<td style="text-align: center;">(-4.13e-03, 5.16e-03)</td>
-<td style="text-align: center;">0.22</td>
-<td style="text-align: center;">0.828</td>
+<td style="text-align: center;">6.54e-04</td>
+<td style="text-align: center;">2.05e-03</td>
+<td style="text-align: center;">(-3.36e-03, 4.67e-03)</td>
+<td style="text-align: center;">0.32</td>
+<td style="text-align: center;">0.750</td>
 </tr>
 </tbody>
 </table>
@@ -774,23 +775,23 @@ help('diagnose')</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">SD (Intercept: Participant)</td>
-<td style="text-align: center;">0.10</td>
+<td style="text-align: center;">0.11</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (Intercept: Stimulus)</td>
-<td style="text-align: center;">7.25e-03</td>
+<td style="text-align: center;">7.34e-03</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (ConditionFiction: Participant)</td>
-<td style="text-align: center;">1.25e-03</td>
+<td style="text-align: center;">1.19e-03</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">7.23e-03</td>
+<td style="text-align: center;">6.80e-03</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
-<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">0.99</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>

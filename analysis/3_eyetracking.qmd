@@ -8,8 +8,6 @@ format:
     code-fold: true
     self-contained: false
     toc: true
-execute: 
-  cache: true
 ---
 
 
@@ -204,7 +202,7 @@ df <- dfori |>
   filter(is.finite(x), is.finite(y))
 ```
 
-We removed `insight::format_percent((nrow(filter(dfori, Type != "Fixation Cross")) - nrow(df)) / nrow(filter(dfori, Type != "Fixation Cross")))` "bad" trials.
+We removed `r insight::format_percent((nrow(filter(dfori, Type != "Fixation Cross")) - nrow(df)) / nrow(filter(dfori, Type != "Fixation Cross")))` "bad" trials.
 
 
 ## Gaze Patterns
