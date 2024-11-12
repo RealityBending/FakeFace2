@@ -58,6 +58,11 @@ var demographics_consent = {
                 "<p style='color:green;' align='left'><b>Note: You will receive a <i style='color:purple;'>SurveySwap.io</i> completion code at the end of the experiment.</b></p>"
         }
 
+        if (jsPsych.data.urlVariables()["exp"] == "SONA") {
+            text +=
+                "<p style='color:green;' align='left'><b>Note: You will receive a <i style='color:purple;'>SONA</i> completion link at the end of the experiment.</b></p>"
+        }
+
         // Consent Form
         text +=
             // Overview
@@ -344,6 +349,15 @@ var demographics_endscreen = {
                 "<a href='https://surveyswap.io/sr/E9XP-DWMS-BHA3'>here<a/>" +
                 " to redeem your SurveySwap participation</b><br>(in case the link doesn't work, the code is: E9XP-DWMS-BHA3)</p>"
         }
+        if (jsPsych.data.urlVariables()["exp"] == "SONA") {
+            text +=
+                "<p style='color:red;'><b>Click " +
+                "<a href='https://sussexpsychology.sona-systems.com/webstudy_credit.aspx?experiment_id=1902&credit_token=49767141c9614189b846796fac1dde07&survey_code=" +
+                jsPsych.data.urlVariables()["sona_id"] +
+                "'>here<a/>" +
+                " to redeem your SONA credits</b><br></p>"
+        }
+
         return text + "<p><b>You can safely close the tab now.</b></p>"
     },
     choices: ["End"],
