@@ -347,6 +347,7 @@ var fiction_showimage2 = {
 
 var fiction_ratings2 = {
     type: jsPsychSurvey,
+    css_classes: ["colored-scale"],
     survey_json: {
         goNextPageAutomatic: true,
         showQuestionNumbers: false,
