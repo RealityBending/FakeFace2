@@ -68,7 +68,7 @@ var demographics_consent = {
             // Overview
             "<p align='left'><b>Invitation to Take Part</b><br>" +
             "Thank you for considering to take part in this study that aims at deepening our understanding of human perception. " +
-            "This study is being conducted by Sofia Turcany Diaz and Dr Dominique Makowski from the <b>University of Sussex</b>, who are happy to be contacted if you have any questions (see contact information below).</p>" +
+            "This study is being conducted by Ana Neves and Dr Dominique Makowski from the <b>University of Sussex</b>, who are happy to be contacted if you have any questions (see contact information below).</p>" +
             // Description
             "<p align='left'><b>Why have I been invited and what will I do?</b><br>" +
             "The goal is to study how new technology can impact <b>human perception</b>. In this study, you will be shown facial images and asked to complete a few questionnaires and perform some tasks. " +
@@ -87,7 +87,7 @@ var demographics_consent = {
             "<li align='left'>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, ...).</li>" +
             "<li align='left'>By participating, you agree to follow the instructions and provide honest answers. If you do not wish to participate, simply close your browser.</li>" +
             "</p>" +
-            "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Sofia Turcany Diaz (<i style='color:DodgerBlue;'>st633@sussex.ac.uk</i>) or Dr Dominique Makowski (<i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i>). This research has been approved (ER/ST633/1) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>"
+            "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Ana Neves (<i style='color:DodgerBlue;'>A.Neves@sussex.ac.uk</i>) and/or Dr Dominique Makowski (<i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i>). This research has been approved (ER/ST633/1) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>"
 
         return text
     },
@@ -313,11 +313,11 @@ var demographics_debriefing = {
     css_classes: ["narrow-text"],
     stimulus:
         "<h2>Debriefing</h2>" +
-        "<p align='left'>The purpose of this study was actually to study the effect on attraction of <i>believing</i> that the content is AI-generated. " +
-        "Indeed, we want to test the hypothesis that believing that facial images are fake would lead to lower attraction levels. " +
+        "<p align='left'>The purpose of this study was actually to study the effect on attraction and trustworthiness of <i>believing</i> that the content is AI-generated. " +
+        "Indeed, we want to test the hypothesis that believing that facial images are fake would lead to lower attraction and trustworthiness levels. " +
         "As we are primarily interested in your <i>beliefs</i> about reality, all images were in fact taken from an existing database of real faces used in psychology research to study emotions. " +
         "We apologize for the necessary deception used in the instructions, and we hope that you understand its role in ensuring the validity of our experiment.</p>" +
-        "<p align='left'><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the project, please contact st633@sussex.ac.uk or D.Makowski@sussex.ac.uk.</p>" +
+        "<p align='left'><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the project, please contact A.Neves@sussex.ac.uk or D.Makowski@sussex.ac.uk.</p>" +
         "<p>To complete your participation in this study, click on 'Continue' and <b>wait until your responses have been successfully saved</b> before closing the tab.</p> ",
     choices: ["Continue"],
     data: { screen: "debriefing" },
