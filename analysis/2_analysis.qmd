@@ -1,475 +1,157 @@
 ---
-title: "Cleaning and analyses"
-author: "Sofia Turcany"
-format: html
-editor: visual
+title: "FaceFake2 - Data Analysis"
+editor: source
 editor_options: 
   chunk_output_type: console
+format:
   html:
     code-fold: true
     self-contained: true
     toc: true
 ---
 
-# Cleaning
+
+## Data Preparation
 
 ```{r}
-library(readr)
-```
+#| message: false
+#| warning: false
 
-## Read CSV files
-
-```{r}
-df1 <- read_csv("https://raw.githubusercontent.com/RealityBending/FakeFace2/main/data/rawdata_task.csv")
-df2 <- read_csv("https://raw.githubusercontent.com/RealityBending/FakeFace2/main/data/rawdata_participants.csv")
-```
-
-## Create dataframes for task and participant data
-
-### Task data
-
-```{r}
-df1_selected <- data.frame(
-  Participant = df1$Participant,
-  Stimulus = df1$Stimulus,
-  Condition = df1$Condition,
-  Beauty = df1$Beauty,
-  Attractiveness = df1$Attractiveness,
-  Trustworthiness = df1$Trustworthiness,
-  Realness = df1$Realness)
-```
-
-### Task data
-
-```{r}
-df2_selected <- data.frame(
-  Participant = df2$Participant,
-  Age = df2$Age,
-  Gender = df2$Gender,
-  Education = df2$Education,
-  Ethnicity = df2$Ethnicity,
-  SexualOrientation = df2$SexualOrientation,
-  SexualStatus = df2$SexualStatus,
-  Instruction_Duration1 = df2$Instruction_Duration1,
-  Instruction_Duration2 = df2$Instruction_Duration2,
-  HEXACO18_HonestyHumility_Sincerity_1_NR = df2$HEXACO18_HonestyHumility_Sincerity_1_NR,
-  HEXACO18_HonestyHumility_GreedAvoidance_2_R = df2$HEXACO18_HonestyHumility_GreedAvoidance_2_R,
-  HEXACO18_HonestyHumility_Modesty_3_R = df2$HEXACO18_HonestyHumility_Modesty_3_R,
-  HEXACO18_Emotionality_Fearfulness_4_R = df2$HEXACO18_Emotionality_Fearfulness_4_R,
-  HEXACO18_Emotionality_Dependence_5_NR = df2$HEXACO18_Emotionality_Dependence_5_NR,
-  HEXACO18_Emotionality_Anxiety_6_NR = df2$HEXACO18_Emotionality_Anxiety_6_NR,
-  HEXACO18_Extraversion_SocialSelfEsteem_7_R = df2$HEXACO18_Extraversion_SocialSelfEsteem_7_R,
-  HEXACO18_Extraversion_SocialBoldness_8_R = df2$HEXACO18_Extraversion_SocialBoldness_8_R,
-  HEXACO18_Extraversion_Liveliness_9_R = df2$HEXACO18_Extraversion_Liveliness_9_R,
-  HEXACO18_Agreeableness_Forgiveness_10_NR = df2$HEXACO18_Agreeableness_Forgiveness_10_NR,
-  HEXACO18_Agreeableness_Gentleness_11_NR = df2$HEXACO18_Agreeableness_Gentleness_11_NR,
-  HEXACO18_Agreeableness_Patience_12_R = df2$HEXACO18_Agreeableness_Patience_12_R,
-  HEXACO18_Conscientiousnes_Diligence_13_R = df2$HEXACO18_Conscientiousnes_Diligence_13_R,
-  HEXACO18_Conscientiousnes_Prudence_14_R = df2$HEXACO18_Conscientiousnes_Prudence_14_R,
-  HEXACO18_Conscientiousnes_Organization_15_R = df2$HEXACO18_Conscientiousnes_Organization_15_R,
-  HEXACO18_Openness_Unconventionality_16_R = df2$HEXACO18_Openness_Unconventionality_16_R,
-  HEXACO18_Openness_AestheticAppreciation_17_NR = df2$HEXACO18_Openness_AestheticAppreciation_17_NR,
-  HEXACO18_Openness_Creativity_18_NR = df2$HEXACO18_Openness_Creativity_18_NR,
-  BAIT_AI_Knowledge = df2$BAIT_AI_Knowledge,
-  BAIT_1_ImagesRealistic = df2$BAIT_1_ImagesRealistic,
-  BAIT_2_ImagesIssues = df2$BAIT_2_ImagesIssues,
-  BAIT_3_VideosRealistic = df2$BAIT_3_VideosRealistic,
-  BAIT_4_VideosIssues = df2$BAIT_4_VideosIssues,
-  BAIT_5_ImitatingReality = df2$BAIT_5_ImitatingReality,
-  BAIT_6_EnvironmentReal = df2$BAIT_6_EnvironmentReal,
-  BAIT_7_TextRealistic = df2$BAIT_7_TextRealistic,
-  BAIT_8_TextIssues = df2$BAIT_8_TextIssues,
-  BAIT_9_NegativeAttitutes = df2$BAIT_9_NegativeAttitutes,
-  BAIT_10_NegativeAttitutes = df2$BAIT_10_NegativeAttitutes,
-  BAIT_11_PositiveAttitutes = df2$BAIT_11_PositiveAttitutes,
-  BAIT_12_PositiveAttitutes = df2$BAIT_12_PositiveAttitutes)
-```
-
-## Outlier detection based on time reading instructions and experimental manipulation
-
-```{r}
-# Specify the minimum duration threshold
-min_duration <- 0.05
-
-# Filter df2_selected to exclude rows where either duration is below the minimum
-df2_filtered <- df2_selected[!(df2_selected$Instruction_Duration1 < min_duration | df2_selected$Instruction_Duration2 < min_duration), ]
-
-# Identify participants that were removed due to short duration
-removed_participants <- setdiff(df2_selected$Participant, df2_filtered$Participant)
-
-# Identify participants based on manipulation certainty
-outlier_participants <- filter(df2, Feedback_AllRealConfidence >= 4 | Feedback_AllFakeConfidence >= 4)$Participant
-
-# Combine all outliers
-all_outliers <- unique(c(removed_participants, outlier_participants))
-
-# Filter df1_selected to remove all these participants
-df1_filtered <- df1_selected[!df1_selected$Participant %in% all_outliers, ]
-
-```
-
-# Analyses
-
-```{r}
-library(dplyr)  
-library(ggplot2)
-library(lme4)
-library(lmerTest)
-library(psycho)
-library(broom.mixed)
-library(performance)
+library(tidyverse)
+library(easystats)
 library(patchwork)
-```
+library(ggside)
 
-## Perceived realness and Attractiveness
-
-### H1: Attractiveness ratings between conditions
-
-```{r}
-#lmer(Attractiveness ~ Condition + (1|Participant) + (1|Stimulus), data = df1_filtered)
-# random intercepts for both participants and stimuli but not random slopes. Participants and stimuli might have different baseline levels of attractiveness ratings (captured by the random intercepts), the effect of the condition (whether the stimulus is a photograph or AI-generated) is the same across all participants and stimuli. This approach is simpler but may miss capturing variability in how different participants and stimuli respond to the conditions.
-#or (second option)
-#lmer(Attractiveness ~ Condition + (Condition|Participant) + (Condition|Stimulus), data = df1_filtered)
-# This model accounts for the potential variability in the effect of the "Condition" across both participants and stimuli. By including random slopes for "Condition" within both "Participant" and "Stimulus," this model allows for individual differences in how participants and stimuli respond to the conditions
-
-H1_model <- lmer(Attractiveness ~ Condition + (Condition | Participant) + (1 | Stimulus), data = df1_filtered)
-
-#lmer(Attractiveness ~ Condition + (1 | Participant) + (Condition | Stimulus), data = df1_filtered)
-# remove the random slope for "Condition" within "Stimulus" or "Participant" since one of these seems to contribute little to the model, leading to the singular fit issue
-
-#slightly lower REML criterion (27328.87 vs. 27331.84), indicating a better fit. Additionally, the random slope for "Condition" within "Participant" shows variability, while in the second model, the random slope for "Condition" within "Stimulus" is near zero, which suggests it contributes little to the model.
-
-#first model is more appropriate, balancing complexity and fit.
-
-H1_model
-summary(H1_model)
-
-results1 <- tidy(H1_model, conf.int = TRUE, conf.level = 0.95)
-parameter1 <- parameters::parameters(H1_model)
-summary(results1)
-parameter1
-print(results1)
-
-# Calculate R2 for the model
-r2_values <- r2(H1_model)
-
-# Print the results
-print(r2_values)
-
-```
-
-### H2: Moderation analysis using regression
-
-```{r}
-H2_model <- lmer(Attractiveness ~ Condition * Trustworthiness + (Condition | Participant) + (1 | Stimulus), data = df1_filtered)
-H2_model_simplified <- lmer(Attractiveness ~ Condition * Trustworthiness + (1 | Participant) + (1 | Stimulus), data = df1_filtered)
-H2_model_simplified
-
-summary(H2_model_simplified)
-
-results2 <- tidy(H2_model_simplified, conf.int = TRUE, conf.level = 0.95)
-parameter2 <- parameters::parameters(H2_model_simplified)
-summary(results2)
-parameter2
-print(results2)
-
-# Calculate R2 for the model
-r2_values <- r2(H2_model_simplified)
-
-# Print the results
-print(r2_values)
-
-# Create violin plot for H2 
-h2plot <- ggplot(df1_filtered, aes(x = Trustworthiness, y = Attractiveness, fill = Condition)) +
-  geom_violin(alpha = 0.5, position = position_dodge(width = 0.9)) +
-  labs(x = "Trustworthiness",
-       y = "Attractiveness") +
-  theme_minimal()
-print(h2plot)
-```
-
-### H3: Quadratic regression
-
-```{r}
-df1_filtered$Attractiveness_sq <- df1_filtered$Attractiveness^2
-H3_model <- lmer(Realness ~ Attractiveness + Attractiveness_sq + (1 | Participant) + (1 | Stimulus), data = df1_filtered)
-
-H3_model
-summary(H3_model)
-
-results3 <- tidy(H3_model, conf.int = TRUE, conf.level = 0.95)
-parameter3 <- parameters::parameters(H3_model)
-summary(results3)
-parameter3
-print(results3)
-
-# Calculate R2 for the model
-r2_values3 <- r2(H3_model)
-
-# Print the results
-print(r2_values3)
-
-# Generate predicted values based on the model
-df1_filtered$Predicted_Realness <- predict(H3_model)
-
-# spaghetti plot
-spaghetti_plot <- ggplot(df1_filtered, aes(x = Attractiveness, y = Realness, group = Participant)) +
-  geom_line(aes(y = Predicted_Realness), alpha = 0.3, color = "blue") +
-  labs(
-    x = "Attractiveness",
-    y = "Perceived Realness"
-  ) +
-  theme_minimal()
-
-# quadratic plot (geom_line: attractiveness or attractiveness_sq?)
-quadratic_plot <- ggplot(df1_filtered, aes(x = Attractiveness, y = Realness)) +
-  geom_point(alpha = 0) +
-  geom_line(aes(y = Attractiveness), color = "blue", size = 1) +
-  labs(
-    x = "Attractiveness",
-    y = "Perceived Realness"
-  ) +
-  theme_minimal()
-
-# combine the two plots 
-combined_plot <- spaghetti_plot + quadratic_plot + plot_layout(ncol = 1)
-print(combined_plot)
-
-```
-
-## Trustworthiness and Attractiveness
-
-### H4: LMM of trustworthiness and attractiveness
-
-```{r}
-H4_model <- lmer(Attractiveness ~ Trustworthiness + (1 | Participant) + (1 | Stimulus), data = df1_filtered)
-
-H4_model
-
-summary(H4_model)
-
-results4 <- tidy(H4_model, conf.int = TRUE, conf.level = 0.95)
-parameter4 <- parameters::parameters(H4_model)
-summary(results4)
-parameter4
-print(results4)
-```
-
-### H5: Trustworthiness ratings between conditions
-
-```{r}
-H5_model <- lmer(Trustworthiness ~ Condition + (Condition | Participant) + (1 | Stimulus), data = df1_filtered)
-
-H5_model
-
-summary(H5_model)
-
-results5 <- tidy(H5_model, conf.int = TRUE, conf.level = 0.95)
-parameter5 <- parameters::parameters(H5_model)
-summary(results5)
-parameter5
-print(results5)
-
-# Calculate R2 for the model
-r2_values5 <- r2(H5_model)
-
-# Print the results
-print(r2_values5)
-
-# violin plot
-violin_plot5 <- ggplot(df1_filtered, aes(x = Condition, y = Trustworthiness, fill = Condition)) +
-  geom_violin(trim = FALSE, alpha = 0.5) +
-  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black", fill = "black") +
-  labs(title = "Trustworthiness Ratings by Condition",
-       x = "Condition",
-       y = "Trustworthiness Rating") +
-  theme_minimal()
-print(violin_plot5)
-```
-
-## Demographic Influences
-
-```{r}
-# Function to perform analysis for a given participant
-analyze_participant <- function(participant_id, df1, df2) {
-  task_data <- df1[df1$Participant == participant_id, ]
-  participant_data <- df2[df2$Participant == participant_id, ]
-  
-  if (nrow(task_data) > 0 && nrow(participant_data) > 0) {
-    # Add demographic data to task data
-    task_data$Age <- participant_data$Age
-    task_data$Gender <- participant_data$Gender
-    task_data$Education <- participant_data$Education
-    task_data$HEXACO_Openness <- participant_data$HEXACO18_Openness_Creativity_18_NR
-    task_data$HEXACO_Agreeableness <- participant_data$HEXACO18_Agreeableness_Patience_12_R
-    task_data$BAIT_AI_Knowledge <- participant_data$BAIT_AI_Knowledge
-    
-    return(task_data)
+results_table <- function(model, effects="fixed", filter=NULL) {
+  if("marginaleffects" %in% class(model)) {
+    model |> 
+      parameters::parameters() |> 
+      as.data.frame() |> 
+      select(-Parameter, -SE, -S, z=Statistic, -Predicted) |> 
+      insight::format_table() |> 
+      parameters::display()
   } else {
-    return(NULL)
+    display(parameters::parameters(model, effects=effects, keep=filter))
   }
 }
-
-# Apply function to all participants and combine results
-results <- lapply(unique(df1_filtered$Participant), analyze_participant, df1 = df1_filtered, df2 = df2_filtered)
-combined_results <- do.call(rbind, results)
-
-# Perform statistical tests on combined results
 ```
 
-### H6: Influence of perceived realness on attractiveness across different age groups
 
 ```{r}
-H6_model <- lmer(Attractiveness ~ Condition * Age + (Condition| Participant) + (1 | Stimulus), data = combined_results)
+#| code-fold: false
 
-H6_model
-
-summary(H6_model)
-
-results6 <- tidy(H6_model, conf.int = TRUE, conf.level = 0.95)
-parameter6 <- parameters::parameters(H6_model)
-summary(results6)
-parameter6
-print(results6)
-
-# Calculate R2 for the model
-r2_values6 <- r2(H6_model)
-print(r2_values6)
+df <- read.csv("../data/data_participants.csv") 
+dftask <- read.csv("../data/data_task.csv") |> 
+  mutate(Condition = fct_relevel(Condition, "Photograph", "AI-Generated"),
+         Relevance = fct_relevel(Relevance, "Relevant", "Irrelevant"),
+         Attractiveness = Attractiveness / 6,
+         Beauty = Beauty / 6,
+         Trustworthiness = Trustworthiness / 6)
 ```
 
-### H7: Gender differences in attractiveness ratings
+
+## Attractiveness 
 
 ```{r}
-H7_model <- lmer(Attractiveness ~ Condition * Gender + (Condition| Participant) + (1 | Stimulus), data = combined_results)
+dftask |> 
+  ggplot(aes(x=Attractiveness, fill=Condition)) +
+  geom_bar(aes(y = after_stat(prop)), position="dodge") +
+  facet_grid(Relevance~Gender) 
+```
 
-H7_model
+```{r}
+m_attractiveness <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
+                      data=dftask)
 
-summary(H7_model)
 
-results7 <- tidy(H7_model, conf.int = TRUE, conf.level = 0.95)
-parameter7 <- parameters::parameters(H7_model)
-summary(results7)
-parameter7
-print(results7)
+m_attractiveness <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
 
-# Calculate R2 for the model
-r2_values7 <- r2(H7_model)
-print(r2_values7)
+results_table(m_attractiveness, filter="Condition")
+```
 
-violin_plot <- ggplot(combined_results, aes(x = Gender, y = Attractiveness, fill = Condition)) +
-  geom_violin(trim = FALSE, position = position_dodge(width = 0.9), alpha = 0.7) +
-  stat_summary(fun = mean, geom = "point", position = position_dodge(width = 0.9), size = 2, color = "black") +
-  labs(
-    x = "Gender",
-    y = "Attractiveness"
-  ) +
+
+
+## Beauty 
+
+```{r}
+dftask |> 
+  ggplot(aes(x=Beauty, fill=Condition)) +
+  geom_bar(aes(y = after_stat(prop)), position="dodge") +
+  facet_grid(Relevance~Gender) 
+```
+
+```{r}
+m_beauty <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_beauty, filter="Condition")
+```
+
+
+```{r}
+pred <- rbind(
+  marginaleffects::predictions(m_attractiveness, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  as.data.frame() |> 
+  mutate(Outcome="Attractiveness"),
+  marginaleffects::predictions(m_beauty, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  as.data.frame() |> 
+  mutate(Outcome="Beauty")
+)
+
+pred |> 
+  ggplot(aes(x=Relevance, y=estimate)) +
+  # geom_hline(yintercept=0, color="darkgrey") +
+  geom_line(aes(group=Condition, color=Condition), position = position_dodge(width=0.2), alpha=0.8, linewidth=0.2) +
+  geom_pointrange(aes(ymin = conf.low, ymax=conf.high, color=Condition), position = position_dodge(width=0.2), size=0.2) +
+  facet_grid(Outcome~Gender, switch="y") +
+  scale_y_continuous(limits=c(0, 1), labels=scales::percent) +
+  scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
+  coord_cartesian(ylim=c(0.15, 0.6)) +
   theme_minimal() +
-  scale_fill_manual(values = c("#E69F00", "#56B4E9"))  # Optional: Customize colors
-
-# Print the plot
-print(violin_plot)
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 8),
+        strip.placement = "outside",
+        strip.background.x = element_rect(fill=c("lightgrey"), color=NA),
+        strip.text.x = element_text(size = 10),
+        strip.text.y = element_text(size = 10),
+        axis.text.x = element_text(size=9, color="black"),
+        legend.text = element_text(size = 10),
+        legend.position = ) +
+  labs(color="Images presented as:",
+       tag = "A")
 ```
 
-## Personality traits
 
-### H8: Openness to Experience and attractiveness ratings
+### Coherence
 
 ```{r}
-H8_model <- lmer(Attractiveness ~ Condition * HEXACO_Openness  + (Condition| Participant) + (1 | Stimulus), data = combined_results)
+m_beauty <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Beauty * Condition) + (1 | Participant) + (1|Stimulus),
+                      data=dftask)
 
-H8_model
-
-summary(H8_model)
-
-results8 <- tidy(H8_model, conf.int = TRUE, conf.level = 0.95)
-parameter8 <- parameters::parameters(H8_model)
-summary(results8)
-parameter8
-print(results8)
+results_table(m_beauty, filter="Beauty")
 ```
 
-### H9: Agreeableness and trustworthiness influence on attractiveness
+
+## Trustworthiness 
 
 ```{r}
-model_mediatorH9 <- lmer(Trustworthiness ~ HEXACO_Agreeableness + (Condition| Participant) + (1 | Stimulus), data = combined_results)
-model_outcomeH9 <- lmer(Attractiveness ~ Trustworthiness + HEXACO_Agreeableness + (1 | Participant) + (1 | Stimulus), data = combined_results)
-# Extract coefficients
-a <- fixef(model_mediatorH9)["HEXACO_Agreeableness"]
-b <- fixef(model_outcomeH9)["Trustworthiness"]
-
-# Calculate the indirect effect
-indirect_effect <- a * b
-indirect_effect
-
-# Direct effect
-direct_effect <- fixef(model_outcomeH9)["HEXACO_Agreeableness"]
-direct_effect
-
-# Total effect
-total_effect <- direct_effect + indirect_effect
-total_effect
-
-# Scatter plot for Agreeableness vs. Trustworthiness
-plot1 <- ggplot(combined_results, aes(x = HEXACO_Agreeableness, y = Trustworthiness)) +
-  geom_point(alpha = 0) +  # Adds the data points with some transparency
-  geom_smooth(method = "lm", color = "lightblue") +  # Adds the regression line
-  labs(
-    x = "Agreeableness",
-    y = "Trustworthiness"
-  ) +
-  theme_minimal()
-
-# Scatter plot for Agreeableness vs. Attractiveness
-plot2 <- ggplot(combined_results, aes(x = HEXACO_Agreeableness, y = Attractiveness)) +
-  geom_point(alpha = 0) +  
-  geom_smooth(method = "lm", color = "lightgreen") +  # Adds the regression line
-  labs(
-    x = "Agreeableness",
-    y = "Attractiveness"
-  ) +
-  theme_minimal()
-
-library(gridExtra)
-grid.arrange(plot1, plot2, ncol = 2)
+dftask |> 
+  ggplot(aes(x=Trustworthiness, fill=Condition)) +
+  geom_bar(aes(y = after_stat(prop)), position="dodge") +
+  facet_grid(Relevance~Gender) 
 ```
 
-### H10: Beliefs about AI and attractiveness ratings
-
 ```{r}
-H10_model <- lmer(Attractiveness ~ Condition * BAIT_AI_Knowledge + (Condition| Participant) + (1 | Stimulus), data = combined_results)
+m_trustworthiness <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
 
-H10_model
-
-summary(H10_model)
-
-results10 <- tidy(H10_model, conf.int = TRUE, conf.level = 0.95)
-parameter10 <- parameters::parameters(H10_model)
-summary(results10)
-parameter10
-print(results10)
-
-H10_plot <- ggplot(combined_results, aes(x = BAIT_AI_Knowledge, y = Attractiveness, color = Condition, group = Condition)) +
-  geom_point(alpha = 0) +  # Adds individual data points with transparency
-  geom_smooth(method = "lm", se = TRUE) +  # Adds a linear fit with confidence intervals
-  labs(
-    title = "Interaction between Perceived Realness and AI Beliefs on Attractiveness",
-    x = "Beliefs About AI (BAIT_AI_Knowledge)",
-    y = "Attractiveness Rating"
-  ) +
-  scale_color_manual(values = c("AI-generated" = "blue", "Photograph" = "red")) +
-  theme_minimal() +  # Clean and simple theme
-  theme(
-    plot.title = element_text(hjust = 0.5),
-    legend.title = element_blank()
-  )
-
-H10_plot
-```
-
-## Eye-tracking patterns
-
-### H11: Complexity and distrubution change with beliefs
-
-```{r}
-## 3_eyetracking file
+results_table(m_trustworthiness, filter="Condition")
 ```

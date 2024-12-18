@@ -164,22 +164,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="fu">aes</span>(<span class="at">fill=</span>Index), <span class="at">position =</span> <span class="fu">position_dodge2</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>)) <span class="sc">+</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Validation Scores"</span>, <span class="at">fill=</span><span class="st">"Validation Phase"</span>, <span class="at">color=</span><span class="st">"Validation Phase"</span>, <span class="at">x=</span><span class="st">"Validation Score"</span>, <span class="at">y=</span><span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">geom_xsidedensity</span>(<span class="fu">aes</span>(<span class="at">fill=</span>Index, <span class="at">color=</span>Index), <span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">theme_ggside_void</span>() <span class="sc">+</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>))</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>p_val2 <span class="ot">&lt;-</span> dfval <span class="sc">|&gt;</span> </span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span><span class="st">"Index"</span>, <span class="at">values_from=</span><span class="st">"Value"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Initial, <span class="at">y=</span>Midgame)) <span class="sc">+</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept=</span><span class="dv">0</span>, <span class="at">slope=</span><span class="dv">1</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point2</span>(<span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">"forestgreen"</span>) <span class="sc">+</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>, <span class="at">formula =</span> <span class="st">'y ~ x'</span>, <span class="at">color=</span><span class="st">"forestgreen"</span>) <span class="sc">+</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Initial vs. Midgame Validation Scores"</span>)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>p_val1 <span class="sc">|</span> p_val2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.1</span>),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">geom_xsidedensity</span>(<span class="fu">aes</span>(<span class="at">fill=</span>Index, <span class="at">color=</span>Index), <span class="at">alpha=</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">theme_ggside_void</span>() <span class="sc">+</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>p_val2 <span class="ot">&lt;-</span> dfval <span class="sc">|&gt;</span> </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from=</span><span class="st">"Index"</span>, <span class="at">values_from=</span><span class="st">"Value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Initial, <span class="at">y=</span>Midgame)) <span class="sc">+</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept=</span><span class="dv">0</span>, <span class="at">slope=</span><span class="dv">1</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point2</span>(<span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">"forestgreen"</span>) <span class="sc">+</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>, <span class="at">formula =</span> <span class="st">'y ~ x'</span>, <span class="at">color=</span><span class="st">"forestgreen"</span>) <span class="sc">+</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Initial vs. Midgame Validation Scores"</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>p_val1 <span class="sc">|</span> p_val2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -256,24 +257,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">fill=</span><span class="st">"darkred"</span>) <span class="sc">+</span></span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="cn">NULL</span>, <span class="at">title=</span><span class="st">"% of Bad Trials"</span>) <span class="sc">+</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">geom_xsidedensity</span>(<span class="at">fill=</span><span class="st">"darkred"</span>, <span class="at">color=</span><span class="st">"darkred"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">theme_ggside_void</span>()</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>p_bad2 <span class="ot">&lt;-</span> <span class="fu">merge</span>(dfsub_bad, dfval, <span class="at">by=</span><span class="st">"Participant"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Value, <span class="at">y=</span>Bad)) <span class="sc">+</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point2</span>(<span class="fu">aes</span>(<span class="at">color=</span>Index), <span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">color=</span>Index, <span class="at">fill=</span>Index), <span class="at">method=</span><span class="st">"lm"</span>, <span class="at">formula =</span> <span class="st">'y ~ x'</span>, <span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.5</span>)) <span class="sc">+</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Validation Phase"</span>, <span class="at">fill =</span> <span class="st">"Validation Phase"</span>, <span class="at">y =</span> <span class="st">"% Bad Trials"</span>, <span class="at">title=</span><span class="st">"Validation Scores vs. Bad Trials"</span>, <span class="at">x=</span><span class="st">"Validation Score"</span>)</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>p_bad1 <span class="sc">|</span> p_bad2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="cn">NULL</span>, <span class="at">title=</span><span class="st">"% of Bad Trials"</span>) <span class="sc">+</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">geom_xsidedensity</span>(<span class="at">fill=</span><span class="st">"darkred"</span>, <span class="at">color=</span><span class="st">"darkred"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  ggside<span class="sc">::</span><span class="fu">theme_ggside_void</span>()</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>p_bad2 <span class="ot">&lt;-</span> <span class="fu">merge</span>(dfsub_bad, dfval, <span class="at">by=</span><span class="st">"Participant"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Value, <span class="at">y=</span>Bad)) <span class="sc">+</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point2</span>(<span class="fu">aes</span>(<span class="at">color=</span>Index), <span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">color=</span>Index, <span class="at">fill=</span>Index), <span class="at">method=</span><span class="st">"lm"</span>, <span class="at">formula =</span> <span class="st">'y ~ x'</span>, <span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"forestgreen"</span>, <span class="st">"orange"</span>)) <span class="sc">+</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Validation Phase"</span>, <span class="at">fill =</span> <span class="st">"Validation Phase"</span>, <span class="at">y =</span> <span class="st">"% Bad Trials"</span>, <span class="at">title=</span><span class="st">"Validation Scores vs. Bad Trials"</span>, <span class="at">x=</span><span class="st">"Validation Score"</span>)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>p_bad1 <span class="sc">|</span> p_bad2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -292,13 +294,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>((p_val1 <span class="sc">|</span> p_bad1 <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())) <span class="sc">/</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  (p_val2 <span class="sc">|</span> p_bad2)) <span class="sc">|</span> p_fix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="3_eyetracking_files/figure-html/fig_eyetracking1-1.png" class="img-fluid figure-img" width="1440"></p>
-</figure>
-</div>
-</div>
 </div>
 <section id="remove-bad-trials" class="level3">
 <h3 class="anchored" data-anchor-id="remove-bad-trials">Remove Bad Trials</h3>
@@ -310,7 +305,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Bad) <span class="sc">|&gt;</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(x), <span class="fu">is.finite</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We removed 23.08% “bad” trials.</p>
+<p>We removed 19.09% “bad” trials.</p>
 </section>
 </section>
 <section id="gaze-patterns" class="level2">
@@ -336,10 +331,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">data=</span>dat,</span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">fill =</span> <span class="fu">after_stat</span>(level)),</span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">geom =</span> <span class="st">"polygon"</span>, <span class="at">alpha=</span><span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_path</span>(</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">data=</span>dat,</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">group =</span> Participant, <span class="at">color=</span>Condition),</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha=</span><span class="fl">0.3</span>, <span class="at">linewidth=</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># geom_path(</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   data=dat,</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   aes(x=x, y=y, group = Participant, color=Condition),</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   alpha=0.1, linewidth=0.2) +</span></span>
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"Reality"</span><span class="ot">=</span><span class="st">"red"</span>, <span class="st">"Fiction"</span><span class="ot">=</span><span class="st">"blue"</span>)) <span class="sc">+</span></span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradientn</span>(<span class="at">colors=</span><span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"green"</span>, <span class="st">"yellow"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>)) <span class="sc">+</span></span>
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title=</span>stim) <span class="sc">+</span></span>
@@ -356,6 +351,226 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">wrap_plots</span>(plots, <span class="at">ncol=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.
+No shared levels found between `names(values)` of the manual scale and the
+data's colour values.</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -370,27 +585,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean disengaging gazes</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Velocity)) <span class="sc">|&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Velocity <span class="sc">&lt;</span> <span class="dv">10</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Velocity)) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill=</span><span class="st">"grey"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove outside of image fixations (max distance = sqrt(2))</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(distance)) <span class="sc">|&gt;</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(distance <span class="sc">&lt;</span> <span class="fu">sqrt</span>(<span class="dv">2</span>))</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>distance, <span class="at">color=</span>Condition)) <span class="sc">+</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">|</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean disengaging gazes</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Velocity)) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Velocity <span class="sc">&lt;</span> <span class="dv">10</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Velocity)) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill=</span><span class="st">"grey"</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove outside of image fixations (max distance = sqrt(2))</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(distance)) <span class="sc">|&gt;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(distance <span class="sc">&lt;</span> <span class="fu">sqrt</span>(<span class="dv">2</span>))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>distance, <span class="at">color=</span>Condition)) <span class="sc">+</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">|</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -401,92 +616,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(y <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<caption># Fixed Effects</caption>
-<colgroup>
-<col style="width: 27%">
-<col style="width: 17%">
-<col style="width: 13%">
-<col style="width: 20%">
-<col style="width: 9%">
-<col style="width: 10%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Parameter</th>
-<th style="text-align: center;">Coefficient</th>
-<th style="text-align: center;">SE</th>
-<th style="text-align: center;">95% CI</th>
-<th style="text-align: center;">z</th>
-<th style="text-align: center;">p</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">0.48</td>
-<td style="text-align: center;">0.02</td>
-<td style="text-align: center;">(0.44, 0.53)</td>
-<td style="text-align: center;">22.88</td>
-<td style="text-align: center;">&lt; .001</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">1.41e-03</td>
-<td style="text-align: center;">8.30e-03</td>
-<td style="text-align: center;">(-0.01, 0.02)</td>
-<td style="text-align: center;">0.17</td>
-<td style="text-align: center;">0.865</td>
-</tr>
-</tbody>
-</table>
-<table class="table table-sm table-striped small">
-<caption># Random Effects</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Parameter</th>
-<th style="text-align: center;">Coefficient</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">SD (Intercept: Participant)</td>
-<td style="text-align: center;">0.17</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">SD (Intercept: Stimulus)</td>
-<td style="text-align: center;">0.04</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">SD (ConditionFiction: Participant)</td>
-<td style="text-align: center;">0.05</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">0.05</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
-<td style="text-align: center;">0.13</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">-0.70</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">SD (Residual)</td>
-<td style="text-align: center;">0.26</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(distance <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(y <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -513,19 +643,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">0.80</td>
-<td style="text-align: center;">0.02</td>
-<td style="text-align: center;">(0.77, 0.83)</td>
-<td style="text-align: center;">47.31</td>
+<td style="text-align: center;">0.50</td>
+<td style="text-align: center;">0.01</td>
+<td style="text-align: center;">(0.47, 0.53)</td>
+<td style="text-align: center;">37.36</td>
 <td style="text-align: center;">&lt; .001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">2.21e-03</td>
-<td style="text-align: center;">5.85e-03</td>
-<td style="text-align: center;">(-9.26e-03, 0.01)</td>
-<td style="text-align: center;">0.38</td>
-<td style="text-align: center;">0.706</td>
+<td style="text-align: center;">1.75e-04</td>
+<td style="text-align: center;">5.15e-03</td>
+<td style="text-align: center;">(-9.92e-03, 0.01)</td>
+<td style="text-align: center;">0.03</td>
+<td style="text-align: center;">0.973</td>
 </tr>
 </tbody>
 </table>
@@ -540,7 +670,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">SD (Intercept: Participant)</td>
-<td style="text-align: center;">0.14</td>
+<td style="text-align: center;">0.15</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (Intercept: Stimulus)</td>
@@ -548,23 +678,108 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (ConditionFiction: Participant)</td>
-<td style="text-align: center;">0.04</td>
+<td style="text-align: center;">0.05</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">0.04</td>
+<td style="text-align: center;">0.03</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
-<td style="text-align: center;">-0.02</td>
+<td style="text-align: center;">0.07</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">-0.66</td>
+<td style="text-align: center;">-0.60</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (Residual)</td>
-<td style="text-align: center;">0.19</td>
+<td style="text-align: center;">0.23</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(distance <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption># Fixed Effects</caption>
+<colgroup>
+<col style="width: 24%">
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 28%">
+<col style="width: 8%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+<th style="text-align: center;">SE</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;">z</th>
+<th style="text-align: center;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: center;">0.78</td>
+<td style="text-align: center;">0.01</td>
+<td style="text-align: center;">(0.76, 0.81)</td>
+<td style="text-align: center;">68.88</td>
+<td style="text-align: center;">&lt; .001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Condition [Fiction]</td>
+<td style="text-align: center;">2.13e-03</td>
+<td style="text-align: center;">3.84e-03</td>
+<td style="text-align: center;">(-5.41e-03, 9.66e-03)</td>
+<td style="text-align: center;">0.55</td>
+<td style="text-align: center;">0.580</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-sm table-striped small">
+<caption># Random Effects</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SD (Intercept: Participant)</td>
+<td style="text-align: center;">0.13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SD (Intercept: Stimulus)</td>
+<td style="text-align: center;">0.02</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SD (ConditionFiction: Participant)</td>
+<td style="text-align: center;">0.03</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
+<td style="text-align: center;">0.02</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
+<td style="text-align: center;">-0.08</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
+<td style="text-align: center;">-0.43</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SD (Residual)</td>
+<td style="text-align: center;">0.18</td>
 </tr>
 </tbody>
 </table>
@@ -573,14 +788,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_means</span>(m, <span class="at">by=</span><span class="st">"Condition"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Condition)) <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_slab</span>(<span class="at">data=</span><span class="fu">filter</span>(dat, Condition<span class="sc">==</span><span class="st">"Reality"</span>), <span class="fu">aes</span>(<span class="at">y=</span>distance, <span class="at">fill=</span>Condition), <span class="at">side=</span><span class="st">"left"</span>) <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_slab</span>(<span class="at">data=</span><span class="fu">filter</span>(dat, Condition<span class="sc">==</span><span class="st">"Fiction"</span>), <span class="fu">aes</span>(<span class="at">y=</span>distance, <span class="at">fill=</span>Condition), <span class="at">side=</span><span class="st">"right"</span>) <span class="sc">+</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>Mean, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">y=</span>Mean, <span class="at">ymin=</span>CI_low, <span class="at">ymax=</span>CI_high)) <span class="sc">+</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Distance from center"</span>, <span class="at">x=</span><span class="st">"Condition"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_means</span>(m, <span class="at">by=</span><span class="st">"Condition"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Condition)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_slab</span>(<span class="at">data=</span><span class="fu">filter</span>(dat, Condition<span class="sc">==</span><span class="st">"Reality"</span>), <span class="fu">aes</span>(<span class="at">y=</span>distance, <span class="at">fill=</span>Condition), <span class="at">side=</span><span class="st">"left"</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_slab</span>(<span class="at">data=</span><span class="fu">filter</span>(dat, Condition<span class="sc">==</span><span class="st">"Fiction"</span>), <span class="fu">aes</span>(<span class="at">y=</span>distance, <span class="at">fill=</span>Condition), <span class="at">side=</span><span class="st">"right"</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>Mean, <span class="at">group=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">y=</span>Mean, <span class="at">ymin=</span>CI_low, <span class="at">ymax=</span>CI_high)) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Distance from center"</span>, <span class="at">x=</span><span class="st">"Condition"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -596,26 +811,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exploratory gaze</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(distance)) <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(distance <span class="sc">&lt;</span> <span class="fu">sqrt</span>(<span class="dv">2</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_position =</span> (<span class="fu">sd</span>(x, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">sd</span>(y, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mad_position =</span> (<span class="fu">mad</span>(x, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">mad</span>(y, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by=</span><span class="fu">c</span>(<span class="st">"Participant"</span>, <span class="st">"Condition"</span>, <span class="st">"Stimulus"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(sd_position, mad_position), <span class="at">names_to=</span><span class="st">"Metric"</span>, <span class="at">values_to=</span><span class="st">"Value"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Value, <span class="at">color=</span>Condition)) <span class="sc">+</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Metric) <span class="sc">+</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exploratory gaze</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.finite</span>(distance)) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(distance <span class="sc">&lt;</span> <span class="fu">sqrt</span>(<span class="dv">2</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_position =</span> (<span class="fu">sd</span>(x, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">sd</span>(y, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mad_position =</span> (<span class="fu">mad</span>(x, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">mad</span>(y, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by=</span><span class="fu">c</span>(<span class="st">"Participant"</span>, <span class="st">"Condition"</span>, <span class="st">"Stimulus"</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(sd_position, mad_position), <span class="at">names_to=</span><span class="st">"Metric"</span>, <span class="at">values_to=</span><span class="st">"Value"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Value, <span class="at">color=</span>Condition)) <span class="sc">+</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Metric) <span class="sc">+</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+<pre><code>Warning: Removed 9 rows containing non-finite outside the scale range
 (`stat_density()`).</code></pre>
 </div>
 <div class="cell-output-display">
@@ -627,8 +842,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(sd_position <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(sd_position <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
 problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</code></pre>
@@ -638,44 +853,24 @@ problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</
 problem; singular convergence (7). See vignette('troubleshooting'),
 help('diagnose')</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <caption># Fixed Effects</caption>
-<colgroup>
-<col style="width: 24%">
-<col style="width: 16%">
-<col style="width: 12%">
-<col style="width: 28%">
-<col style="width: 8%">
-<col style="width: 9%">
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Parameter</th>
 <th style="text-align: center;">Coefficient</th>
-<th style="text-align: center;">SE</th>
-<th style="text-align: center;">95% CI</th>
-<th style="text-align: center;">z</th>
-<th style="text-align: center;">p</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">0.16</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;">(0.13, 0.18)</td>
-<td style="text-align: center;">11.64</td>
-<td style="text-align: center;">&lt; .001</td>
+<td style="text-align: center;">0.13</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">1.78e-04</td>
-<td style="text-align: center;">1.72e-03</td>
-<td style="text-align: center;">(-3.19e-03, 3.55e-03)</td>
-<td style="text-align: center;">0.10</td>
-<td style="text-align: center;">0.918</td>
+<td style="text-align: center;">-2.31e-04</td>
 </tr>
 </tbody>
 </table>
@@ -690,19 +885,19 @@ help('diagnose')</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">SD (Intercept: Participant)</td>
-<td style="text-align: center;">0.11</td>
+<td style="text-align: center;">0.09</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (Intercept: Stimulus)</td>
-<td style="text-align: center;">4.91e-03</td>
+<td style="text-align: center;">1.57e-03</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (ConditionFiction: Participant)</td>
-<td style="text-align: center;">7.06e-36</td>
+<td style="text-align: center;">1.21e-03</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">5.49e-03</td>
+<td style="text-align: center;">1.72e-11</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
@@ -710,7 +905,7 @@ help('diagnose')</code></pre>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">-1.00</td>
+<td style="text-align: center;">1.00</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (Residual)</td>
@@ -721,9 +916,13 @@ help('diagnose')</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(mad_position <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> glmmTMB<span class="sc">::</span><span class="fu">glmmTMB</span>(mad_position <span class="sc">~</span> Condition <span class="sc">+</span> (Condition<span class="sc">|</span>Participant) <span class="sc">+</span> (Condition<span class="sc">|</span>Stimulus),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data=</span>dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in finalizeTMB(TMBStruc, obj, fit, h, data.tmb.old): Model convergence
+problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>insight<span class="sc">::</span><span class="fu">display</span>(parameters<span class="sc">::</span><span class="fu">parameters</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <caption># Fixed Effects</caption>
@@ -748,19 +947,19 @@ help('diagnose')</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">0.15</td>
-<td style="text-align: center;">0.01</td>
-<td style="text-align: center;">(0.13, 0.18)</td>
-<td style="text-align: center;">11.11</td>
+<td style="text-align: center;">0.13</td>
+<td style="text-align: center;">8.07e-03</td>
+<td style="text-align: center;">(0.11, 0.14)</td>
+<td style="text-align: center;">15.68</td>
 <td style="text-align: center;">&lt; .001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Condition [Fiction]</td>
-<td style="text-align: center;">6.54e-04</td>
-<td style="text-align: center;">2.05e-03</td>
-<td style="text-align: center;">(-3.36e-03, 4.67e-03)</td>
-<td style="text-align: center;">0.32</td>
-<td style="text-align: center;">0.750</td>
+<td style="text-align: center;">-4.24e-04</td>
+<td style="text-align: center;">1.11e-03</td>
+<td style="text-align: center;">(-2.60e-03, 1.75e-03)</td>
+<td style="text-align: center;">-0.38</td>
+<td style="text-align: center;">0.703</td>
 </tr>
 </tbody>
 </table>
@@ -775,31 +974,31 @@ help('diagnose')</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">SD (Intercept: Participant)</td>
-<td style="text-align: center;">0.11</td>
+<td style="text-align: center;">0.09</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (Intercept: Stimulus)</td>
-<td style="text-align: center;">7.34e-03</td>
+<td style="text-align: center;">9.47e-07</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (ConditionFiction: Participant)</td>
-<td style="text-align: center;">1.19e-03</td>
+<td style="text-align: center;">4.63e-10</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SD (ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">6.80e-03</td>
+<td style="text-align: center;">5.80e-06</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Participant)</td>
-<td style="text-align: center;">0.99</td>
+<td style="text-align: center;">1.00</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cor (Intercept~ConditionFiction: Stimulus)</td>
-<td style="text-align: center;">-1.00</td>
+<td style="text-align: center;">-0.99</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SD (Residual)</td>
-<td style="text-align: center;">0.07</td>
+<td style="text-align: center;">0.06</td>
 </tr>
 </tbody>
 </table>

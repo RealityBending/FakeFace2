@@ -75,7 +75,8 @@ p_val1 <- dfval |>
   geom_bar(stat="identity", aes(fill=Index), position = position_dodge2(reverse=TRUE)) +
   theme_minimal() +
   labs(title="Validation Scores", fill="Validation Phase", color="Validation Phase", x="Validation Score", y=NULL) +
-  theme(legend.position = "inside", legend.position.inside = c(0.9, 0.1)) +
+  theme(legend.position = "inside", legend.position.inside = c(0.9, 0.1),
+        axis.text.y = element_blank()) +
   ggside::geom_xsidedensity(aes(fill=Index, color=Index), alpha=0.3) +
   ggside::theme_ggside_void() +
   scale_fill_manual(values=c("forestgreen", "orange")) +
@@ -158,7 +159,8 @@ p_bad1 <- dfsub_bad |>
   geom_bar(stat="identity", fill="darkred") +
   scale_x_continuous(labels=scales::percent) +
   theme_minimal() +
-  theme(legend.position="none") +
+  theme(legend.position="none",
+        axis.text.y = element_blank()) +
   labs(x=NULL, y=NULL, title="% of Bad Trials") +
   ggside::geom_xsidedensity(fill="darkred", color="darkred", alpha=0.7) +
   ggside::theme_ggside_void()
@@ -230,10 +232,10 @@ plot_eyetrace <- function(stim="NF-1041") {
       data=dat,
       aes(x=x, y=y, fill = after_stat(level)),
       geom = "polygon", alpha=0.1) +
-    geom_path(
-      data=dat,
-      aes(x=x, y=y, group = Participant, color=Condition),
-      alpha=0.3, linewidth=0.2) +
+    # geom_path(
+    #   data=dat,
+    #   aes(x=x, y=y, group = Participant, color=Condition),
+    #   alpha=0.1, linewidth=0.2) +
     scale_color_manual(values=c("Reality"="red", "Fiction"="blue")) +
     scale_fill_gradientn(colors=c("blue", "green", "yellow", "orange", "red")) +
     labs(title=stim) +

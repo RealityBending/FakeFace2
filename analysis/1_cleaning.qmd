@@ -36,6 +36,7 @@ dftask <- read.csv("../data/rawdata_task.csv") |>
     by = join_by(Participant)
     ) |> 
   mutate(Category = ifelse(str_detect(Stimulus, "NF"), "Female", "Male")) |> 
+  mutate(Condition = ifelse(Condition == "Reality", "Photograph", "AI-Generated")) |> 
   mutate(Relevance = case_when(
     Gender == "Male" & SexualOrientation == "Heterosexual" & Category == "Female" ~ "Relevant",
     Gender == "Female" & SexualOrientation == "Heterosexual" & Category == "Male" ~ "Relevant",
@@ -62,7 +63,7 @@ df$HEXACO18_HonestyHumility <- rowMeans(df[grepl("HonestyHumility", names(df))])
 df$HEXACO18_Emotionality <- rowMeans(df[grepl("Emotionality", names(df))])
 df$HEXACO18_Extraversion <- rowMeans(df[grepl("Extraversion", names(df))])
 df$HEXACO18_Agreeableness <- rowMeans(df[grepl("Agreeableness", names(df))])
-df$HEXACO18_Conscientiousnes <- rowMeans(df[grepl("Conscientiousnes", names(df))])
+df$HEXACO18_Conscientiousness <- rowMeans(df[grepl("Conscientiousnes", names(df))])
 df$HEXACO18_Openness <- rowMeans(df[grepl("Openness", names(df))])
 ```
 
@@ -113,10 +114,19 @@ The majority of participants found the study to be a "fun" experience. Interesti
 #### Enjoyment
 
 ```{r}
-ggplot(df, aes(x = Feedback_Enjoyment, y=after_stat(prop))) +
-  geom_bar(na.rm=TRUE, fill=c("#F44336", "#FF9800", "#CDDC39", "#8BC34A", "#4CAF50")) +
+df |> 
+  summarize(n = n(), .by="Feedback_Enjoyment") |> 
+  arrange(desc(Feedback_Enjoyment)) |>
+  mutate(Feedback_Enjoyment = fct_rev(as.factor(Feedback_Enjoyment))) |> 
+  ggplot(aes(x=0, y=n)) +
+  geom_bar(aes(fill=Feedback_Enjoyment), stat="identity") +
+  scale_fill_manual(values=c("#4CAF50", "#8BC34A", "#CDDC39", "#FF9800", "#F44336")) +
+  scale_x_continuous(expand=c(0, 0)) +
+  coord_flip() +
   theme_minimal() +
-  scale_y_continuous(labels=scales::percent) +
+  theme(axis.title.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.text.y = element_blank()) +
   labs(x="Answer", y = "Participants", title = "Did you enjoy doing this experiment?")
 ```
 
@@ -209,7 +219,7 @@ In summary:
 ```{r}
 data.frame(Source = df$Source,
            Comments = trimws(df$Feedback_Text)) |> 
-  filter(!tolower(Comments) %in% c(NA, "", "n/a")) |> 
+  filter(!tolower(Comments) %in% c(NA, "", "n/a", "no", "none")) |> 
   arrange(Source) |>
   gt::gt() |> 
   gt::opt_stylize() |> 
@@ -237,7 +247,33 @@ df |>
   scale_y_continuous(expand=c(0, 0))
 ```
 
-There were `r sum(df$Mobile=="True")` (`r sum(df$Mobile=="True") / nrow(df) * 100`%) participants that used a mobile device.
+There were `r sum(df$Mobile=="True")` (`r insight::format_percent(sum(df$Mobile=="True") / nrow(df))`) participants that used a mobile device.
+
+### Invalid Responses
+
+```{r}
+outliers$invalid <- dftask |>
+  group_by(Participant) |>
+  summarize(Mean_Attractiveness = mean(Attractiveness),
+            SD_Attractiveness = sd(Attractiveness),
+            N_Attractiveness = length(unique(Attractiveness)),
+            SD_Trustworthiness = sd(Trustworthiness),
+            SD_Beauty = sd(Beauty)) |> 
+  arrange(N_Attractiveness) |>
+  filter(SD_Attractiveness == 0 | SD_Trustworthiness == 0 | SD_Beauty == 0) 
+
+gt::gt(outliers$invalid)
+
+outliers$invalid <- outliers$invalid$Participant
+```
+
+
+We removed `r length(outliers$invalid)` (`r insight::format_percent(length(outliers$invalid) / nrow(df))`) participants with no variation in their responses.
+
+```{r}
+df <- filter(df, !Participant %in% outliers$invalid)
+dftask <- filter(dftask, !Participant %in% outliers$invalid)
+```
 
 
 ### Experiment Duration
@@ -283,7 +319,7 @@ df |>
 #| fig-width: 15
 #| fig-height: 15
 
-df |>
+p_time1 <- df |>
   select(Participant, Instruction_Duration1, Instruction_Duration2) |> 
   mutate(Participant = fct_reorder(Participant, Instruction_Duration1)) |> 
   pivot_longer(cols = -Participant) |>
@@ -292,7 +328,7 @@ df |>
          Category = ifelse(value > 4, "extra", "ok"),
          value = ifelse(value > 4,4, value)) |> 
   ggplot(aes(y = Participant, x = value)) +
-  geom_point(aes(shape=Category)) +
+  geom_point(aes(shape=Category), alpha=0.5) +
   facet_wrap(~name, scales = "free")+
   guides(color = "none", shape = "none") +
   scale_shape_manual(values = c("extra" = 3, "ok" = 19)) +
@@ -308,10 +344,99 @@ df |>
   theme(ggside.panel.scale = .3,
         panel.border = element_blank(),
         axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())
+        axis.ticks.y = element_blank(),
+        panel.grid.major.y = element_blank())
 
+p_time2 <- df |> 
+  filter(Instruction_Duration1 < 200, Instruction_Duration2 < 100) |>
+  ggplot(aes(x=Instruction_Duration1, y=Instruction_Duration2)) +
+  geom_point(size=3, alpha=0.5) +
+  geom_smooth(method = "lm", formula = 'y ~ x') +
+  theme_minimal()
+
+p_time1 / p_time2
 # outliers$expe_duration <- filter(df, Experiment_Duration < 15)$Participant
 ```
+
+
+### Response Coherence
+
+::: {.panel-tabset}
+
+#### Attractiveness vs. Beauty
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+
+dfcoherence <- dftask |> 
+  group_by(Participant) |>
+  summarize(r = cor(Attractiveness, Beauty, method = "spearman")) |> 
+  arrange(r) |> 
+  mutate(Participant = factor(Participant, levels = Participant)) 
+
+dfcoherence |> 
+  ggplot(aes(x = Participant, y=r)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0.1, color = "red", linetype = "dashed") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) 
+
+outliers$coherence <- filter(dfcoherence, r < 0.1)$Participant
+```
+
+We removed `r length(outliers$coherence)` (`r insight::format_percent(length(outliers$coherence) / nrow(df))`) participants that did not show coherence in their responses.
+
+```{r}
+df <- filter(df, !Participant %in% outliers$coherence)
+dftask <- filter(dftask, !Participant %in% outliers$coherence)
+```
+
+#### HEXACO
+
+```{r}
+#| eval: true
+
+items <- select(df, starts_with("HEXACO18")) |> 
+  select(ends_with("_NR"), ends_with("_R")) 
+
+for(d in c("HonestyHumility", "Emotionality", "Extraversion", "Agreeableness",
+           "Conscientiousnes", "Openness")) {
+  items[paste0(d, "_SD")] <- sapply(as.data.frame(t(items[grepl(d, names(items))])), sd, na.rm=TRUE)
+}
+
+sds <- select(items, ends_with("_SD"))
+sds$Mean <- rowMeans(sds)
+sds$Participant <- df$Participant
+
+sds |> 
+  mutate(Participant = fct_reorder(Participant, Mean)) |> 
+  ggplot(aes(x=Participant, y=Mean)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept=c(0.25, 2.25), color="red", linetype="dashed") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank()) +
+  ggside::geom_ysidedensity(fill="black", color=NA) +
+  ggside::scale_ysidex_continuous(expand = c(0, 0)) +
+  ggside::theme_ggside_void() +
+  labs(y = "Mean SD of each HEXACO dimension", x="Participants")
+
+outliers$coherence2 <- filter(sds, Mean < 0.25 | Mean > 2.25)$Participant
+```
+
+We removed `r length(outliers$coherence2)` (`r insight::format_percent(length(outliers$coherence2) / nrow(df))`) participants that had low consistency in the HEXACO.
+
+
+```{r}
+df <- filter(df, !Participant %in% outliers$coherence2)
+dftask <- filter(dftask, !Participant %in% outliers$coherence2)
+```
+
+:::
+
 
 ### Manipulation
 
@@ -321,23 +446,40 @@ df |>
 
 df |> 
   select(Participant, Feedback_AllRealConfidence, Feedback_AllFakeConfidence) |> 
-  pivot_longer(-Participant) |> 
-  filter(!is.na(value)) |> 
-  ggplot(aes(x=value, fill=name)) +
+  pivot_longer(-Participant, values_to = "Confidence") |> 
+  filter(!is.na(Confidence)) |> 
+  mutate(name = ifelse(str_detect(name, "Real"), "All images are real", "All images are fake")) |> 
+  ggplot(aes(x=Confidence, fill=name)) +
   geom_bar() +
-  facet_grid(~name)
+  facet_grid(~name) +
+  theme_minimal() +
+  theme(legend.position = "none") 
 
 outliers$manipulation <- filter(df, Feedback_AllRealConfidence >= 4 | Feedback_AllFakeConfidence >= 4)$Participant
 ```
 
-We removed `r length(outliers$manipulation)` participants that did not believe in the manipulation and were fully confident that all images were real (or fake).
-
-## Final Sample
+We removed `r length(outliers$manipulation)` (`r insight::format_percent(length(outliers$manipulation) / nrow(df))`) participants that did not believe in the manipulation and were fully confident that all images were real (or fake).
 
 ```{r}
-dfdsub <- filter(df, !Participant %in% outliers$manipulation)
-df <- filter(df, Participant %in% df$Participant)
+df <- filter(df, !Participant %in% outliers$manipulation)
+dftask <- filter(dftask, !Participant %in% outliers$manipulation)
 ```
+
+### Gender and Sex 
+
+```{r}
+outliers$valid <- filter(df, Gender == "Other" | SexualOrientation == "Other")$Participant
+```
+
+We removed `r length(outliers$valid)` (`r insight::format_percent(length(outliers$valid) / nrow(df))`) participants that answered "Other" for gender or sexual orientation.
+
+```{r}
+df <- filter(df, !Participant %in% outliers$valid)
+dftask <- filter(dftask, !Participant %in% outliers$valid)
+```
+
+
+## Final Sample
 
 ### Age
 
@@ -387,6 +529,28 @@ p_edu <- df |>
 p_edu
 ```
 
+### Sexual Profile
+
+```{r p_demographics_sexprofile}
+#| fig-width: 14
+#| fig-height: 14
+
+df |>
+  ggplot(aes(x = SexualOrientation)) +
+  geom_bar(aes(fill=Gender)) +
+  scale_y_continuous(expand = c(0, 0), breaks= scales::pretty_breaks()) +
+  scale_fill_manual(values = c("Male"= "#64B5F6", "Female"= "#F06292")) +
+  labs(title = "Sexual Orientation of Participants") +
+  theme_modern(axis.title.space = 15) +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2), vjust = 7),
+    axis.text.y = element_text(size = rel(1.1)),
+    axis.text.x = element_text(size = rel(1.1), angle = 45, hjust = 1),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
 
 ### Summary
 
@@ -398,7 +562,7 @@ The final sample includes `r report::report_participants(df, age="Age", sex="Sex
 #| code-fold: false
 
 write.csv(df, "../data/data_participants.csv", row.names = FALSE)
-write.csv(df, "../data/data_task.csv", row.names = FALSE)
+write.csv(dftask, "../data/data_task.csv", row.names = FALSE)
 ```
 
 
