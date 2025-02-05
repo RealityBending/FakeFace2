@@ -5,7 +5,9 @@ import pandas as pd
 
 import requests
 
-path = "C:/Users/domma/Box/Data/FakeFace2/"
+#path = "C:/Users/domma/Box/Data/FakeFace2/"
+path = "C:/Users/aneve/Box/FakeFace2/"
+
 files = os.listdir(path)
 
 
@@ -375,3 +377,4 @@ data_demo = replace_value(data_demo, "Education", "Other_Middle School", "Other"
 data_demo.to_csv("../data/rawdata_participants.csv", index=False)
 data_task.to_csv("../data/rawdata_task.csv", index=False)
 data_eye.to_csv("../data/rawdata_eyetracking.csv", index=False)
+
