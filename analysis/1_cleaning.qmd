@@ -10,7 +10,6 @@ format:
     toc: true
 ---
 
-
 ## Data Preparation
 
 ```{r}
@@ -22,7 +21,6 @@ library(easystats)
 library(patchwork)
 library(ggside)
 ```
-
 
 ```{r}
 #| code-fold: false
@@ -67,11 +65,7 @@ df$HEXACO18_Conscientiousness <- rowMeans(df[grepl("Conscientiousnes", names(df)
 df$HEXACO18_Openness <- rowMeans(df[grepl("Openness", names(df))])
 ```
 
-
-
-
 ### Recruitment History
-
 
 ```{r}
 #| message: false
@@ -104,13 +98,11 @@ summarize(df, N = n(), .by=c("Source")) |>
 
 ## Feedback
 
-
 ### Evaluation
 
 The majority of participants found the study to be a "fun" experience. Interestingly, reports of "fun" were significantly associated with finding at least some stimuli arousing. Conversely, reporting "no feelings" was associated with finding the experiment "boring".
 
-::: {.panel-tabset}
-
+::: panel-tabset
 #### Enjoyment
 
 ```{r}
@@ -204,17 +196,16 @@ cor |>
         axis.title.y = element_blank(),
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
 :::
 
 ### Comments
 
 In summary:
 
-- The term "trustworthiness" seemed to cause some confusion, as some participants lowered trustworthiness when asked about it. Also, image presentation format (few seconds and with no background whatsoever) seemed to affect ratings of trustworthiness. I think some found the term misleading and inherently suspicious so maybe clarify it or change wording for next time.
-- Lots of people said faces from database were "too ugly to be real" and someone suggested that 1-10 scales for attractiveness, trustworthiness and beauty might work better than "Agree-Disagree" scales.
-- In general, the most important bit is that the experiment is too long and tiring. For future improvement either have some incentives and add more breaks in-between or cut the number of faces in half as I think people started to get fatigued near the end and definitely distracted (some didn't really read the tags at the start). Participants propose either a controlled experimental setting like the lab or a shorter time to complete to avoid fatigue and getting distracted.
-- Some thought the eye-tracking was a very cool idea.
+-   The term "trustworthiness" seemed to cause some confusion, as some participants lowered trustworthiness when asked about it. Also, image presentation format (few seconds and with no background whatsoever) seemed to affect ratings of trustworthiness. I think some found the term misleading and inherently suspicious so maybe clarify it or change wording for next time.
+-   Lots of people said faces from database were "too ugly to be real" and someone suggested that 1-10 scales for attractiveness, trustworthiness and beauty might work better than "Agree-Disagree" scales.
+-   In general, the most important bit is that the experiment is too long and tiring. For future improvement either have some incentives and add more breaks in-between or cut the number of faces in half as I think people started to get fatigued near the end and definitely distracted (some didn't really read the tags at the start). Participants propose either a controlled experimental setting like the lab or a shorter time to complete to avoid fatigue and getting distracted.
+-   Some thought the eye-tracking was a very cool idea.
 
 ```{r}
 data.frame(Source = df$Source,
@@ -225,7 +216,6 @@ data.frame(Source = df$Source,
   gt::opt_stylize() |> 
   gt::opt_interactive(use_compact_mode = TRUE) 
 ```
-
 
 ## Exclusion
 
@@ -267,14 +257,12 @@ gt::gt(outliers$invalid)
 outliers$invalid <- outliers$invalid$Participant
 ```
 
-
 We removed `r length(outliers$invalid)` (`r insight::format_percent(length(outliers$invalid) / nrow(df))`) participants with no variation in their responses.
 
 ```{r}
 df <- filter(df, !Participant %in% outliers$invalid)
 dftask <- filter(dftask, !Participant %in% outliers$invalid)
 ```
-
 
 ### Experiment Duration
 
@@ -358,11 +346,9 @@ p_time1 / p_time2
 # outliers$expe_duration <- filter(df, Experiment_Duration < 15)$Participant
 ```
 
-
 ### Response Coherence
 
-::: {.panel-tabset}
-
+::: panel-tabset
 #### Attractiveness vs. Beauty
 
 ```{r}
@@ -429,14 +415,11 @@ outliers$coherence2 <- filter(sds, Mean < 0.25 | Mean > 2.25)$Participant
 
 We removed `r length(outliers$coherence2)` (`r insight::format_percent(length(outliers$coherence2) / nrow(df))`) participants that had low consistency in the HEXACO.
 
-
 ```{r}
 df <- filter(df, !Participant %in% outliers$coherence2)
 dftask <- filter(dftask, !Participant %in% outliers$coherence2)
 ```
-
 :::
-
 
 ### Manipulation
 
@@ -465,7 +448,7 @@ df <- filter(df, !Participant %in% outliers$manipulation)
 dftask <- filter(dftask, !Participant %in% outliers$manipulation)
 ```
 
-### Gender and Sex 
+### Gender and Sex
 
 ```{r}
 outliers$valid <- filter(df, Gender == "Other" | SexualOrientation == "Other")$Participant
@@ -477,7 +460,6 @@ We removed `r length(outliers$valid)` (`r insight::format_percent(length(outlier
 df <- filter(df, !Participant %in% outliers$valid)
 dftask <- filter(dftask, !Participant %in% outliers$valid)
 ```
-
 
 ## Final Sample
 
@@ -506,7 +488,6 @@ p_age <- estimate_density(df$Age) |>
   )
 p_age
 ```
-
 
 ### Education
 
@@ -564,5 +545,3 @@ The final sample includes `r report::report_participants(df, age="Age", sex="Sex
 write.csv(df, "../data/data_participants.csv", row.names = FALSE)
 write.csv(dftask, "../data/data_task.csv", row.names = FALSE)
 ```
-
-
