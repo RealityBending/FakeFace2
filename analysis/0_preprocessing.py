@@ -11,6 +11,37 @@ path = "C:/Users/asf25/Box/FakeFace2/"
 
 files = os.listdir(path)
 
+# ============================== IMCOMPLETE DATA SETS ===================================
+
+# Demographic data =========================================
+all_demo_data = []  # List to store browser info
+demo_files = [file for file in files if file.endswith("_demo.csv")] # only files ending in demo
+
+# Identify and collect demo files
+for file in demo_files:
+    full_path = os.path.join(path, file)
+    data = pd.read_csv(full_path) 
+    # browser data
+    browser_demo = data[data["screen"] == "browser_info"].iloc[0]
+
+    # Extract browser info
+    df_row = {
+        "SONA_ID": browser_demo["sona_id"],
+        "Participant": file,  
+        "Experiment_Duration": data["time_elapsed"].max() / 1000 / 60,
+        "Date": browser_demo["date"],
+        "Time": browser_demo["time"],
+        "Browser": browser_demo["browser"],
+        "Mobile": browser_demo["mobile"],
+        "Platform": browser_demo["os"],
+        "Screen_Width": browser_demo["screen_width"],
+        "Screen_Height": browser_demo["screen_height"],
+        "Source": browser_demo["researcher"],
+    }
+
+    all_demo_data.append(df_row)
+
+demo_browser_df = pd.DataFrame(all_demo_data)
 
 # Loop through files ======================================================
 # Initialize empty dataframes
@@ -20,6 +51,10 @@ data_eye = pd.DataFrame()
 
 for i, file in enumerate(files):
     print(f"File N°{i+1}/{len(files)}")  # Print progress
+
+    if file in demo_files:
+        print(f"Skipping demo file: {file}")
+        continue
 
     # Skip if participant already in the dataset
     filename = file.replace(".csv", "")
