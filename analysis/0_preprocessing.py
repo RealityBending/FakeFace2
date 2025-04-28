@@ -5,9 +5,9 @@ import pandas as pd
 
 import requests
 
-#path = "C:/Users/domma/Box/Data/FakeFace2/"
+path = "C:/Users/domma/Box/Data/FakeFace2/"
 # path = "C:/Users/aneve/Box/FakeFace2/"
-path = "C:/Users/asf25/Box/FakeFace2/"
+# path = "C:/Users/asf25/Box/FakeFace2/"
 
 files = os.listdir(path)
 
@@ -15,19 +15,21 @@ files = os.listdir(path)
 
 # Demographic data =========================================
 all_demo_data = []  # List to store browser info
-demo_files = [file for file in files if file.endswith("_demo.csv")] # only files ending in demo
+demo_files = [
+    file for file in files if file.endswith("_demo.csv")
+]  # only files ending in demo
 
 # Identify and collect demo files
 for file in demo_files:
     full_path = os.path.join(path, file)
-    data = pd.read_csv(full_path) 
+    data = pd.read_csv(full_path)
     # browser data
     browser_demo = data[data["screen"] == "browser_info"].iloc[0]
 
     # Extract browser info
     df_row = {
         "SONA_ID": browser_demo["sona_id"],
-        "Participant": file,  
+        "Participant": file,
         "Experiment_Duration": data["time_elapsed"].max() / 1000 / 60,
         "Date": browser_demo["date"],
         "Time": browser_demo["time"],
@@ -348,7 +350,7 @@ def replace_value(df, column, old, new):
 
 # data_demo["Ethnicity"][data_demo["Ethnicity"].str.contains("Other_").values].values
 data_demo = replace_value(data_demo, "Ethnicity", "Other_White, Hispanic", "Mixed")
-
+data_demo = replace_value(data_demo, "Ethnicity", "Other_Tatar", "Other")
 
 # data_demo["Discipline"][data_demo["Discipline"].str.contains("Other_").values].values
 data_demo = replace_value(
@@ -356,8 +358,13 @@ data_demo = replace_value(
 )
 data_demo = replace_value(data_demo, "Discipline", "Other_Journalism", "Other")
 data_demo = replace_value(data_demo, "Discipline", "Other_Industrial Design", "Other")
-data_demo = replace_value(data_demo, "Discipline", "Other_pharmacy", "Other")
+data_demo = replace_value(
+    data_demo, "Discipline", "Other_pharmacy", "Biology, Chemistry, Physics"
+)
 data_demo = replace_value(data_demo, "Discipline", "Other_Geography", "Other")
+data_demo = replace_value(
+    data_demo, "Discipline", "Other_Zoology", "Biology, Chemistry, Physics"
+)
 data_demo = replace_value(
     data_demo, "Discipline", "Other_Health Sciences and Public Health", "Other"
 )
@@ -376,11 +383,13 @@ data_demo = replace_value(
     data_demo, "SexualOrientation", "Other_Mainly heterosexual", "Heterosexual"
 )
 data_demo = replace_value(data_demo, "SexualOrientation", "Other_Queer", "Other")
+data_demo = replace_value(data_demo, "SexualOrientation", "Other_queer", "Other")
 data_demo = replace_value(data_demo, "SexualOrientation", "Other_Demisexual", "Other")
 data_demo = replace_value(data_demo, "SexualOrientation", "Other_Questioning", "Other")
 data_demo = replace_value(data_demo, "SexualOrientation", "Other_Asexual", "Other")
 data_demo = replace_value(data_demo, "SexualOrientation", "Other_AroAce", "Other")
-
+data_demo = replace_value(data_demo, "SexualOrientation", "Other_unsure", "Other")
+data_demo = replace_value(data_demo, "SexualOrientation", "Other_pansexual", "Other")
 
 # data_demo["SexualStatus"][data_demo["SexualStatus"].str.contains("Other_").values].values
 data_demo = replace_value(
@@ -395,12 +404,14 @@ data_demo = replace_value(
     "Other_Prefer not to say.",
     np.nan,
 )
+data_demo = replace_value(data_demo, "SexualStatus", "Other_It's complicated", np.nan)
 
 # data_demo["Gender"][data_demo["Gender"].str.contains("Other_").values].values
 # data_demo["Country"][data_demo["Country"].str.contains("Other_").values].values
 # data_demo["Education"][data_demo["Education"].str.contains("Other_").values].values
 data_demo = replace_value(data_demo, "Education", "Other_Diploma in TEFL", "Other")
 data_demo = replace_value(data_demo, "Education", "Other_A level", "High school")
+data_demo = replace_value(data_demo, "Education", "Other_A-Level", "High school")
 data_demo = replace_value(data_demo, "Education", "Other_collage", "High school")
 data_demo = replace_value(
     data_demo, "Education", "Other_A-Levels, college", "High school"
@@ -408,9 +419,26 @@ data_demo = replace_value(
 data_demo = replace_value(data_demo, "Education", "Other_Middle school", "Other")
 data_demo = replace_value(data_demo, "Education", "Other_Middle School", "Other")
 
+
+# Experimenter
+data_demo["Source"].value_counts()
+data_demo = replace_value(data_demo, "Source", "sof1", "Student")
+data_demo = replace_value(data_demo, "Source", "hl", "Student")
+data_demo = replace_value(data_demo, "Source", "tj_ig1", "Student")
+data_demo = replace_value(data_demo, "Source", "tj_im1", "Student")
+data_demo = replace_value(data_demo, "Source", "tj_im3", "Student")
+data_demo = replace_value(data_demo, "Source", "tj_w1", "Student")
+data_demo = replace_value(data_demo, "Source", "tj_sc1", "Student")
+data_demo = replace_value(data_demo, "Source", "fb2", "Student")
+data_demo = replace_value(data_demo, "Source", "website", "Website")
+data_demo = replace_value(data_demo, "Source", "README", "Website")
+
+
 # Save data ==============================================================
 
 data_demo.to_csv("../data/rawdata_participants.csv", index=False)
 data_task.to_csv("../data/rawdata_task.csv", index=False)
-data_eye.to_csv("../data/rawdata_eyetracking.csv", index=False)
 
+# Split eyetracking data into multiple files
+data_eye.loc[:800000, :].to_csv("../data/rawdata_eyetracking1.csv", index=False)
+data_eye.loc[800000:, :].to_csv("../data/rawdata_eyetracking2.csv", index=False)

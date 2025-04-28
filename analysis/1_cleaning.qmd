@@ -46,7 +46,7 @@ dftask <- read.csv("../data/rawdata_task.csv") |>
   )) 
 ```
 
-The initial sample consisted of `r report::report_participants(df, age="Age", gender="Gender", education="Education")`, for a total trial number of `r nrow(df)`.
+The initial sample consisted of `r report::report_participants(df, age="Age", gender="Gender", education="Education")`, for a total trial number of `r nrow(dftask)`.
 
 ### Compute Dimensions
 
@@ -352,8 +352,8 @@ p_time1 / p_time2
 #### Attractiveness vs. Beauty
 
 ```{r}
-#| fig-width: 15
-#| fig-height: 15
+#| fig-width: 12
+#| fig-height: 12
 
 dfcoherence <- dftask |> 
   group_by(Participant) |>
@@ -365,16 +365,18 @@ dfcoherence |>
   ggplot(aes(x = Participant, y=r)) +
   geom_bar(stat = "identity") +
   geom_hline(yintercept = 0.1, color = "red", linetype = "dashed") +
+  ggside::geom_ysidedensity(fill = "darkgrey", color=NA) +
   theme_minimal() +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank()) 
+  
 
 outliers$coherence <- filter(dfcoherence, r < 0.1)$Participant
 ```
 
-We removed `r length(outliers$coherence)` (`r insight::format_percent(length(outliers$coherence) / nrow(df))`) participants that did not show coherence in their responses.
+We removed `r length(outliers$coherence)` (`r insight::format_percent(length(outliers$coherence) / nrow(df))`) participants that did not show coherence in their responses (Spearman correlation < 0.1).
 
 ```{r}
 df <- filter(df, !Participant %in% outliers$coherence)
@@ -402,10 +404,10 @@ sds |>
   mutate(Participant = fct_reorder(Participant, Mean)) |> 
   ggplot(aes(x=Participant, y=Mean)) +
   geom_bar(stat = "identity") +
-  geom_hline(yintercept=c(0.25, 2.25), color="red", linetype="dashed") +
+  # geom_hline(yintercept=c(0.25, 2.25), color="red", linetype="dashed") +
   theme_minimal() +
   theme(axis.text.x = element_blank()) +
-  ggside::geom_ysidedensity(fill="black", color=NA) +
+  ggside::geom_ysidedensity(fill="darkgrey", color=NA) +
   ggside::scale_ysidex_continuous(expand = c(0, 0)) +
   ggside::theme_ggside_void() +
   labs(y = "Mean SD of each HEXACO dimension", x="Participants")
@@ -413,12 +415,16 @@ sds |>
 outliers$coherence2 <- filter(sds, Mean < 0.25 | Mean > 2.25)$Participant
 ```
 
-We removed `r length(outliers$coherence2)` (`r insight::format_percent(length(outliers$coherence2) / nrow(df))`) participants that had low consistency in the HEXACO.
+<!-- We removed `r length(outliers$coherence2)` (`r insight::format_percent(length(outliers$coherence2) / nrow(df))`) participants that had low consistency in the HEXACO. -->
+
+We did not remove participants based on the HEXACO scores, but we provide the information for transparency.
+
 
 ```{r}
-df <- filter(df, !Participant %in% outliers$coherence2)
-dftask <- filter(dftask, !Participant %in% outliers$coherence2)
+# df <- filter(df, !Participant %in% outliers$coherence2)
+# dftask <- filter(dftask, !Participant %in% outliers$coherence2)
 ```
+
 :::
 
 ### Manipulation

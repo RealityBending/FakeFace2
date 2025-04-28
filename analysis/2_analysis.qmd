@@ -46,7 +46,13 @@ dftask <- read.csv("../data/data_task.csv") |>
          Relevance = fct_relevel(Relevance, "Relevant", "Irrelevant"),
          Attractiveness = Attractiveness / 6,
          Beauty = Beauty / 6,
-         Trustworthiness = Trustworthiness / 6)
+         Trustworthiness = Trustworthiness / 6,
+         Realness = Realness / 6 + 0.5,
+         RealnessBelief = ifelse(Realness > 0.5, 1, 0))
+
+dftask <- full_join(dftask, 
+                    select(df, Participant, starts_with("HEXACO"), -ends_with("_NR"), -ends_with("_R")),
+                    by="Participant")
 ```
 
 
@@ -60,15 +66,13 @@ dftask |>
 ```
 
 ```{r}
-m_attractiveness <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
-                      data=dftask)
-
-
-m_attractiveness <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
+m_attractiveness <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / Condition + 
+                                       (Condition | Participant) + ((Relevance / Condition)|Stimulus),
                       data=dftask, 
                       family=glmmTMB::ordbeta(),
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
+performance::performance(m_attractiveness)
 results_table(m_attractiveness, filter="Condition")
 ```
 
@@ -84,7 +88,8 @@ dftask |>
 ```
 
 ```{r}
-m_beauty <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
+m_beauty <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / Condition + 
+                               (Condition | Participant),
                       data=dftask, 
                       family=glmmTMB::ordbeta(),
                       control = glmmTMB::glmmTMBControl(parallel = 8))
@@ -92,49 +97,9 @@ m_beauty <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / Condition + (1 | Part
 results_table(m_beauty, filter="Condition")
 ```
 
-
 ```{r}
-pred <- rbind(
-  marginaleffects::predictions(m_attractiveness, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
-  as.data.frame() |> 
-  mutate(Outcome="Attractiveness"),
-  marginaleffects::predictions(m_beauty, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
-  as.data.frame() |> 
-  mutate(Outcome="Beauty")
-)
-
-pred |> 
-  ggplot(aes(x=Relevance, y=estimate)) +
-  # geom_hline(yintercept=0, color="darkgrey") +
-  geom_line(aes(group=Condition, color=Condition), position = position_dodge(width=0.2), alpha=0.8, linewidth=0.2) +
-  geom_pointrange(aes(ymin = conf.low, ymax=conf.high, color=Condition), position = position_dodge(width=0.2), size=0.2) +
-  facet_grid(Outcome~Gender, switch="y") +
-  scale_y_continuous(limits=c(0, 1), labels=scales::percent) +
-  scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
-  coord_cartesian(ylim=c(0.15, 0.6)) +
-  theme_minimal() +
-  theme(axis.title.y = element_blank(),
-        axis.title.x = element_blank(),
-        axis.text.y = element_text(size = 8),
-        strip.placement = "outside",
-        strip.background.x = element_rect(fill=c("lightgrey"), color=NA),
-        strip.text.x = element_text(size = 10),
-        strip.text.y = element_text(size = 10),
-        axis.text.x = element_text(size=9, color="black"),
-        legend.text = element_text(size = 10),
-        legend.position = ) +
-  labs(color="Images presented as:",
-       tag = "A")
-```
-
-
-### Coherence
-
-```{r}
-m_beauty <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Beauty * Condition) + (1 | Participant) + (1|Stimulus),
-                      data=dftask)
-
-results_table(m_beauty, filter="Beauty")
+modelbased::estimate_grouplevel(m_beauty)
+performance::performance_dvour(m_beauty)
 ```
 
 
@@ -155,3 +120,124 @@ m_trustworthiness <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / Con
 
 results_table(m_trustworthiness, filter="Condition")
 ```
+
+## Coupling
+
+Does fiction create a decoupling?
+
+```{r}
+m_coupling1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Beauty * Condition) + 
+                               (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_coupling1, filter="Beauty")
+```
+
+```{r}
+m_coupling2 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Beauty * Condition) + 
+                               (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      # family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_coupling2, filter="Beauty")
+```
+
+
+```{r}
+m_coupling3 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Attractiveness * Condition) + 
+                               (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      # family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_coupling3, filter="Attractiveness")
+```
+
+## Reality
+
+```{r}
+dftask |> 
+  ggplot(aes(x=Realness, fill=Condition)) +
+  geom_bar(aes(y = after_stat(prop)), position="dodge") +
+  facet_grid(Relevance~Gender) 
+```
+
+```{r}
+m_realness <- glmmTMB::glmmTMB(Realness ~ Gender / Relevance / Condition + 
+                               (1 | Participant),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_realness, filter="Condition")
+
+m_realness <- glmmTMB::glmmTMB(RealnessBelief ~ Gender / Relevance / poly(Beauty, 2) * Condition + 
+                               (1 | Participant),
+                      data=dftask, 
+                      family="binomial",
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_realness, filter="Beauty")
+```
+
+
+## Moderators
+
+
+```{r}
+m1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m1, filter="HEXACO18_Emotionality")
+```
+
+
+
+## Figures
+
+### Main Effects
+
+```{r}
+pred <- rbind(
+  marginaleffects::predictions(m_attractiveness, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  as.data.frame() |> 
+  mutate(Outcome="Attractiveness"),
+  marginaleffects::predictions(m_beauty, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  as.data.frame() |> 
+  mutate(Outcome="Beauty"),
+  marginaleffects::predictions(m_trustworthiness, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  as.data.frame() |> 
+  mutate(Outcome="Trustworthiness")
+)
+
+pred |> 
+  ggplot(aes(x=Relevance, y=estimate)) +
+  # geom_hline(yintercept=0, color="darkgrey") +
+  geom_line(aes(group=Condition, color=Condition), position = position_dodge(width=0.2), alpha=0.8, linewidth=0.2) +
+  geom_pointrange(aes(ymin = conf.low, ymax=conf.high, color=Condition), position = position_dodge(width=0.2), size=0.2) +
+  facet_grid(Outcome~Gender, switch="y", scales="free") +
+  scale_y_continuous(labels=scales::percent) +
+  scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
+  # coord_cartesian(ylim=c(0.15, 0.6)) +
+  theme_minimal() +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 8),
+        strip.placement = "outside",
+        strip.background.x = element_rect(fill=c("lightgrey", "blue"), color=NA),
+        strip.text.x = element_text(size = 10),
+        strip.text.y = element_text(size = 10),
+        axis.text.x = element_text(size=9, color="black"),
+        legend.text = element_text(size = 10),
+        legend.position = ) +
+  labs(color="Images presented as:",
+       tag = "A")
+```
+
+
