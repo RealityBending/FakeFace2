@@ -25,7 +25,8 @@ library(ggside)
 ```{r}
 #| code-fold: false
 
-df <- read.csv("../data/rawdata_participants.csv")
+df <- read.csv("../data/rawdata_participants.csv") |> 
+  filter(Age >= 18)
 
 
 dftask <- read.csv("../data/rawdata_task.csv") |> 
@@ -44,6 +45,8 @@ dftask <- read.csv("../data/rawdata_task.csv") |>
     SexualOrientation %in% c("Other") ~ "Irrelevant",  # What to do with "Other"? 
     .default = "Irrelevant"
   )) 
+
+dftask <- filter(dftask, Participant %in% unique(df$Participant))
 ```
 
 The initial sample consisted of `r report::report_participants(df, age="Age", gender="Gender", education="Education")`, for a total trial number of `r nrow(dftask)`.
