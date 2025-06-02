@@ -217,7 +217,7 @@ var results_hexaco18 = {
 // History:
 // - BAIT-Original: Items specifically about CGI and artificial media originally in Makowski et al. (FakeFace study)
 // - BAIT-14: Validated in FictionEro (with new items + removal of "I think"), where it was mixed with the 6 most
-//   loading items of the positive and negative attitutes dimensions from the General Attitudes towards
+//   loading items of the positive and negative attitudes dimensions from the General Attitudes towards
 //   Artificial Intelligence Scale (GAAIS; Schepman et al., 2020, 2022)
 // - BAIT-14: Used in FakeNewsValidation
 // - BAIT-12 (Current version): Used in FakeFace2.
