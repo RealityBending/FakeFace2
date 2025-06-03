@@ -51,6 +51,52 @@ dftask <- filter(dftask, Participant %in% unique(df$Participant))
 
 The initial sample consisted of `r report::report_participants(df, age="Age", gender="Gender", education="Education")`, for a total trial number of `r nrow(dftask)`.
 
+### Reliability
+
+#### HEXACO
+
+```{r}
+
+dplyr::select(df, starts_with("HEXACO18_HonestyHumility_")) |>
+  psych::alpha(check.keys = TRUE) # 0.57
+
+dplyr::select(df, starts_with("HEXACO18_Emotionality_")) |>
+  psych::alpha(check.keys = TRUE) # 0.67
+
+dplyr::select(df, starts_with("HEXACO18_Extraversion_")) |>
+  psych::alpha(check.keys = TRUE) # 0.74
+
+dplyr::select(df, starts_with("HEXACO18_Agreeableness_")) |>
+  psych::alpha(check.keys = TRUE) # 0.53
+
+dplyr::select(df, starts_with("HEXACO18_Conscientiousnes_")) |>
+  psych::alpha(check.keys = TRUE) # 0.79
+
+dplyr::select(df, starts_with("HEXACO18_Openness_")) |>
+  psych::alpha(check.keys = TRUE) # 0.5
+
+```
+
+#### BAIT
+
+```{r}
+
+#expectations about AI
+dplyr::select(df, BAIT_1_ImagesRealistic, BAIT_2_ImagesIssues, BAIT_3_VideosRealistic, BAIT_4_VideosIssues, BAIT_5_ImitatingReality, BAIT_6_EnvironmentReal, BAIT_7_TextRealistic, BAIT_8_TextIssues) |>
+psych::alpha(check.keys = TRUE) # 0.75
+
+
+## positive Attitudes
+dplyr::select(df,BAIT_11_PositiveAttitutes,BAIT_12_PositiveAttitutes ) |>
+psych::alpha(check.keys = TRUE) # 0.71
+
+## negtavive GAAIS
+dplyr::select(df, BAIT_9_NegativeAttitutes, BAIT_10_NegativeAttitutes) |>
+psych::alpha(check.keys = TRUE) # 0.79
+
+
+```
+
 ### Compute Dimensions
 
 ```{r}
@@ -67,6 +113,7 @@ df$HEXACO18_Agreeableness <- rowMeans(df[grepl("Agreeableness", names(df))])
 df$HEXACO18_Conscientiousness <- rowMeans(df[grepl("Conscientiousnes", names(df))])
 df$HEXACO18_Openness <- rowMeans(df[grepl("Openness", names(df))])
 ```
+
 
 ### Recruitment History
 
@@ -98,6 +145,7 @@ summarize(df, N = n(), .by=c("Source")) |>
   gt::opt_interactive(use_compact_mode = TRUE) |> 
   gt::tab_header("Number of participants per recruitment source")
 ```
+
 
 ## Feedback
 

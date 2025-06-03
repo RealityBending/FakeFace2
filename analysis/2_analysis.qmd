@@ -76,8 +76,6 @@ performance::performance(m_attractiveness)
 results_table(m_attractiveness, filter="Condition")
 ```
 
-
-
 ## Beauty 
 
 ```{r}
@@ -205,13 +203,15 @@ results_table(m1, filter="HEXACO18_Emotionality")
 
 ```{r}
 pred <- rbind(
-  marginaleffects::predictions(m_attractiveness, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  marginaleffects::predictions(m_attractiveness, by=c("Gender", "Relevance", "Condition"), newdata = "mean", re.form=NA) |>
   as.data.frame() |> 
   mutate(Outcome="Attractiveness"),
-  marginaleffects::predictions(m_beauty, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  
+  marginaleffects::predictions(m_beauty, by=c("Gender", "Relevance", "Condition"), newdata = "mean", re.form=NA) |>
   as.data.frame() |> 
   mutate(Outcome="Beauty"),
-  marginaleffects::predictions(m_trustworthiness, by=c("Gender", "Relevance", "Condition"), newdata = "marginalmeans", re.form=NA) |>
+  
+  marginaleffects::predictions(m_trustworthiness, by=c("Gender", "Relevance", "Condition"), newdata = "mean", re.form=NA) |>
   as.data.frame() |> 
   mutate(Outcome="Trustworthiness")
 )
