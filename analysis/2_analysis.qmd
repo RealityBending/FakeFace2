@@ -38,7 +38,7 @@ results_table <- function(model, effects="fixed", filter=NULL) {
 
 
 ```{r}
-#| code-fold: false
+#| code-fold: true
 
 df <- read.csv("../data/data_participants.csv") 
 dftask <- read.csv("../data/data_task.csv") |> 
@@ -65,7 +65,9 @@ dftask <- full_join(dftask,
 dftask |> 
   ggplot(aes(x=Attractiveness, fill=Condition)) +
   geom_bar(aes(y = after_stat(prop)), position="dodge") +
-  facet_grid(Relevance~Gender) 
+  facet_grid(Relevance~Gender) +
+  theme_bw()
+  
 ```
 
 This model looks at the effect of Gender and Relevance on attractiveness scores, accounting for random variabilty due to participants and items (i.e., random effects). 
@@ -90,7 +92,7 @@ estimate_relation(m_a) |>
   scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
   labs(y="Attractiveness") +
   facet_wrap(~Gender) +
-  theme_abyss()
+  theme_bw()
 ```
 
 ### Beauty
@@ -99,7 +101,8 @@ estimate_relation(m_a) |>
 dftask |> 
   ggplot(aes(x=Beauty, fill=Condition)) +
   geom_bar(aes(y = after_stat(prop)), position="dodge") +
-  facet_grid(Relevance~Gender) 
+  facet_grid(Relevance~Gender) +
+  theme_bw()
 ```
 
 This model looks at the effect of Gender and Relevance on beauty scores, accounting for random variabilty due to participants and items (i.e., random effects). 
@@ -124,7 +127,7 @@ estimate_relation(m_b) |>
   scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
   labs(y="Beauty") +
   facet_wrap(~Gender) +
-  theme_abyss()
+  theme_bw()
 ```
 
 ### Trustworthiness
@@ -133,7 +136,8 @@ estimate_relation(m_b) |>
 dftask |> 
   ggplot(aes(x=Trustworthiness, fill=Condition)) +
   geom_bar(aes(y = after_stat(prop)), position="dodge") +
-  facet_grid(Relevance~Gender) 
+  facet_grid(Relevance~Gender) +
+  theme_bw()
 ```
 
 This model looks at the effect of Gender and Relevance on trustworthiness scores, accounting for random variabilty due to participants and items (i.e., random effects). 
@@ -158,7 +162,8 @@ estimate_relation(m_b) |>
   scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
   labs(y="Beauty") +
   facet_wrap(~Gender) +
-  theme_abyss()
+  theme_bw()
+
 ```
 
 ### Reality 
@@ -167,7 +172,8 @@ estimate_relation(m_b) |>
 dftask |> 
   ggplot(aes(x=Realness, fill=Condition)) +
   geom_bar(aes(y = after_stat(prop)), position="dodge") +
-  facet_grid(Relevance~Gender) 
+  facet_grid(Relevance~Gender) +
+  theme_bw()
 ```
 
 The model evaluating the effect of Gender and Relevance on Realness ratings shows no significant effects. 
@@ -190,7 +196,7 @@ estimate_relation(m_r) |>
   scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
   labs(y="Realness") +
   facet_wrap(~Gender) +
-  theme_abyss()
+  theme_bw()
 ```
 :::
 
@@ -345,7 +351,7 @@ performance::performance(m_realness)
 
 ## Reality Beliefs
 
-::: tab-set
+::: panel-tabset
 
 ### Attractiveness
 
@@ -418,9 +424,7 @@ performance::performance(m_realness_t)
 
 ## Moderator
 
-No
-
-:::tab-set
+::: panel-tabset
 
 ### Honest-Humility
 
@@ -554,8 +558,8 @@ pred |>
 ```
 
 
-### Notes
+## Notes
 
-- The attractivenes, beauty and trustworthy model with relevance and condition as random slopes for stimuli were singular.
+- The attractiveness, beauty and trustworthy model with relevance and condition as random slopes for stimuli were singular.
 - The beauty and trustworthiness models with either relevance or condition as random slopes for stimuli were singular. 
 - The D-vour score was higher for the models with Relevance as a random slope on Stimulus than for the model with Condition, suggesting that Relevance captures more reliable variability across stimuli. Therefore, Relevance was retained as the random slope for Stimulus (see [explanation of D-vour](https://easystats.github.io/performance/reference/performance_reliability.html)). 
