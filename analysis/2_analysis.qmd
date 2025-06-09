@@ -27,7 +27,7 @@ results_table <- function(model, effects="fixed", filter=NULL) {
     model |> 
       parameters::parameters() |> 
       as.data.frame() |> 
-      select(-Parameter, -SE, -S, z=Statistic, -Predicted) |> 
+      select(-Parameter, -SE, -S, z=Statistic) |> 
       insight::format_table() |> 
       parameters::display()
   } else {
@@ -48,16 +48,19 @@ dftask <- read.csv("../data/data_task.csv") |>
          Beauty = Beauty / 6,
          Trustworthiness = Trustworthiness / 6,
          Realness = Realness / 6 + 0.5,
-         RealnessBelief = ifelse(Realness > 0.5, 1, 0))
+         RealnessBelief = ifelse(Realness > 0.5, 1, 0),
+         Gender = fct_relevel(Gender, "Male", "Female"))
 
 dftask <- full_join(dftask, 
                     select(df, Participant, starts_with("HEXACO"), -ends_with("_NR"), -ends_with("_R")),
                     by="Participant")
 ```
 
+## Visualisation of Variables
 
-## Attractiveness 
+::: panel-tabset
 
+### Attractiveness 
 ```{r}
 dftask |> 
   ggplot(aes(x=Attractiveness, fill=Condition)) +
@@ -65,18 +68,32 @@ dftask |>
   facet_grid(Relevance~Gender) 
 ```
 
+This model looks at the effect of Gender and Relevance on attractiveness scores, accounting for random variabilty due to participants and items (i.e., random effects). 
+
+Females did not rate faces significantly higher than males in attractiveness. However, both genders rated irrelevant images lower in attractiveness than relevant ones.
+
 ```{r}
-m_attractiveness <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / Condition + 
-                                       (Condition | Participant) + ((Relevance / Condition)|Stimulus),
+m_a<- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance + 
+                                       (Relevance | Participant) + (1|Stimulus),
                       data=dftask, 
                       family=glmmTMB::ordbeta(),
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
-performance::performance(m_attractiveness)
-results_table(m_attractiveness, filter="Condition")
+results_table(m_a)
+
 ```
 
-## Beauty 
+```{r}
+estimate_relation(m_a) |> 
+  ggplot(aes(x=Relevance, y=Predicted)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high, color=Relevance), position=position_dodge(width=0.5)) +
+  scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
+  labs(y="Attractiveness") +
+  facet_wrap(~Gender) +
+  theme_abyss()
+```
+
+### Beauty
 
 ```{r}
 dftask |> 
@@ -85,23 +102,32 @@ dftask |>
   facet_grid(Relevance~Gender) 
 ```
 
+This model looks at the effect of Gender and Relevance on beauty scores, accounting for random variabilty due to participants and items (i.e., random effects). 
+
+Females rated faces significantly higher than males in beauty. Males rated irrelevant images as more beautiful than relevant ones, whilst females rated irrelevant images as less beautiful than relevent ones, both effects were significant. 
+
 ```{r}
-m_beauty <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / Condition + 
-                               (Condition | Participant),
+m_b<- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance + 
+                                       (Relevance | Participant) + (1|Stimulus),
                       data=dftask, 
                       family=glmmTMB::ordbeta(),
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
-results_table(m_beauty, filter="Condition")
+results_table(m_b)
+
 ```
 
 ```{r}
-modelbased::estimate_grouplevel(m_beauty)
-performance::performance_dvour(m_beauty)
+estimate_relation(m_b) |> 
+  ggplot(aes(x=Relevance, y=Predicted)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high, color=Relevance), position=position_dodge(width=0.5)) +
+  scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
+  labs(y="Beauty") +
+  facet_wrap(~Gender) +
+  theme_abyss()
 ```
 
-
-## Trustworthiness 
+### Trustworthiness
 
 ```{r}
 dftask |> 
@@ -110,18 +136,145 @@ dftask |>
   facet_grid(Relevance~Gender) 
 ```
 
+This model looks at the effect of Gender and Relevance on trustworthiness scores, accounting for random variabilty due to participants and items (i.e., random effects). 
+
+Females rated faces higher in trustworthiness then males, however this effect was not significant. Males rated irrelevant images as significantly more trustworthy than relevant ones, whereas the same effect was not significant for women. 
+
 ```{r}
-m_trustworthiness <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / Condition + (1 | Participant) + (1|Stimulus),
+m_t<- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance + 
+                                       (Relevance | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_t)
+
+```
+
+```{r}
+estimate_relation(m_b) |> 
+  ggplot(aes(x=Relevance, y=Predicted)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high, color=Relevance), position=position_dodge(width=0.5)) +
+  scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
+  labs(y="Beauty") +
+  facet_wrap(~Gender) +
+  theme_abyss()
+```
+
+### Reality 
+
+```{r}
+dftask |> 
+  ggplot(aes(x=Realness, fill=Condition)) +
+  geom_bar(aes(y = after_stat(prop)), position="dodge") +
+  facet_grid(Relevance~Gender) 
+```
+
+The model evaluating the effect of Gender and Relevance on Realness ratings shows no significant effects. 
+
+```{r}
+m_r<- glmmTMB::glmmTMB(Realness ~ Gender / Relevance + 
+                                       (Relevance | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_r)
+
+```
+
+```{r}
+estimate_relation(m_r) |> 
+  ggplot(aes(x=Relevance, y=Predicted)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high, color=Relevance), position=position_dodge(width=0.5)) +
+  scale_color_manual(values=c("Relevant"="#03A9F4", "Irrelevant"="#FF9800"), guide = "none") +
+  labs(y="Realness") +
+  facet_wrap(~Gender) +
+  theme_abyss()
+```
+:::
+
+## Attractiveness 
+
+This model examines the effects of Gender, Relevance, and Condition on Attractiveness, while accounting for random variability by including random intercepts for Participants and Stimuli, as well as random slopes for Condition (by Participant) and Relevance (by Stimulus).
+
+The model demonstrated strong conditional fit (R²_conditional = 0.812), indicating that most of the explained variance was due to random effects, particularly between participants (ICC = 0.810).
+
+Notably, only female participants rated irrelevant images as significantly less attractive than relevant ones in the AI-generated condition. No significant effects were observed for male participants or other interaction terms. 
+
+The variance decomposition (D_vour) further confirms that most of the explainable variance lies in participant-level intercepts (0.98) and stimulus-level intercepts (0.97), with smaller contributions from the random slopes.
+
+
+```{r}
+m_attractiveness <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / Condition + 
+                                       (Condition | Participant) + (Relevance|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+performance::performance(m_attractiveness)
+results_table(m_attractiveness, filter="Condition")
+performance::performance_dvour(m_attractiveness)
+
+```
+
+## Beauty 
+
+This model examines the effects of Gender, Relevance, and Condition on Attractiveness, while accounting for random variability by including random intercepts for Participants and Stimuli, as well as random slopes for Condition (by Participant).
+
+The model demonstrated strong conditional fit (R²_conditional = 0.858), indicating that most of the explained variance was due to random effects, particularly between participants (ICC = 0.849).
+
+Females rated relevant images significantly lower in beauty than males as well as rating irrelevant images signifcantly lower in beauty than relevant ones. Lastly, males also rated irrelevant images lower in beauty than relevant ones. 
+
+The variance decomposition (D_vour) further declares the smaller contributions from the random slopes. 
+
+<!-- *Note*. models with random random slopea for stimulus were singular.  -->
+
+```{r}
+m_beauty <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / Condition + (Condition | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_beauty, filter="Condition")
+performance::performance(m_beauty)
+performance::performance_dvour(m_beauty)
+```
+
+```{r}
+# modelbased::estimate_grouplevel(m_beauty)
+```
+
+
+## Trustworthiness 
+
+This model examines the effects of Gender, Relevance, and Condition on Attractiveness, while accounting for random variability by including random intercepts for Participants and Stimuli, as well as random slopes for Condition (by Participant).
+
+The model demonstrated strong conditional fit (R²_conditional = 0.845), indicating that most of the explained variance was due to random effects, particularly between participants (ICC = 0.844).
+
+Females rated relevant images significantly lower in trustworthiness than males as well as rating irrelevant images signifcantly lower in trustworthiness than relevant ones. Males did not rate irrelevant images significantly lower in trustworthiness than relevant ones. 
+
+The variance decomposition (D_vour) further confirms that most of the explainable variance lies in participant-level intercepts (0.98) and stimulus-level intercepts (0.96).
+
+<!-- *Note* Models with random slopes for stimuli were singular -->
+```{r}
+m_trustworthiness <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / Condition + (Condition|Participant) + (1|Stimulus),
                       data=dftask, 
                       family=glmmTMB::ordbeta(),
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
 results_table(m_trustworthiness, filter="Condition")
+performance::performance(m_trustworthiness)
+performance::performance_dvour(m_trustworthiness)
+
+
 ```
 
-## Coupling
+## Coupling - Does fiction create a decoupling?
 
-Does fiction create a decoupling?
+This model evaluates how beauty and image condition (e.g., AI-generated or not) jointly influence attractiveness ratings, and how this relationship is further moderated by the relevance of the image and the gender of the participant.
+
+Beauty ratings are a strong predictor of attractiveness, but the strenght of this relationship varies by gender and relevance. Condition does not significantly moderate the beauty-attractiveness relationship, indicating that fiction does not create a decoupling between beauty and attractiveness.
 
 ```{r}
 m_coupling1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Beauty * Condition) + 
@@ -131,7 +284,14 @@ m_coupling1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Beauty * 
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
 results_table(m_coupling1, filter="Beauty")
+performance::performance(m_coupling1)
+
+
 ```
+
+This model evaluates how beauty and image condition (e.g., AI-generated or not) jointly influence trustworthiness ratings, and how this relationship is further moderated by the relevance of the image and the gender of the participant.
+
+Beauty ratings are a strong predictor of trustowrthiness but condition does not significantly moderate the beauty-trustworthiness relationship. These findings indicate that fiction does not create a decoupling between beauty and trustworthiness. 
 
 ```{r}
 m_coupling2 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Beauty * Condition) + 
@@ -141,9 +301,17 @@ m_coupling2 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Beauty *
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
 results_table(m_coupling2, filter="Beauty")
+performance::performance(m_coupling2)
+
 ```
 
+This model evaluates how attractiveness and image condition (e.g., AI-generated or not) jointly influence trustworthiness ratings, and how this relationship is further moderated by the relevance of the image and the gender of the participant.
 
+Atractiveness ratings are a strong predictor of trustowrthiness, but the strenght of this relationship varies by gender and relevance. 
+
+Importantly, Condition (AI-generated vs. real) significantly moderates the attractiveness–trustworthiness relationship only for females rating irrelevant images. In this group, real photos are rated as less trustworthy compared to AI-generated images at comparable levels of attractiveness, indicating a weakening or decoupling of the usual link between attractiveness and trustworthiness when the image is irrelevant and real.
+
+These results suggest that fiction (AI-generated images) affects the attractiveness–trustworthiness association for females evaluating irrelevant images, creating a decoupling between perceived beauty and trustworthiness in this context.
 ```{r}
 m_coupling3 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Attractiveness * Condition) + 
                                (1 | Participant) + (1|Stimulus),
@@ -152,16 +320,17 @@ m_coupling3 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Attracti
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
 results_table(m_coupling3, filter="Attractiveness")
+performance::performance(m_coupling3)
+
 ```
 
 ## Reality
 
-```{r}
-dftask |> 
-  ggplot(aes(x=Realness, fill=Condition)) +
-  geom_bar(aes(y = after_stat(prop)), position="dodge") +
-  facet_grid(Relevance~Gender) 
-```
+This model examines the effects of Gender, Relevance, and Condition on Realness, while accounting participants as random intercepts. 
+
+The model demonstrated moderate conditional fit (R²_conditional = 0.525), indicating that approximately half of the explained variance was attributable to between-participant differences (ICC = 0.521).
+
+No significant fixed effects or interactions were detected. Specifically, none of the combinations of Gender, Relevance, and Condition showed a statistically significant association with Realness ratings. 
 
 ```{r}
 m_realness <- glmmTMB::glmmTMB(Realness ~ Gender / Relevance / Condition + 
@@ -171,30 +340,163 @@ m_realness <- glmmTMB::glmmTMB(Realness ~ Gender / Relevance / Condition +
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
 results_table(m_realness, filter="Condition")
+performance::performance(m_realness)
+```
 
-m_realness <- glmmTMB::glmmTMB(RealnessBelief ~ Gender / Relevance / poly(Beauty, 2) * Condition + 
+## Reality Beliefs
+
+::: tab-set
+
+### Attractiveness
+
+This model examined the effects of Gender, Relevance, and Condition on the probability of rating an images as Real, accounting for participants as random intercepts, and included a non-linear effect of Attractiveness by modeling it as a second-degree polynomial.
+
+The fixed effects revealed a significant positive linear effect of Attractiveness on Realness Belief across most Gender × Relevance conditions, except for ratings by males on irrelevant images, where the effect was not significant (p = 0.097). 
+
+No significant quadratic effects of Attractiveness were observed. Furthermore, interactions involving Condition (AI-Generated) did not significantly influence the Attractiveness effect.
+
+```{r}
+
+m_realness_a <- glmmTMB::glmmTMB(RealnessBelief ~ Gender / Relevance / poly(Attractiveness, 2) * Condition + 
                                (1 | Participant),
                       data=dftask, 
                       family="binomial",
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
-results_table(m_realness, filter="Beauty")
+results_table(m_realness_a, filter="Attractiveness")
+performance::performance(m_realness_a)
 ```
 
 
-## Moderators
+### Beauty
 
+This model examined the effects of Gender, Relevance, and Condition on Realness Belief, accounting for participants as random intercepts, and included a non-linear effect of Beauty by modeling it as a second-degree polynomial.
+
+The model demonstrated low conditional fit (conditional R² = 0.174), indicating that only a small portion of variance was explained by between-participant differences (ICC = 0.146).
+
+Beauty showed a significant linear effect on Realness Belief across multiple Gender × Relevance combinations
+
+Of note, the interaction term involving Gender (Male) × Condition (AI-Generated) × Relevance (Irrelevant) × linear Beauty approached significance (p =0.051), suggesting a potential moderating effect of condition and relevance on the beauty–realness relationship for males in the irrelevant relevance condition.
 
 ```{r}
-m1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
+
+m_realness_b <- glmmTMB::glmmTMB(RealnessBelief ~ Gender / Relevance / poly(Beauty, 2) * Condition + 
+                               (1 | Participant),
+                      data=dftask, 
+                      family="binomial",
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_realness_b, filter="Beauty")
+performance::performance(m_realness_b)
+```
+
+### Trustworthiness
+
+This model examined the effects of Gender, Relevance, and Condition on the probability of rating an images as Real, accounting for participants as random intercepts, and included a non-linear effect of Beauty by modeling it as a second-degree polynomial.
+
+The model demonstrated low conditional fit (conditional R² = 0.174), indicating that only a small portion of variance was explained by between-participant differences (ICC = 0.146).
+
+Trustworthiness showed a significant positive linear effect on Realness Belief across all Gender × Relevance combinations.
+No significant quadratic effects of Trustworthiness were found. 
+
+An interaction involving male participants rating irrelevant AI-generated images showed a significant negative effect, suggesting a moderated Trustworthiness influence in this condition. Other interactions involving Condition (AI-Generated) were non-significant.
+
+```{r}
+
+m_realness_t <- glmmTMB::glmmTMB(RealnessBelief ~ Gender / Relevance / poly(Trustworthiness, 2) * Condition + 
+                               (1 | Participant),
+                      data=dftask, 
+                      family="binomial",
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m_realness_t, filter="Trustworthiness")
+performance::performance(m_realness_t)
+```
+
+:::
+
+
+## Moderator
+
+No
+
+:::tab-set
+
+### Honest-Humility
+
+```{r}
+m1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_HonestyHumility) + 
                                        (1 | Participant) + (1|Stimulus),
                       data=dftask, 
                       family=glmmTMB::ordbeta(),
                       control = glmmTMB::glmmTMBControl(parallel = 8))
 
-results_table(m1, filter="HEXACO18_Emotionality")
+results_table(m1, filter="HEXACO18_HonestyHumility")
 ```
 
+### Openness
+
+Openess was a significant moderator for females ratings of irrelant images presented as AI-Generated. 
+
+```{r}
+m2 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Openness) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m2, filter="HEXACO18_Openness")
+```
+
+### Emotionality
+
+```{r}
+m3 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m3, filter="HEXACO18_Emotionality")
+```
+
+### Extraversion
+
+```{r}
+m4 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Extraversion) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m4, filter="HEXACO18_Extraversion")
+```
+
+### Agreeableness
+
+```{r}
+m5 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Agreeableness) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m5, filter="HEXACO18_Agreeableness")
+```
+
+### Conscientiousness
+
+```{r}
+m6 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Conscientiousness) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m6, filter="HEXACO18_Conscientiousness")
+```
+
+:::
 
 
 ## Figures
@@ -202,28 +504,39 @@ results_table(m1, filter="HEXACO18_Emotionality")
 ### Main Effects
 
 ```{r}
-pred <- rbind(
-  marginaleffects::predictions(m_attractiveness, by=c("Gender", "Relevance", "Condition"), newdata = "mean", re.form=NA) |>
-  as.data.frame() |> 
-  mutate(Outcome="Attractiveness"),
-  
-  marginaleffects::predictions(m_beauty, by=c("Gender", "Relevance", "Condition"), newdata = "mean", re.form=NA) |>
-  as.data.frame() |> 
-  mutate(Outcome="Beauty"),
-  
-  marginaleffects::predictions(m_trustworthiness, by=c("Gender", "Relevance", "Condition"), newdata = "mean", re.form=NA) |>
-  as.data.frame() |> 
+pred_attr <- modelbased::estimate_means(m_attractiveness, by=c("Gender", "Relevance", "Condition")) |>
+  as.data.frame() |>
+  mutate(Outcome="Attractiveness")
+
+pred_beauty <- modelbased::estimate_means(m_beauty, by=c("Gender", "Relevance", "Condition")) |>
+  as.data.frame() |>
+  mutate(Outcome="Beauty")
+
+pred_trust <- modelbased::estimate_means(m_trustworthiness, by=c("Gender", "Relevance", "Condition")) |>
+  as.data.frame() |>
   mutate(Outcome="Trustworthiness")
-)
+
+pred <- rbind(pred_attr, pred_beauty, pred_trust)
+
+stars1 <- data.frame(
+  label = c("**", "**", "*", "***", "***", "***"),
+  Gender = factor(c("Female", "Female", "Male", "Female", "Female", "Female"), levels = c("Male", "Female")),
+  Relevance = c("Irrelevant", "Relevant", "Irrelevant", "Relevant", "Relevant", "Irrelevant"),
+  Outcome = c("Attractiveness", "Beauty", "Beauty", "Beauty", "Trustworthiness", "Trustworthiness"),
+  y = c(0.39, 0.52, 0.42, 0.55, 0.54, 0.54),
+  x = c(2.0, 2, 1.0, 1, 1, 2))
+
 
 pred |> 
-  ggplot(aes(x=Relevance, y=estimate)) +
+  ggplot(aes(x=Relevance, y=Proportion)) +
   # geom_hline(yintercept=0, color="darkgrey") +
   geom_line(aes(group=Condition, color=Condition), position = position_dodge(width=0.2), alpha=0.8, linewidth=0.2) +
-  geom_pointrange(aes(ymin = conf.low, ymax=conf.high, color=Condition), position = position_dodge(width=0.2), size=0.2) +
+  geom_pointrange(aes(ymin =CI_low, ymax=CI_high, color=Condition), position = position_dodge(width=0.2), size=0.2) +
   facet_grid(Outcome~Gender, switch="y", scales="free") +
   scale_y_continuous(labels=scales::percent) +
   scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
+  geom_text(data = stars1,aes(x = x, y = y, label = label),inherit.aes = FALSE,size = 4
+  ) +
   # coord_cartesian(ylim=c(0.15, 0.6)) +
   theme_minimal() +
   theme(axis.title.y = element_blank(),
@@ -241,3 +554,8 @@ pred |>
 ```
 
 
+### Notes
+
+- The attractivenes, beauty and trustworthy model with relevance and condition as random slopes for stimuli were singular.
+- The beauty and trustworthiness models with either relevance or condition as random slopes for stimuli were singular. 
+- The D-vour score was higher for the models with Relevance as a random slope on Stimulus than for the model with Condition, suggesting that Relevance captures more reliable variability across stimuli. Therefore, Relevance was retained as the random slope for Stimulus (see [explanation of D-vour](https://easystats.github.io/performance/reference/performance_reliability.html)). 

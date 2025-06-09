@@ -5,9 +5,9 @@ import pandas as pd
 
 import requests
 
-path = "C:/Users/domma/Box/Data/FakeFace2/"
+# path = "C:/Users/domma/Box/Data/FakeFace2/"
 # path = "C:/Users/aneve/Box/FakeFace2/"
-# path = "C:/Users/asf25/Box/FakeFace2/"
+path = "C:/Users/asf25/Box/FakeFace2/"
 
 files = os.listdir(path)
 
