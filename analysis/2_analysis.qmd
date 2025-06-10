@@ -355,7 +355,6 @@ performance::performance(m_realness)
 
 ### Attractiveness
 
-This model examined the effects of Gender, Relevance, and Condition on the probability of rating an images as Real, accounting for participants as random intercepts, and included a non-linear effect of Attractiveness by modeling it as a second-degree polynomial.
 
 The fixed effects revealed a significant positive linear effect of Attractiveness on Realness Belief across most Gender × Relevance conditions, except for ratings by males on irrelevant images, where the effect was not significant (p = 0.097). 
 
@@ -373,6 +372,35 @@ results_table(m_realness_a, filter="Attractiveness")
 performance::performance(m_realness_a)
 ```
 
+
+```{r}
+
+pred1 <- estimate_relation(m_realness_a)
+
+p1 <- pred1 |> 
+  # filter(Relevance == "Relevant") |>
+  ggplot(aes(x=Attractiveness, y=Predicted)) +
+  geom_ribbon(aes(ymin=CI_low, ymax=CI_high, fill=Condition), alpha=0.3) +
+  geom_line(aes(color=Condition), linewidth=1, key_glyph = draw_key_rect) +
+  # geom_text(data=stars1, aes(x=x, y=y, label=label, color=Condition), hjust=0.5, size=3) +
+  # geom_text(data=data.frame(Sex=as.factor("Female"), x=0.65, y=0.638, label="**"), aes(x=x, y=y, label=label), hjust=0.5, color="#424242", size=3) +
+  facet_grid(Relevance~Gender) +
+  scale_y_continuous(labels=scales::percent) +
+  scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
+  scale_fill_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336"), guide="none") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 8),
+        strip.placement = "outside",
+        strip.background.x = element_rect(fill=c("lightgrey"), color=NA),
+        strip.text.x = element_text(size = 10),
+        strip.text.y = element_text(size = 10),
+        axis.text.x = element_text(size=9, color="black"),
+        legend.text = element_text(size = 10)) +
+  labs(y="Realness\n", fill="Images presented as:", color="Images presented as:",
+       x = "\nAttractiveness",
+       tag = "A")
+
+```
 
 ### Beauty
 
@@ -395,6 +423,35 @@ m_realness_b <- glmmTMB::glmmTMB(RealnessBelief ~ Gender / Relevance / poly(Beau
 results_table(m_realness_b, filter="Beauty")
 performance::performance(m_realness_b)
 ```
+
+```{r}
+
+pred2 <- estimate_relation(m_realness_b)
+
+p2 <- pred2 |> 
+  # filter(Relevance == "Relevant") |>
+  ggplot(aes(x=Beauty, y=Predicted)) +
+  geom_ribbon(aes(ymin=CI_low, ymax=CI_high, fill=Condition), alpha=0.3) +
+  geom_line(aes(color=Condition), linewidth=1, key_glyph = draw_key_rect) +
+  # geom_text(data=stars1, aes(x=x, y=y, label=label, color=Condition), hjust=0.5, size=3) +
+  # geom_text(data=data.frame(Sex=as.factor("Female"), x=0.65, y=0.638, label="**"), aes(x=x, y=y, label=label), hjust=0.5, color="#424242", size=3) +
+  facet_grid(Gender~Relevance) +
+  scale_y_continuous(labels=scales::percent) +
+  scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
+  scale_fill_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336"), guide="none") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 8),
+        strip.placement = "outside",
+        strip.background.x = element_rect(fill=c("lightgrey"), color=NA),
+        strip.text.x = element_text(size = 10),
+        strip.text.y = element_text(size = 10),
+        axis.text.x = element_text(size=9, color="black"),
+        legend.text = element_text(size = 10)) +
+  labs(y="Realness\n", fill="Images presented as:", color="Images presented as:",
+       x = "\nBeauty",
+       tag = "B")
+```
+
 
 ### Trustworthiness
 
@@ -419,14 +476,45 @@ results_table(m_realness_t, filter="Trustworthiness")
 performance::performance(m_realness_t)
 ```
 
+
+```{r}
+
+pred3 <- estimate_relation(m_realness_t)
+
+p3 <- pred3 |> 
+  # filter(Relevance == "Relevant") |>
+  ggplot(aes(x=Trustworthiness, y=Predicted)) +
+  geom_ribbon(aes(ymin=CI_low, ymax=CI_high, fill=Condition), alpha=0.3) +
+  geom_line(aes(color=Condition), linewidth=1, key_glyph = draw_key_rect) +
+  # geom_text(data=stars1, aes(x=x, y=y, label=label, color=Condition), hjust=0.5, size=3) +
+  # geom_text(data=data.frame(Sex=as.factor("Female"), x=0.65, y=0.638, label="**"), aes(x=x, y=y, label=label), hjust=0.5, color="#424242", size=3) +
+  facet_grid(Gender~Relevance) +
+  scale_y_continuous(labels=scales::percent) +
+  scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
+  scale_fill_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336"), guide="none") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 8),
+        strip.placement = "outside",
+        strip.background.x = element_rect(fill=c("lightgrey"), color=NA),
+        strip.text.x = element_text(size = 10),
+        strip.text.y = element_text(size = 10),
+        axis.text.x = element_text(size=9, color="black"),
+        legend.text = element_text(size = 10)) +
+  labs(y="Realness\n", fill="Images presented as:", color="Images presented as:",
+       x = "\nTrustworthiness",
+       tag = "C")
+```
+
 :::
 
 
 ## Moderator
 
+### Attractiveness 
+
 ::: panel-tabset
 
-### Honest-Humility
+#### Honest-Humility
 
 ```{r}
 m1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_HonestyHumility) + 
@@ -438,7 +526,7 @@ m1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m1, filter="HEXACO18_HonestyHumility")
 ```
 
-### Openness
+#### Openness
 
 Openess was a significant moderator for females ratings of irrelant images presented as AI-Generated. 
 
@@ -452,7 +540,7 @@ m2 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m2, filter="HEXACO18_Openness")
 ```
 
-### Emotionality
+#### Emotionality
 
 ```{r}
 m3 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
@@ -464,7 +552,7 @@ m3 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m3, filter="HEXACO18_Emotionality")
 ```
 
-### Extraversion
+#### Extraversion
 
 ```{r}
 m4 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Extraversion) + 
@@ -476,7 +564,7 @@ m4 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m4, filter="HEXACO18_Extraversion")
 ```
 
-### Agreeableness
+#### Agreeableness
 
 ```{r}
 m5 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Agreeableness) + 
@@ -488,7 +576,7 @@ m5 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m5, filter="HEXACO18_Agreeableness")
 ```
 
-### Conscientiousness
+#### Conscientiousness
 
 ```{r}
 m6 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Conscientiousness) + 
@@ -502,6 +590,85 @@ results_table(m6, filter="HEXACO18_Conscientiousness")
 
 :::
 
+### Beauty 
+
+::: panel-tabset
+
+#### Honest-Humility
+
+```{r}
+m1 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_HonestyHumility) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m1, filter="HEXACO18_HonestyHumility")
+```
+
+#### Openness
+
+Openess was a significant moderator for females ratings of irrelant images presented as AI-Generated. 
+
+```{r}
+m2 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Openness) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m2, filter="HEXACO18_Openness")
+```
+
+#### Emotionality
+
+```{r}
+m3 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m3, filter="HEXACO18_Emotionality")
+```
+
+#### Extraversion
+
+```{r}
+m4 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Extraversion) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m4, filter="HEXACO18_Extraversion")
+```
+
+#### Agreeableness
+
+```{r}
+m5 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Agreeableness) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m5, filter="HEXACO18_Agreeableness")
+```
+
+#### Conscientiousness
+
+```{r}
+m6 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Conscientiousness) + 
+                                       (1 | Participant) + (1|Stimulus),
+                      data=dftask, 
+                      family=glmmTMB::ordbeta(),
+                      control = glmmTMB::glmmTMBControl(parallel = 8))
+
+results_table(m6, filter="HEXACO18_Conscientiousness")
+```
+
+:::
 
 ## Figures
 
@@ -520,7 +687,7 @@ pred_trust <- modelbased::estimate_means(m_trustworthiness, by=c("Gender", "Rele
   as.data.frame() |>
   mutate(Outcome="Trustworthiness")
 
-pred <- rbind(pred_attr, pred_beauty, pred_trust)
+pred4 <- rbind(pred_attr, pred_beauty, pred_trust)
 
 stars1 <- data.frame(
   label = c("**", "**", "*", "***", "***", "***"),
@@ -531,7 +698,7 @@ stars1 <- data.frame(
   x = c(2.0, 2, 1.0, 1, 1, 2))
 
 
-pred |> 
+p4 <- pred4 |> 
   ggplot(aes(x=Relevance, y=Proportion)) +
   # geom_hline(yintercept=0, color="darkgrey") +
   geom_line(aes(group=Condition, color=Condition), position = position_dodge(width=0.2), alpha=0.8, linewidth=0.2) +
@@ -553,9 +720,21 @@ pred |>
         axis.text.x = element_text(size=9, color="black"),
         legend.text = element_text(size = 10),
         legend.position = ) +
-  labs(color="Images presented as:",
-       tag = "A")
+  labs(color="Images presented as:")
+
+ggsave("figures/figure1.png", p4, width=8, height=8, dpi=300)
+p4
+
 ```
+
+
+```{r}
+
+p5 <- (p1 + theme(legend.position = "none")) / (p2 + theme(legend.position = "none"))/  p3  + plot_layout(guides = "collect")
+ggsave("figures/figure2.png", p5, width=8, height=8, dpi=300)
+p5
+```
+
 
 
 ## Notes
