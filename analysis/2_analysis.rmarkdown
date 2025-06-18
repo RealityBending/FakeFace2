@@ -9,10 +9,9 @@ format:
     self-contained: true
     toc: true
 ---
+
+
 ## Summary
-
-**The models for attractiveness include random slopes of Condition by Participant and Relevance by Images. Conversely, the models for beauty and trustorthiness only include random slopes for participant, as they did not converge when adding random slopes for images. **
-
 
 The **effect of image condition** (AI-generated vs. photo) differed significantly between females and males.
 
@@ -28,6 +27,8 @@ For males, the only significant effect of condition was that irrelevant images l
 4. While, female's trsutworthiness ratings of *relevant* images were moderated by *Emotionality* and *Conscientiousness*. 
 
 ## Data Preparation
+
+
 
 ```{r}
 #| message: false
@@ -52,7 +53,6 @@ results_table <- function(model, effects="fixed", filter=NULL) {
 }
 ```
 
-
 ```{r}
 #| code-fold: true
 
@@ -72,11 +72,15 @@ dftask <- full_join(dftask,
                     by="Participant")
 ```
 
+
+
 ## Visualisation of Variables
 
 ::: panel-tabset
 
 ### Attractiveness 
+
+
 ```{r}
 dftask |> 
   ggplot(aes(x=Attractiveness, fill=Condition)) +
@@ -86,9 +90,13 @@ dftask |>
   
 ```
 
+
+
 This model looks at the effect of Gender and Relevance on attractiveness scores, accounting for random variabilty due to participants and items (i.e., random effects). 
 
 Females did not rate faces significantly higher than males in attractiveness. However, both genders rated irrelevant images lower in attractiveness than relevant ones.
+
+
 
 ```{r}
 m_a<- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance + 
@@ -111,7 +119,11 @@ estimate_relation(m_a) |>
   theme_bw()
 ```
 
+
+
 ### Beauty
+
+
 
 ```{r}
 dftask |> 
@@ -121,9 +133,13 @@ dftask |>
   theme_bw()
 ```
 
+
+
 This model looks at the effect of Gender and Relevance on beauty scores, accounting for random variabilty due to participants and items (i.e., random effects). 
 
 Females rated faces significantly higher than males in beauty. Males rated irrelevant images as more beautiful than relevant ones, whilst females rated irrelevant images as less beautiful than relevent ones, both effects were significant. 
+
+
 
 ```{r}
 m_b<- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance + 
@@ -146,7 +162,11 @@ estimate_relation(m_b) |>
   theme_bw()
 ```
 
+
+
 ### Trustworthiness
+
+
 
 ```{r}
 dftask |> 
@@ -156,9 +176,13 @@ dftask |>
   theme_bw()
 ```
 
+
+
 This model looks at the effect of Gender and Relevance on trustworthiness scores, accounting for random variabilty due to participants and items (i.e., random effects). 
 
 Females rated faces higher in trustworthiness then males, however this effect was not significant. Males rated irrelevant images as significantly more trustworthy than relevant ones, whereas the same effect was not significant for women. 
+
+
 
 ```{r}
 m_t<- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance + 
@@ -182,7 +206,11 @@ estimate_relation(m_b) |>
 
 ```
 
+
+
 ### Reality 
+
+
 
 ```{r}
 dftask |> 
@@ -192,7 +220,11 @@ dftask |>
   theme_bw()
 ```
 
+
+
 The model evaluating the effect of Gender and Relevance on Realness ratings shows no significant effects. 
+
+
 
 ```{r}
 m_r<- glmmTMB::glmmTMB(Realness ~ Gender / Relevance + 
@@ -214,6 +246,8 @@ estimate_relation(m_r) |>
   facet_wrap(~Gender) +
   theme_bw()
 ```
+
+
 :::
 
 ## Attractiveness 
@@ -225,6 +259,8 @@ The model demonstrated strong conditional fit (R²_conditional = 0.812), indicat
 Notably, only female participants rated irrelevant images as significantly less attractive than relevant ones in the AI-generated condition. No significant effects were observed for male participants or other interaction terms. 
 
 The variance decomposition (D_vour) further confirms that most of the explainable variance lies in participant-level intercepts (0.98) and stimulus-level intercepts (0.97), with smaller contributions from the random slopes.
+
+
 
 
 ```{r}
@@ -240,6 +276,8 @@ performance::performance_dvour(m_attractiveness)
 
 ```
 
+
+
 ## Beauty 
 
 This model examines the effects of Gender, Relevance, and Condition on Attractiveness, while accounting for random variability by including random intercepts for Participants and Stimuli, as well as random slopes for Condition (by Participant).
@@ -251,6 +289,8 @@ Females rated relevant images significantly lower in beauty than males as well a
 The variance decomposition (D_vour) further declares the smaller contributions from the random slopes. 
 
 <!-- *Note*. models with random random slopea for stimulus were singular.  -->
+
+
 
 ```{r}
 m_beauty <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / Condition + (Condition | Participant) + (1|Stimulus),
@@ -268,6 +308,8 @@ performance::performance_dvour(m_beauty)
 ```
 
 
+
+
 ## Trustworthiness 
 
 This model examines the effects of Gender, Relevance, and Condition on Attractiveness, while accounting for random variability by including random intercepts for Participants and Stimuli, as well as random slopes for Condition (by Participant).
@@ -279,6 +321,8 @@ Females rated relevant images significantly lower in trustworthiness than males 
 The variance decomposition (D_vour) further confirms that most of the explainable variance lies in participant-level intercepts (0.98) and stimulus-level intercepts (0.96).
 
 <!-- *Note* Models with random slopes for stimuli were singular -->
+
+
 ```{r}
 m_trustworthiness <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / Condition + (Condition|Participant) + (1|Stimulus),
                       data=dftask, 
@@ -292,11 +336,15 @@ performance::performance_dvour(m_trustworthiness)
 
 ```
 
+
+
 ## Coupling - Does fiction create a decoupling?
 
 This model evaluates how beauty and image condition (e.g., AI-generated or not) jointly influence attractiveness ratings, and how this relationship is further moderated by the relevance of the image and the gender of the participant.
 
 Beauty ratings are a strong predictor of attractiveness, but the strenght of this relationship varies by gender and relevance. Condition does not significantly moderate the beauty-attractiveness relationship, indicating that fiction does not create a decoupling between beauty and attractiveness.
+
+
 
 ```{r}
 m_coupling1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Beauty * Condition) + 
@@ -311,9 +359,13 @@ performance::performance(m_coupling1)
 
 ```
 
+
+
 This model evaluates how beauty and image condition (e.g., AI-generated or not) jointly influence trustworthiness ratings, and how this relationship is further moderated by the relevance of the image and the gender of the participant.
 
 Beauty ratings are a strong predictor of trustowrthiness but condition does not significantly moderate the beauty-trustworthiness relationship. These findings indicate that fiction does not create a decoupling between beauty and trustworthiness. 
+
+
 
 ```{r}
 m_coupling2 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Beauty * Condition) + 
@@ -327,6 +379,8 @@ performance::performance(m_coupling2)
 
 ```
 
+
+
 This model evaluates how attractiveness and image condition (e.g., AI-generated or not) jointly influence trustworthiness ratings, and how this relationship is further moderated by the relevance of the image and the gender of the participant.
 
 Atractiveness ratings are a strong predictor of trustowrthiness, but the strenght of this relationship varies by gender and relevance. 
@@ -334,6 +388,8 @@ Atractiveness ratings are a strong predictor of trustowrthiness, but the strengh
 Importantly, Condition (AI-generated vs. real) significantly moderates the attractiveness–trustworthiness relationship only for females rating irrelevant images. In this group, real photos are rated as less trustworthy compared to AI-generated images at comparable levels of attractiveness, indicating a weakening or decoupling of the usual link between attractiveness and trustworthiness when the image is irrelevant and real.
 
 These results suggest that fiction (AI-generated images) affects the attractiveness–trustworthiness association for females evaluating irrelevant images, creating a decoupling between perceived beauty and trustworthiness in this context.
+
+
 ```{r}
 m_coupling3 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Attractiveness * Condition) + 
                                (1 | Participant) + (1|Stimulus),
@@ -347,6 +403,8 @@ performance::performance(m_coupling3)
 ```
 
 
+
+
 ## Moderator
 
 ### Attractiveness 
@@ -354,6 +412,8 @@ performance::performance(m_coupling3)
 ::: panel-tabset
 
 #### Honest-Humility
+
+
 
 ```{r}
 m1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_HonestyHumility) + 
@@ -365,9 +425,13 @@ m1 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m1, filter="HEXACO18_HonestyHumility")
 ```
 
+
+
 #### Openness
 
 Honesty-Humility significantly moderated females’ ratings of irrelevant images labeled as AI-generated vs photos, such that higher Honesty-Humility was associated with lower ratings attractiveness. 
+
+
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Openness) + 
@@ -407,7 +471,11 @@ p6 <- predao |>
        caption ="Note. Females Only")
 ```
 
+
+
 #### Emotionality
+
+
 
 ```{r}
 m3 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
@@ -419,7 +487,11 @@ m3 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m3, filter="HEXACO18_Emotionality")
 ```
 
+
+
 #### Extraversion
+
+
 
 ```{r}
 m4 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Extraversion) + 
@@ -431,7 +503,11 @@ m4 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m4, filter="HEXACO18_Extraversion")
 ```
 
+
+
 #### Agreeableness
+
+
 
 ```{r}
 m5 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Agreeableness) + 
@@ -443,7 +519,11 @@ m5 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m5, filter="HEXACO18_Agreeableness")
 ```
 
+
+
 #### Conscientiousness
+
+
 
 ```{r}
 m6 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO18_Conscientiousness) + 
@@ -455,6 +535,8 @@ m6 <- glmmTMB::glmmTMB(Attractiveness ~ Gender / Relevance / (Condition * HEXACO
 results_table(m6, filter="HEXACO18_Conscientiousness")
 ```
 
+
+
 :::
 
 ### Beauty 
@@ -462,6 +544,8 @@ results_table(m6, filter="HEXACO18_Conscientiousness")
 ::: panel-tabset
 
 #### Honest-Humility
+
+
 
 ```{r}
 m1 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_HonestyHumility) + 
@@ -473,7 +557,11 @@ m1 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Hones
 results_table(m1, filter="HEXACO18_HonestyHumility")
 ```
 
+
+
 #### Openness
+
+
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Openness) + 
@@ -485,7 +573,11 @@ m2 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Openn
 results_table(m2, filter="HEXACO18_Openness")
 ```
 
+
+
 #### Emotionality
+
+
 
 ```{r}
 m3 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
@@ -497,7 +589,11 @@ m3 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Emoti
 results_table(m3, filter="HEXACO18_Emotionality")
 ```
 
+
+
 #### Extraversion
+
+
 
 ```{r}
 m4 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Extraversion) + 
@@ -509,7 +605,11 @@ m4 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Extra
 results_table(m4, filter="HEXACO18_Extraversion")
 ```
 
+
+
 #### Agreeableness
+
+
 
 ```{r}
 m5 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Agreeableness) + 
@@ -521,11 +621,15 @@ m5 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Agree
 results_table(m5, filter="HEXACO18_Agreeableness")
 ```
 
+
+
 #### Conscientiousness
 
 Conscientiousness significantly moderated females’ ratings of relevant images labeled as AI-generated vs photos, such that higher conscientiousness was associated with more positive ratings of beauty.
 
 Additionally, conscientiousness significantly moderated males’ ratings of relevant images that are presented as photos. 
+
+
 
 ```{r}
 m6 <- glmmTMB::glmmTMB(Beauty ~ Gender / Relevance / (Condition * HEXACO18_Conscientiousness) + 
@@ -568,6 +672,8 @@ p7
 ```
 
 
+
+
 ### Trustworthiness
 
 ::: panel-tabset
@@ -575,6 +681,8 @@ p7
 #### Honest-Humility
 
 Honesty-Humility significantly moderated trustworthiness ratings for both relevant and irrelevant images in both males and females. Higher Honesty-Humility was associated with higher trustworthiness ratings across all conditions, except when images were labelled as AI-generated — where no effects were found except for females rating irrelevant AI-generated images, where higher Honesty-Humility was associated with lower trustworthiness. 
+
+
 
 
 ```{r}
@@ -615,9 +723,13 @@ p7 <- predthh |>
 
 ```
 
+
+
 #### Openness
 
 Openness significantly moderated females’ ratings of irrelevant AI-generated images, such that higher Openness was associated with lower trustworthiness ratings. No other effects were significant.
+
+
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Condition * HEXACO18_Openness) + 
@@ -656,9 +768,13 @@ p8 <- predto |>
        x = "\nOpenness to Experience",
        caption ="Note. Females Only")
 ```
+
+
 #### Emotionality
 
 Emotionality significantly moderated females’ trustworthiness ratings of relevant AI-generated images, where higher Emotionality was associated with lower trustworthiness. No other significant effects were found.
+
+
 
 ```{r}
 m3 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Condition * HEXACO18_Emotionality) + 
@@ -697,9 +813,13 @@ p9 <- predte |>
        x = "\nEmotionality",
        caption ="Note. Females Only")
 ```
+
+
 #### Extraversion
 
 Extraversion significantly moderated males’ ratings of irrelevant images, such that higher Extraversion was associated with higher trustworthiness ratings. No other effects were significant. 
+
+
 
 ```{r}
 m4 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Condition * HEXACO18_Extraversion) + 
@@ -711,9 +831,13 @@ m4 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Condition * HEXAC
 results_table(m4, filter="HEXACO18_Extraversion")
 ```
 
+
+
 #### Agreeableness
 
 Agreeableness significantly moderated females’ ratings of relevant images, with higher Agreeableness being associated with higher trustworthiness ratings. Other interactions were non-significant.
+
+
 
 ```{r}
 m5 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Condition * HEXACO18_Agreeableness) + 
@@ -725,9 +849,13 @@ m5 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Condition * HEXAC
 results_table(m5, filter="HEXACO18_Agreeableness")
 ```
 
+
+
 #### Conscientiousness
 
 Conscientiousness significantly moderated females’ trustworthiness ratings of AI-generated images. Specifically, higher Conscientiousness was associated with higher trustworthiness ratings for relevant AI-generated images and lower trustworthiness ratings for irrelevant AI-generated images.
+
+
 
 ```{r}
 m6 <- glmmTMB::glmmTMB(Trustworthiness ~ Gender / Relevance / (Condition * HEXACO18_Conscientiousness) + 
@@ -767,6 +895,8 @@ p10 <- predtc |>
        x = "\nConscientiousness",
        caption ="Note. Females Only")
 ```
+
+
 :::
 
 # Reality 
@@ -776,6 +906,8 @@ Please refer to this [analysis on the reality determinants for this study](https
 ## Figures
 
 ### Main Effects
+
+
 
 ```{r}
 #| fig-height: 12
@@ -833,7 +965,6 @@ p4
 
 ```
 
-
 ```{r}
 #| fig-height: 12
 #| fig-width: 7
@@ -860,6 +991,8 @@ ggsave("figures/figure3.png", p12, width=10, height=10, dpi=300)
 p12
 
 ```
+
+
 
 ## Notes
 
