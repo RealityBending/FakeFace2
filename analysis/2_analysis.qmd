@@ -822,8 +822,12 @@ p7 <- pred4 |>
   scale_color_manual(values=c("AI-Generated"="#2196F3", "Photograph"="#F44336")) +
   geom_text(data = stars1,aes(x = x, y = y, label = label),inherit.aes = FALSE,size = 4
   ) +
+  geom_rect(data=data.frame(Gender=as.factor("Male"), Proportion=0.1,  Outcome="Attractiveness", Relevance="Relevant"),
+            aes(xmin=0.8, xmax=1.2, ymin=0.28, ymax=0.42), color="#8BC34A", alpha=0) +
+  geom_rect(data=data.frame(Gender=as.factor("Female"), Proportion=0.1,  Outcome="Attractiveness", Relevance="Relevant"),
+            aes(xmin=0.8, xmax=1.2, ymin=0.33, ymax=0.44), color="#8BC34A", alpha=0) +
   # coord_cartesian(ylim=c(0.15, 0.6)) +
-  theme_minimal() +
+  theme_bw() +
   theme(axis.title.y = element_blank(),
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 8),
@@ -836,8 +840,9 @@ p7 <- pred4 |>
         legend.position = ) +
   labs(color="Images presented as:")
 
-ggsave("figures/figure1.png", p7, width=8, height=8, dpi=300)
 p7
+ggsave("figures/figure1.png", p7, width=8, height=8, dpi=300)
+
 
 ```
 
